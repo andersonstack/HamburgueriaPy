@@ -18,9 +18,9 @@ from menu import *
 resp = ""
 
 while resp != "0":
+    varredura()
     limpar_tela()
     cabecalho("Hamburgueria do Py")
-    varredura()
     principal()
 
     resp = input_tratado("Operação: ")
