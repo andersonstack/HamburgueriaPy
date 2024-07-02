@@ -105,7 +105,7 @@ while resp != "0":
                             confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
 
                             if confirmar[0] in 'S':
-                                criar_novo_hamburguer(hamburguer)
+                                criar_novo_hamburguer()
                             
                             else:
                                 break

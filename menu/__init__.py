@@ -50,7 +50,7 @@ def verificar_hamburguer_existente():
             }
         }
     """
-    hamburguer = leia_item("Nome:   ").upper()
+    hamburguer = leia_item("Nome do Hambúrguer:   ").upper()
 
     for nome, _ in cardapio.items(): # Verificação
         if hamburguer.replace(" ", "") in nome.replace(" ", ""): # Comparação da entrada do hambúrguer com o nome do cardápio
@@ -112,12 +112,9 @@ def atualizar_hamburguer(hamburguer):
     input(">> Enter")
 
 
-def criar_novo_hamburguer(hamburguer):
+def criar_novo_hamburguer():
     """
     Cria um novo hambúrguer no cardápio.
-
-    Args:
-        hamburguer (str): O nome do hambúrguer a ser atualizado.
 
     Fluxo:
         1. Cria um novo hambúrguer no cardápio.
@@ -139,10 +136,11 @@ def criar_novo_hamburguer(hamburguer):
             }
         }
     """
+    hamburguer = leia_item("Nome do Hamburguer: ")
     limpar_tela()
     cardapio[hamburguer] = {}  # Cria um novo hambúrguer no cardápio
     titulo("HAMBÚRGUERES")
-    sucess_msg(f"Hambúrguer '{hamburguer}' criado. Por favor, adicione os ingredientes e preço:")
+    sucess_msg(f"Hambúrguer: '{hamburguer}' criado. Por favor, adicione os ingredientes e preço:")
 
     while True:
         ingrediente = leia_item("[SAIR] Ingrediente:    ").upper()

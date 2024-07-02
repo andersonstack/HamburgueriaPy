@@ -232,4 +232,5 @@ def varredura():
         for itens in itens_baixos:
             print(f"{itens[0]:^25}", f"{itens[1]:^25}")
         print("=" * 50)    
-    input(">> Enter")
+        
+        input(">> Enter")
