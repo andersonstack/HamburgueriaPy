@@ -8,11 +8,12 @@ def quadro_clientes():
     """
     limpar_tela()
     cabecalho("Lista de Clientes")
-    for nome, dados in clientes.items():
-        cliente = clientes[nome]['Nome']
-        endereco = clientes[nome]['Endereço']
+    for cpf, dados in clientes.items():
+        cliente = clientes[cpf]['Nome']
+        endereco = clientes[cpf]['Endereço']
 
         linha()
+        print_alinhado("CPF:", cpf)
         print_alinhado("Nome:", cliente)
         print_alinhado("Endereço:", endereco)
         linha()
@@ -48,9 +49,9 @@ def cadastrar_cliente():
                 - Retorna input("Cliente já está no sistema")
     """
     limpar_tela()
-    cpf = leiaCPF("CPF:   ")
-
     cabecalho("Cadastrar clientes")
+
+    cpf = leiaCPF("CPF:   ")
 
     if cpf not in clientes:
       nome = leia_nome("Nome:  ")
@@ -118,3 +119,30 @@ def editar_clientes():
     else:
        error_msg("Cliente não encontrado.")
        return input(">> Enter.")
+
+def excluir_cliente():
+    """
+    Função para excluir um cliente.
+
+    A função solicita o CPF. Se o CPF estiver em Clientes, pede confirmação de exclusão, caso
+    sim, o cliente é removido e os arquivos são salvos. Caso não, a operação é cancelada.
+
+    Returns:
+        input: De exclusão do cliente.
+                De operação cancelada.
+    """
+    cpf = leiaCPF("CPF: ")
+    if cpf in clientes:
+        confirm = input_tratado(f"Deseja excluir o cliente {clientes[cpf]['Nome']} (S/N)")
+        match confirm:
+            case 'S':
+                clientes.pop(cpf)
+                save_data("arquivo_clientes.dat", clientes)
+
+                return input("Cliente deletado. >> Enter")
+            case 'N':
+                return input("Operação cancelada. >> Enter")
+    else:
+        error_msg("Cliente não encontrado.")
+        input(">> Enter")
+

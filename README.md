@@ -8,7 +8,7 @@ Este projeto é uma aplicação de gestão para uma hamburgueria, desenvolvida e
 - **Almoxarifado**: Busca e exclusão de itens.
 - **Vendas**: Exibição do cardápio, administração e fechamento de vendas.
 - **Funcionários**: Gerenciamento de quadro de funcionários, contratação e demissão.
-- **Clientes**: Cadastro e edição de informações de clientes.
+- **Clientes**: Cadastro, edição e exclusão de informações de clientes.
 - **Relatórios**: Geração de relatórios de compras, vendas e itens mais vendidos.
 - **Informações**: Detalhes sobre o projeto e a equipe de desenvolvimento.
 

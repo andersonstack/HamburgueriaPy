@@ -26,20 +26,15 @@ def processo_compras():
     else:
         data = compras
 
-    for data, detalhes in data.items():
-        subtitulo(data)
-        for items in detalhes:
-            hora = items["Hora"]
-            nome = items["Nome"]
-            quantidade = items["Quantidade"]
-            preco = items["R$"]
-            preco_total += preco
-            linha()
-            print_alinhado("Hora:", hora)
-            print_alinhado("Nome:", nome)
-            print_alinhado("Quantidade:", quantidade)
-            print_alinhado("Preço:", preco)
-            linha()
+    for data, compra in data.items():
+        print_alinhado("\033[1mDATA:",f"{data}\033[m")
+        print("=" * 50)
+        for detalhes in compra:
+            print_alinhado("Hora:",detalhes['hora'])
+            print_alinhado("Nome:", detalhes['nome'])
+            print_alinhado("Quantidade:", f"{detalhes['quantidade']} unidades")
+            print_alinhado("Preço",f"R$ {detalhes['preço']}")
+            print("=" * 50)
     linha()
     input(">> Enter para continuar")
 

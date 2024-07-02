@@ -136,10 +136,10 @@ def criar_novo_hamburguer():
             }
         }
     """
-    hamburguer = leia_item("Nome do Hamburguer: ")
     limpar_tela()
-    cardapio[hamburguer] = {}  # Cria um novo hambúrguer no cardápio
     titulo("HAMBÚRGUERES")
+    hamburguer = leia_item("Nome do Hamburguer: ").upper()
+    cardapio[hamburguer] = {}  # Cria um novo hambúrguer no cardápio
     sucess_msg(f"Hambúrguer: '{hamburguer}' criado. Por favor, adicione os ingredientes e preço:")
 
     while True:

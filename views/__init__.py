@@ -23,7 +23,8 @@ def operacoes_clientes():
     titulo("Clientes")
     print("1 ↪︎ Cadastrar Cliente")  
     print("2 ↪︎ Lista de Clientes") 
-    print("3 ↪︎ Editar Clientes")   
+    print("3 ↪︎ Editar Clientes")
+    print("4 ↪︎ Excluir Clientes")   
     print("0 ↪︎ Sair")  
 
 

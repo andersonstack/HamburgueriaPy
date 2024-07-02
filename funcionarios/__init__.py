@@ -68,7 +68,7 @@ def contratar():
 
     numero = leia_int("Número: ")
     cidade = leia_nome("Cidade:  ")
-    uf = leia_item("Estado:  ").upper()
+    uf = leia_nome("Estado:  ").upper()
     endereco = f"{rua}, {bairro}, {numero}. {cidade}/{uf}"
 
     funcionarios[cpf] =  {"Nome": nome, "Idade": idade, "Endereço": endereco}

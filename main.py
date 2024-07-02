@@ -240,7 +240,7 @@ while resp != "0":
                     elif op_gerenciar == '4':
 
                         if editar_funcionario():
-                            sucess_msg(f"{funcionarios[cpf]['Nome']} foi editado com sucesso!")
+                            sucess_msg(f"Funcionário foi editado com sucesso!")
                             input(">> Enter")
 
                         else:
@@ -271,6 +271,10 @@ while resp != "0":
             elif op_cliente[0] in "3E":
                 quadro_clientes()
                 editar_clientes()
+            
+            elif op_cliente[0] in "4D":
+                quadro_clientes()
+                excluir_cliente()
 
             elif op_cliente[0] in "0S":
                 break
@@ -312,7 +316,7 @@ while resp != "0":
             print("-○  andersong.pereiracruz@gmail.com          ")
             print("-○  59-378/000 São José do Serído - RN       ")
             linha()
-            input("<<ENTER>> para continuar")
+            input(">> Enter para continuar ")
 
     elif resp[0] in "S" or resp == '0':
         break
