@@ -1,6 +1,7 @@
 from os import system, name
 from data import *
 from views import *
+
 def error_msg(text):
     print()
     print("\033[1;31;7m >> " + text + "\033[m")
@@ -156,7 +157,7 @@ def leia_item(prompt):
         texto = input(prompt)
         
         if checker_fields(texto):
-            if texto.isalpha() or '-' in texto or ' ' in texto:
+            if (texto.isalpha() or '-' in texto or ' ' in texto) and len(texto) > 3:
                 return texto
             else:
                 error_msg("O nome do item deve conter apenas letras, espaços ou '-'")
@@ -203,3 +204,32 @@ def leia_nome(prompt):
             return nome
         else:
             error_msg("Nome inválido!")
+
+def varredura():
+    """
+    Função para varredura do almoxarifado ao iniciar o main.
+
+    Fluxo:
+        1. Intera sobre os elementos do almoxarifado.
+        2. Verifica se a quanstidade é menor ou igual a 10.
+            2.1 Caso o IF seja satisfeito, adiciona a lista de itens_baixos.
+        3. Verifica o tamanho da lista de itens_baixos.
+        4. Se a lista for maior que 0, faz um laço de repetição para interar sobre a lista.
+        5. Exibe a lista e uma mensagem de quantia baixa.
+    """
+    itens_baixos = []
+
+    for keys, values in almoxarifado.items():
+        quantia = values[1]
+        if quantia <= 10:
+            itens_baixos.append(values)
+    
+    if len(itens_baixos) > 0:
+        error_msg("Quantia baixa dos itens: ")
+        print(f"{'Nome':^25} {'Quantidade':^25}")
+        print("=" * 50)
+        
+        for itens in itens_baixos:
+            print(f"{itens[0]:^25}", f"{itens[1]:^25}")
+        print("=" * 50)    
+    input(">> Enter")

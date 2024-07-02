@@ -20,6 +20,7 @@ resp = ""
 while resp != "0":
     limpar_tela()
     cabecalho("Hamburgueria do Py")
+    varredura()
     principal()
 
     resp = input_tratado("Operação: ")
