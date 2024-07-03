@@ -1,325 +1,342 @@
-# Importações importantes
-from data import * # Dados do código
-from views import * # Ferramentas de interface
-from tools import * # Ferramentas para tratamento de entrada de dados
-# Modularização de pastas 
-from compras import * 
-from almoxarifado import * 
-from vendas import *
-from clientes import *
-from funcionarios import *
-from relatorios import *
-from menu import *
-
 ####################################
-###         VERSÃO 14            ###
+###         VERSÃO 15            ###
 ####################################
 
+
+#   Importações de módulos do projeto
+from almoxarifado import buscar_item, excluir_item
+from clientes import cadastrar_cliente, quadro_clientes, editar_clientes, excluir_cliente
+from compras import cadastrar_compras
+from data import almoxarifado, funcionarios
+from funcionarios import contratar, demitir, buscar, editar_funcionario
+from menu import (
+    exibir_cardapio, verificar_hamburguer_existente, 
+    atualizar_hamburguer, criar_novo_hamburguer, excluir_hamburguer
+)
+from relatorios import processo_compras, processos_vendas, imprimir_ranking
+from tools import varredura, limpar_tela, input_tratado
+from vendas import (
+    listar_pedidos, criar_pedido, decrementar_ingredientes, 
+    perca_de_ingredientes, editar_pedido, fechar_vendas,
+    deletar_pedido
+)
+from views import (
+    cabecalho, titulo, principal, linha, quadro_almoxarifado, 
+    sucess_msg, error_msg, leia_int, operacoes_clientes, 
+    operacoes_funcionarios, quadro, subtitulo
+)
+
+#   Código principal
 resp = ""
+varredura()
+
 
 while resp != "0":
-    varredura()
     limpar_tela()
     cabecalho("Hamburgueria do Py")
     principal()
 
     resp = input_tratado("Operação: ")
 
-    if resp == "C" or resp == "1":
-        limpar_tela()
-        op_compra = ""
-
-        while op_compra != "0":
+    match resp:
+        case "1" | "C":
             limpar_tela()
-            titulo("Compras")
-            print("↪︎ 1.  Cadastrar Mercadorias")
-            print("↪︎ 0.  Menu principal")
-            linha()
-            op_compra = input_tratado("Operação:    ")
+            op_compra = ""
 
-            if op_compra == "C" or op_compra == "1":
-                cadastrar_compras()
-
-            elif op_compra == "M" or op_compra == "0":
-                break
-
-    elif resp == "A" or resp == "2":
-        limpar_tela()
-        quadro_almoxarifado(almoxarifado)
-        op_almoxarifado = ""
-
-        while op_almoxarifado != "0":
-            linha()
-            print("↪︎ 1.  Buscar item")
-            print("↪︎ 2.  Excluir item")
-            print("↪︎ 0.  Menu principal")
-            linha()
-            op_almoxarifado = input_tratado("Operação:  ")
-
-            if op_almoxarifado == "B" or op_almoxarifado == "1":
-                buscar_item()
-            
-            elif op_almoxarifado == "E" or op_almoxarifado == "2":
-                excluir_item()
-
-            elif op_almoxarifado == "M" or op_almoxarifado == "0":
-                break
- 
-    elif resp == "V" or resp == "3":
-        limpar_tela()
-        op_vender = ""
-
-        while op_vender != "0":
-            limpar_tela()
-            titulo("Vendas")
-            print("↪︎ 1.  Ver Cardápio")
-            print("↪︎ 2.  Administrar Cardápio")
-            print("↪︎ 3.  Vendas")
-            print("↪︎ 0.  Menu Principal")
-            linha()
-
-            op_vender = input_tratado("Operação:    ")
-            if op_vender == "C" or op_vender == "1":
-                exibir_cardapio()
-
-            elif op_vender == "A" or op_vender == "2":
+            while op_compra != "0":
                 limpar_tela()
-                op_admi_cardapio = ""
+                titulo("Compras")
+                print("↪︎ 1.  Cadastrar Mercadorias")
+                print("↪︎ 0.  Menu principal")
+                linha()
+                op_compra = input_tratado("Operação:    ")
 
-                while op_admi_cardapio != "0":
-                    limpar_tela()
-                    titulo("Administrar Cardápio")
-                    print("↪︎ 1.  Atualizar Cardápio")
-                    print("↪︎ 2.  Excluir Hambúrguer")
-                    print("↪︎ 0.  Vendas")
-
-                    op_admi_cardapio = input_tratado("Operação: ")
-
-                    if op_admi_cardapio == "A" or op_admi_cardapio == "1":
-                        hamburguer = verificar_hamburguer_existente()
-                        
-                        if hamburguer:
-                            atualizar_hamburguer(hamburguer)
-
-                        else:
-                            confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
-
-                            if confirmar[0] in 'S':
-                                criar_novo_hamburguer()
-                            
-                            else:
-                                break
-
-                    elif op_admi_cardapio == "E" or op_admi_cardapio == "2":
-                        excluir_hamburguer()
-
-                    elif op_admi_cardapio == "0":
+                match op_compra:
+                    case "1":
+                        cadastrar_compras()
+                    case "0":
                         break
-            
-            elif op_vender == "V" or op_vender == "3":
-                    limpar_tela()
-                    op_fazer_venda = ""
 
-                    while op_fazer_venda != "0":
+        case "A" | "2":
+            limpar_tela()
+            quadro_almoxarifado(almoxarifado)
+            op_almoxarifado = ""
+
+            while op_almoxarifado != "0":
+                linha()
+                print("↪︎ 1.  Buscar item")
+                print("↪︎ 2.  Excluir item")
+                print("↪︎ 0.  Menu principal")
+                linha()
+                op_almoxarifado = input_tratado("Operação:  ")
+
+                match op_almoxarifado:
+                    case "B" | "1":
+                        buscar_item()
+                    case "E" | "2":
+                        excluir_item()
+                    case "M" | "0":
+                        break
+
+        case "V" | "3":
+            limpar_tela()
+            op_vender = ""
+
+            while op_vender != "0":
+                limpar_tela()
+                titulo("Vendas")
+                print("↪︎ 1.  Ver Cardápio")
+                print("↪︎ 2.  Administrar Cardápio")
+                print("↪︎ 3.  Vendas")
+                print("↪︎ 0.  Menu Principal")
+                linha()
+
+                op_vender = input_tratado("Operação:    ")
+
+                match op_vender:
+                    case "C" | "1":
+                        exibir_cardapio()
+
+                    case "A" | "2":
                         limpar_tela()
-                        titulo("Vendas")
-                        print("↪︎ 1.  Vender Hambúruguer")
-                        print("↪︎ 2.  Lista de Pedidos")
-                        print("↪︎ 3.  Fechar vendas")
-                        print("↪︎ 0.  Vendas")
+                        op_admi_cardapio = ""
 
-                        op_fazer_venda = input_tratado("Operação:   ")
+                        while op_admi_cardapio != "0":
+                            limpar_tela()
+                            titulo("Administrar Cardápio")
+                            print("↪︎ 1.  Atualizar Cardápio")
+                            print("↪︎ 2.  Excluir Hambúrguer")
+                            print("↪︎ 0.  Vendas")
 
-                        if op_fazer_venda == "V" or op_fazer_venda == "1":
-                            criar_pedido()
+                            op_admi_cardapio = input_tratado("Operação: ")
 
-                        elif op_fazer_venda == "L" or op_fazer_venda == "2":
-                            listar_pedidos()
-                            op_finalizar = ''
+                            match op_admi_cardapio:
+                                case "A" | "1":
+                                    hamburguer = verificar_hamburguer_existente()
 
-                            while op_finalizar != "0":
-                                print("↪︎ 1.  Confirmar Pedido")
-                                print("↪︎ 2.  Remover Pedido")
-                                print("↪︎ 3.  Editar Pedido")
-                                print("↪︎ 0.  Retornar")
-                                op_finalizar = input_tratado("Operação: ")
-                                
-                                if op_finalizar == '1' or op_finalizar[0] in 'C':
-                                    limpar_tela()
-                                    titulo("Processamento de Pedidos")
-                                    finalizar_pedido = leia_int("N° do Pedido: ")
-                                    
-                                    if finalizar_pedido == '0':
-                                        break
-
-                                    decrementar_ingredientes(finalizar_pedido)
-                                    sucess_msg("Pedido realizado com sucesso!")
-                                    input(">> Enter")
-
-                                elif op_finalizar == '2' or op_finalizar[0] in 'R':
-                                    limpar_tela()
-                                    titulo("Remoção de pedidos")
-                                    excluir_pedido = leia_int("N° do Pedido: ")
-
-                                    if excluir_item == '0':
-                                        break
-
-                                    delete = input_tratado("Pedido já foi confirmado (S/N): ")
-
-                                    if delete[0] == 'S':
-                                        if incrementar_ingredientes(excluir_pedido):
-                                            sucess_msg("Pedido removido com sucesso!")
+                                    if hamburguer:
+                                        atualizar_hamburguer(hamburguer)
                                     else:
-                                        if delete(excluir_pedido):
-                                            sucess_msg("Pedido removido com sucesso!")
-                                   
-                                    input(">> Enter")
+                                        confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
 
-                                elif op_finalizar == '3' or op_finalizar[0] in 'E':
-                                    titulo("Edição de pedidos")
-                                    pedido_cliente = leia_int("N° do Pedido: ")
+                                        if confirmar[0] in 'S':
+                                            criar_novo_hamburguer()
+                                        else:
+                                            break
 
-                                    if editar_pedido == '0':
-                                        break
+                                case "E" | "2":
+                                    excluir_hamburguer()
 
-                                    editar_pedido(pedido_cliente)
-
-                                    input(">> Enter")
-                        
-                        elif op_fazer_venda == "F" or op_fazer_venda == "3":
-                            fechar_vendas()
-
-                        elif op_vender == "0":
+                                case "0":
                                     break
 
-    elif resp == 'F' or resp == '4':
-        op_funcionarios = ''
+                    case "V" | "3":
+                        limpar_tela()
+                        op_fazer_venda = ""
 
-        while op_funcionarios != '0':
-            operacoes_funcionarios()
-            op_funcionarios = input_tratado("Operação:  ")
+                        while op_fazer_venda != "0":
+                            limpar_tela()
+                            titulo("Vendas")
+                            print("↪︎ 1.  Vender Hambúruguer")
+                            print("↪︎ 2.  Lista de Pedidos")
+                            print("↪︎ 3.  Fechar vendas")
+                            print("↪︎ 0.  Vendas")
 
-            if op_funcionarios[0] in "1Q":
-                limpar_tela()
-                titulo("Quadro de funcionários")
+                            op_fazer_venda = input_tratado("Operação:   ")
 
-                for cpf, dados in funcionarios.items():
-                  nome = funcionarios[cpf]['Nome']
-                  idade = funcionarios[cpf]['Idade']
-                  quadro(cpf, nome, idade)        
+                            match op_fazer_venda:
+                                case "V" | "1":
+                                    criar_pedido()
 
-                input(">> Enter")
+                                case "L" | "2":
+                                    listar_pedidos()
+                                    op_finalizar = ""
 
-            elif op_funcionarios[0] in "2G":
-              chave_acesso = True
+                                    while op_finalizar != "0":
+                                        print("↪︎ 1.  Confirmar Pedido")
+                                        print("↪︎ 2.  Remover Pedido")
+                                        print("↪︎ 3.  Editar Pedido")
+                                        print("↪︎ 0.  Retornar")
+                                        op_finalizar = input_tratado("Operação: ")
 
-              if chave_acesso == True:
-                limpar_tela()
+                                        match op_finalizar:
+                                            case "1" | "C":
+                                                limpar_tela()
+                                                titulo("Processamento de Pedidos")
+                                                finalizar_pedido = int(input_tratado("N° do Pedido: "))
 
-                op_gerenciar = ''
-                while op_gerenciar != '0':
-                    limpar_tela()
-                    titulo("Administrativo")
-                    print("↪︎ 1.  Contratar funcionários      ")
-                    print("↪︎ 2.  Demitir funcionários      ")
-                    print("↪︎ 3.  Buscar funcionário     ")
-                    print("↪︎ 4.  Editar funcionário     ")
-                    print("↪︎ 0. Menu Principal") 
-                    linha()
-                    op_gerenciar = input_tratado("Operação: ")
+                                                if finalizar_pedido == '0':
+                                                    break
 
-                    if op_gerenciar == '1':
-                        contratar()
+                                                decrementar_ingredientes(finalizar_pedido)
+                                                sucess_msg("Pedido realizado com sucesso!")
+                                                input(">> Enter")
 
-                    elif op_gerenciar == '2':
-                        demitir()
+                                            case "2" | "R":
+                                                limpar_tela()
+                                                titulo("Remoção de pedidos")
+                                                excluir_pedido = int(input_tratado("N° do Pedido: "))
 
-                    elif op_gerenciar == '3':
-                        buscar()
-                    
-                    elif op_gerenciar == '4':
+                                                if excluir_pedido == '0':
+                                                    break
 
-                        if editar_funcionario():
-                            sucess_msg(f"Funcionário foi editado com sucesso!")
-                            input(">> Enter")
+                                                cabecalho("ATENÇÃO")
+                                                deletar_pedido = input_tratado("Pedido já foi confirmado (S/N): ")
+                                                linha()
 
-                        else:
-                            error_msg(f"Não cadastrado")
-                            input(">> Enter")
+                                                match deletar_pedido:
+                                                    case 'S':
+                                                        perca_de_ingredientes(excluir_pedido)
+                                                    case 'N':
+                                                        deletar_pedido(excluir_pedido)
 
-                    elif op_gerenciar == '0':
+                                            case "3" | "E":
+                                                titulo("Edição de pedidos")
+                                                pedido_cliente = int(input_tratado("N° do Pedido: "))
+
+                                                if pedido_cliente == '0':
+                                                    break
+
+                                                editar_pedido(pedido_cliente)
+
+                                                input(">> Enter")
+
+                                case "F" | "3":
+                                    fechar_vendas()
+
+                                case "0":
+                                    break
+
+        case "F" | "4":
+            op_funcionarios = ""
+
+            while op_funcionarios != "0":
+                operacoes_funcionarios()
+                op_funcionarios = input_tratado("Operação:  ")
+
+                match op_funcionarios:
+                    case "1" | "Q":
+                        limpar_tela()
+                        titulo("Quadro de funcionários")
+
+                        for cpf, dados in funcionarios.items():
+                            nome = dados['Nome']
+                            idade = dados['Idade']
+                            quadro(cpf, nome, idade)
+
+                        input(">> Enter")
+
+                    case "2" | "G":
+                        chave_acesso = True
+
+                        if chave_acesso:
+                            limpar_tela()
+
+                            op_gerenciar = ""
+                            while op_gerenciar != "0":
+                                limpar_tela()
+                                titulo("Administrativo")
+                                print("↪︎ 1.  Contratar funcionários")
+                                print("↪︎ 2.  Demitir funcionários")
+                                print("↪︎ 3.  Buscar funcionário")
+                                print("↪︎ 4.  Editar funcionário")
+                                print("↪︎ 0. Menu Principal")
+                                linha()
+                                op_gerenciar = input_tratado("Operação: ")
+
+                                match op_gerenciar:
+                                    case "1":
+                                        contratar()
+
+                                    case "2":
+                                        demitir()
+
+                                    case "3":
+                                        buscar()
+
+                                    case "4":
+                                        if editar_funcionario():
+                                            sucess_msg("Funcionário foi editado com sucesso!")
+                                            input(">> Enter")
+                                        else:
+                                            error_msg("Não cadastrado")
+                                            input(">> Enter")
+
+                                    case "0":
+                                        break
+
+                    case "0" | "S":
                         break
 
-            elif op_funcionarios[0] in '0S':
-              break
-
-    elif resp == "CL" or resp == "5":
-        limpar_tela()
-        op_cliente = ""
-
-        while op_cliente != "0":
-            operacoes_clientes()
-            
-            op_cliente = input_tratado("Operação:   ")
-
-            if op_cliente[0] in "1C":
-                cadastrar_cliente()
-
-            elif op_cliente[0] in "2L":
-                quadro_clientes()
-
-            elif op_cliente[0] in "3E":
-                quadro_clientes()
-                editar_clientes()
-            
-            elif op_cliente[0] in "4D":
-                quadro_clientes()
-                excluir_cliente()
-
-            elif op_cliente[0] in "0S":
-                break
-
-    elif resp[0] in "R" or resp == '6':
-        limpar_tela()
-        op_relatorio = ""
-
-        while op_relatorio != "0":
+        case "CL" | "5":
             limpar_tela()
-            titulo("Relatórios")
-            print("1 ↪︎ Relatório de Compras")  
-            print("2 ↪︎ Relatório de Vendas")
-            print("3 ↪︎ Relatório de mais vendidos")  
-            print("0 ↪︎ Menu Principal") 
+            op_cliente = ""
 
-            op_relatorio = input_tratado("Operação:   ")
+            while op_cliente != "0":
+                operacoes_clientes()
 
-            if op_relatorio[0] in "1C":
-                processo_compras()
+                op_cliente = input_tratado("Operação:   ")
 
-            elif op_relatorio[0] in "2V":
-                processos_vendas()
-            
-            elif op_relatorio == "3":
-                imprimir_ranking()
+                match op_cliente:
+                    case "1" | "C":
+                        cadastrar_cliente()
 
-            elif op_relatorio[0] in "0S":
-              break
-            
-    elif resp == "INF" or resp == '7':
+                    case "2" | "L":
+                        quadro_clientes()
+
+                    case "3" | "E":
+                        quadro_clientes()
+                        editar_clientes()
+
+                    case "4" | "D":
+                        quadro_clientes()
+                        excluir_cliente()
+
+                    case "0" | "S":
+                        break
+
+        case "R" | "6":
+            limpar_tela()
+            op_relatorio = ""
+
+            while op_relatorio != "0":
+                limpar_tela()
+                titulo("Relatórios")
+                print("1 ↪︎ Relatório de Compras")
+                print("2 ↪︎ Relatório de Vendas")
+                print("3 ↪︎ Relatório de mais vendidos")
+                print("0 ↪︎ Menu Principal")
+
+                op_relatorio = input_tratado("Operação:   ")
+
+                match op_relatorio:
+                    case "1" | "C":
+                        processo_compras()
+
+                    case "2" | "V":
+                        processos_vendas()
+
+                    case "3":
+                        imprimir_ranking()
+
+                    case "0" | "S":
+                        break
+
+        case "INF" | "7":
             limpar_tela()
             titulo("Informações")
             subtitulo("Projeto de Gestão de uma Hamburgueria")
-            print("-○  Equipe de desenvolvimento:               ")
-            print("-○  Anderson G. Pereira Cruz                 ")
-            print("-○  Replit: @gabrielcruz133                  ")
-            print("-○  Instagram: biel.ands                     ")
-            print("-○  andersong.pereiracruz@gmail.com          ")
-            print("-○  59-378/000 São José do Serído - RN       ")
+            print("-○  Equipe de desenvolvimento:")
+            print("-○  Anderson G. Pereira Cruz")
+            print("-○  Replit: @gabrielcruz133")
+            print("-○  Instagram: biel.ands")
+            print("-○  andersong.pereiracruz@gmail.com")
+            print("-○  59-378/000 São José do Serído - RN")
             linha()
             input(">> Enter para continuar ")
 
-    elif resp[0] in "S" or resp == '0':
-        break
+        case "S" | "0":
+            break
 
 limpar_tela()
 cabecalho("Hamburgueria do Py")

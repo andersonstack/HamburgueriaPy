@@ -130,4 +130,6 @@ def imprimir_ranking():
         print("¨" * 125)
     
     input(">> Enter")
-    
+
+def exibir_percas():
+    ...

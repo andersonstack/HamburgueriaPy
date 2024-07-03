@@ -335,96 +335,36 @@ def decrementar_adicionais(codigo):
     save_data("arquivo_almoxarifado.dat", almoxarifado)
 
 
-def incrementar_adicionais(codigo):
-    """
-    Incrementa a quantidade de adicionais utilizados em um pedido no almoxarifado.
+def perca_de_ingredientes(codigo):
+    hamburguer = pedidos[codigo][3]
+    quantidade = pedidos[codigo][4]
+    for hamburguers, ingredientes in cardapio.items():
+        if hamburguers == hamburguer:
+            for ingrediente, quantia in ingredientes.items():
+                
+                if ingrediente == 'Preço':
+                    continue
 
-    Utilizada em cancelamento de pedidos.
+                quantia *= quantidade
+                gerar_percas(hamburguer, ingrediente, quantia)
 
-    Args:
-        codigo (int): ID do pedido no dicionário `pedidos`.
-
-    Returns:
-        str: Retorna uma mensagem de aviso se o pedido não for encontrado.
-
-    Fluxo da função:
-        1. Verifica se o pedido existe.
-        2. Acessa a lista de adicionais do pedido.
-        3. Itera sobre cada adicional na lista e incrementa a quantidade no almoxarifado.
-        4. Salva os dados atualizados do almoxarifado.
-    """
-    if verificar_pedido:
-        pedido_cliente = pedidos[codigo]
-        lista_adicionais = pedido_cliente[5]  # Acessar a lista dos adicionais
-        for adicional in lista_adicionais:  # Iterar sobre os adicionais da lista
-            nome_adicional = adicional[0]
-            quantidade_adicional = adicional[1]
-
-            for ids, detalhes in almoxarifado.items():
-                item_almoxarifado = detalhes[0]
-                if nome_adicional == item_almoxarifado:  # Verificar se o adicional existe no almoxarifado
-                    almoxarifado[ids][1] += quantidade_adicional
-    else:
-        return error_msg("Pedido não encontrado!")
-    
-    save_data("arquivo_almoxarifado.dat", almoxarifado)
-
-
-def incrementar_ingredientes(codigo):
-    """
-    Incrementa os ingredientes utilizados em um pedido no almoxarifado e remove o pedido.
-
-    Utilizada para cancelamento de pedidos.
-
-    Args:
-        codigo (int): ID do pedido no dicionário `pedidos`.
-
-    Returns:
-         bool: Retorna True se os ingredientes foram incrementados com sucesso e o pedido foi removido.
-              Retorna False e exibe uma mensagem de erro se o pedido não for encontrado.
-    
-    Fluxo da função:
-        1. Verifica se o pedido existe.
-        2. Incrementa os adicionais se houver.
-        3. Calcula a quantidade total de cada ignrediente do hambúrguer.
-        4. Atualiza as quantidades de ingredientes no almoxarifado.
-        5. Salva os dados atualizados do almoxarifado e do dicionário de pedidos.
-        6. Remove o pedido do dicionário de pedidos.
-    """
-    if verificar_pedido:
-        
-        adicionais = pedidos[codigo][-2]
-        
-        if len(adicionais) != 0:
-            incrementar_adicionais(codigo)
-
-        pedido_cliente = pedidos[codigo]
-        nome_hamburguer = pedido_cliente[3]  # Acessar nome do hambúrguer
-        ingredientes_hamburguer = cardapio[nome_hamburguer]  # Acessar o dict de ingredientes do hambúrguer no cardápio
-        quantidade_hamburguer = pedido_cliente[4]  # Acessar quantidade solicitada pelo cliente
-
-        for ingrediente in ingredientes_hamburguer:  # Acessar os ingredientes
-            if ingrediente == 'Preço':
-                continue
-            quantidade_ingrediente = ingredientes_hamburguer[ingrediente]
-            quantidade_total = quantidade_hamburguer * quantidade_ingrediente # Quantidade total
-            
-            for ids, detalhes in almoxarifado.items():
-                item_almoxarifado = detalhes[0]
-
-                if ingrediente == item_almoxarifado:  # Verificar se o adicional existe no almoxarifado
-                    almoxarifado[ids][1] += quantidade_total
-    else:
-        error_msg("Pedido não encontrado!")
-        return False
-    
-    save_data("arquivo_almoxarifado.dat", almoxarifado)
-    pedidos.pop(codigo)
     save_data("arquivo_pedidos.dat", pedidos)
-    return True
+    sucess_msg("Pedido removido e anexado em percas.")
+    return input(">> Enter")
 
 
-def delete(codigo):
+def gerar_percas(hamburguer, ingrediente, quantidade):
+
+    if data not in percas_ingredientes:
+        perca_de_ingredientes[data] = []
+    
+    percas_vendas = {"Hambúrguer": hamburguer, "Ingredientes": ingrediente, "Quantidade": quantidade}
+
+    perca_de_ingredientes[data].append(percas_vendas) 
+    save_data("percas_ingredientes.dat", percas_ingredientes)
+
+
+def deletar_pedido(codigo):
     """
     Função para deletar pedidos que não foram confirmados.
 
@@ -436,9 +376,11 @@ def delete(codigo):
     """
     if verificar_pedido():
         pedidos.pop(codigo)
+        input(">> Enter")
         return True
     else:
         error_msg("Pedido não encontrado")
+        input(">> Enter")
         return False
 
 
@@ -651,7 +593,7 @@ def editar_pedido(id_pedido):
             break
 
 
-def fechar_vendas(cpf):
+def fechar_vendas():
     """
     Fecha as vendas do dia para um funcionário específico, limpa os pedidos e salva os dados no relatório de vendas.
 
