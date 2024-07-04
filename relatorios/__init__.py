@@ -57,7 +57,7 @@ def processos_vendas():
     if data_venda.strip() != 'TODO':
         if data_venda not in vendas.keys():
             error_msg("Data não encontrada")
-            return input("<< Enter >>")
+            return input(">> Enter")
         
         else:
             data = {data_venda: vendas[data_venda]}
@@ -132,4 +132,28 @@ def imprimir_ranking():
     input(">> Enter")
 
 def exibir_percas():
-    ...
+    """
+    Função que exibe as percas de determinado turno ou período completo de vendas.
+
+    Returns:
+        input: Solicita que o usuário aperte enter para continuar o processo.
+    """
+    limpar_tela()
+    data_percas = input_tratado("Data [XX/XX/XXXX] | Todo [Relatorio completo]:  ")
+
+    if data_percas.strip() != 'TODO':
+        if data_percas not in percas_ingredientes.keys():
+            error_msg("Data não encontrada")
+            return input(">> Enter")
+        else:
+            data = {data_percas: percas_ingredientes[data_percas]}
+    else:
+        data = percas_ingredientes
+
+    for data, infor in data.items():
+        cabecalho("RELATÓRIO DE PERCAS")
+        subtitulo(f"Data: {data}")
+        for item, quantidade in infor.items():
+           print_alinhado(f"{item}{'-' * (124 - (len(item)))}{quantidade}")
+    linha()
+    return input(">> Enter")

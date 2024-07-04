@@ -13,7 +13,7 @@ from menu import (
     exibir_cardapio, verificar_hamburguer_existente, 
     atualizar_hamburguer, criar_novo_hamburguer, excluir_hamburguer
 )
-from relatorios import processo_compras, processos_vendas, imprimir_ranking
+from relatorios import processo_compras, processos_vendas, imprimir_ranking, exibir_percas
 from tools import varredura, limpar_tela, input_tratado
 from vendas import (
     listar_pedidos, criar_pedido, decrementar_ingredientes, 
@@ -180,7 +180,7 @@ while resp != "0":
                                                 if excluir_pedido == '0':
                                                     break
 
-                                                cabecalho("ATENÇÃO")
+                                                subtitulo("ATENÇÃO")
                                                 deletar_pedido = input_tratado("Pedido já foi confirmado (S/N): ")
                                                 linha()
 
@@ -305,6 +305,7 @@ while resp != "0":
                 print("1 ↪︎ Relatório de Compras")
                 print("2 ↪︎ Relatório de Vendas")
                 print("3 ↪︎ Relatório de mais vendidos")
+                print("4 ↪︎ Relatório de percas")
                 print("0 ↪︎ Menu Principal")
 
                 op_relatorio = input_tratado("Operação:   ")
@@ -318,6 +319,9 @@ while resp != "0":
 
                     case "3":
                         imprimir_ranking()
+                    
+                    case "4":
+                        exibir_percas()
 
                     case "0" | "S":
                         break

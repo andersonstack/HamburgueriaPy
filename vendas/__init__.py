@@ -336,6 +336,28 @@ def decrementar_adicionais(codigo):
 
 
 def perca_de_ingredientes(codigo):
+    """
+    Função que recebe o código de um pedido já confirmado e feito. Como os ingredientes de uma hambúrguer real
+    não podem voltar para cozinha, eles são gerados como perca a não ser que outro cliente escolha esse hambúrguer.
+
+    Args:
+        codigo (int): Chave a qual está armazenado o pedido em pedidos.
+
+    Returns:
+        input: Solicita enter para continuar o código.
+    
+    Fluxo:
+        1. A função define o hamburguer e a quantidade do pedido
+        2. Intera sobre o cardapio para encontrar os valores correspondentes.
+        3. Compara se o hamburguer no cardaio é igual ao hamburguer definido na função.
+        4. Intera sobre os ingredientes desse hamburguer.
+        5. Se ingrediente for igual a "Preço", ignore.
+        6. Pega a quasntia do cardapio e multiplica pela quantia pedida pelo cliente.
+        7. Ingrediente e quantia é colocado em gerar_percas.
+        8. Pedido é removido de pedidos.
+        9. Arquivos são salvos.
+        10. Exibe mensagem de sucesso.
+    """
     hamburguer = pedidos[codigo][3]
     quantidade = pedidos[codigo][4]
     for hamburguers, ingredientes in cardapio.items():
@@ -346,22 +368,45 @@ def perca_de_ingredientes(codigo):
                     continue
 
                 quantia *= quantidade
-                gerar_percas(hamburguer, ingrediente, quantia)
-
+                gerar_percas(ingrediente, quantia)
+    
+    pedidos.pop(codigo)
     save_data("arquivo_pedidos.dat", pedidos)
     sucess_msg("Pedido removido e anexado em percas.")
     return input(">> Enter")
 
 
-def gerar_percas(hamburguer, ingrediente, quantidade):
+def gerar_percas(ingrediente, quantidade):
+    """
+    Função que gera o relataório de percas de pedidos.
 
+    A função recebe como parâmetro o ingrediente e sua quantidade correspondente do pedido. A partir da data,
+    as informações são adicionais ao dicionário percas_ingredientes.
+
+    Args:
+        ingrediente (str): Nome do ingrediente
+        quantidade (int): Quantidade do ingrediente
+
+    Fluxo:
+        1. Verifica se a data existe no dicionario, caso não, cria para receber um dict();
+        2. Verifica se o ingrediente existe naquele data respectiva no dicionário, caso não, cria e iguala a 0.
+        3. Acrescenta as informações em percas_ingredientes a partir de seus dados.
+
+    Formato do dicionário:
+        percas_ingredientes = {
+            "04/07/2024": {"Ingrediente": quantidade}
+            ...
+        }
+    """
     if data not in percas_ingredientes:
-        perca_de_ingredientes[data] = []
+        percas_ingredientes[data] = {}
     
-    percas_vendas = {"Hambúrguer": hamburguer, "Ingredientes": ingrediente, "Quantidade": quantidade}
-
-    perca_de_ingredientes[data].append(percas_vendas) 
+    if ingrediente not in percas_ingredientes[data]:
+        percas_ingredientes[data][ingrediente] = 0
+    
+    percas_ingredientes[data][ingrediente] += quantidade
     save_data("percas_ingredientes.dat", percas_ingredientes)
+
 
 
 def deletar_pedido(codigo):
