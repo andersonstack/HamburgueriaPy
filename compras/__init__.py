@@ -1,7 +1,7 @@
 from views import *
 from data import *
 from tools import *
-id_counter = max(almoxarifado.keys()) + 1  # Define o próximo ID a ser usado
+id_counter = 0 if len(almoxarifado) == 0 else max(almoxarifado.keys()) + 1  # Define o próximo ID a ser usado
 
 
 def atualizar_compras(id_item, quantidade):

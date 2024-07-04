@@ -53,11 +53,13 @@ def processos_vendas():
 
     limpar_tela()
     data_venda = input_tratado("Data [XX/XX/XXXX] | Todo [Relatorio completo]:  ")
+    limpar_tela()
 
-    if data_venda.strip() != 'TODO':
+    if data_venda.strip().upper() != 'TODO':
         if data_venda not in vendas.keys():
             error_msg("Data não encontrada")
-            return input(">> Enter")
+            input(">> Enter para continuar")
+            return
         
         else:
             data = {data_venda: vendas[data_venda]}
@@ -66,29 +68,29 @@ def processos_vendas():
      
     for data, detalhes in data.items():
         subtitulo(data)
-        for chaves, especificacoes in detalhes.items():
-            if chaves == "Pedidos Realizados":
-                linha()
-                for id_pedido, detalhes_pedido in especificacoes.items():
-                    for especificacoes, valor in detalhes_pedido.items():
-                        if especificacoes == "Adicionais":
-                            if valor:  # Verifica se há adicionais
-                                for adicional, adicional_detalhes in valor.items(): # Informações adicionais
-                                    nome_adicional = adicional
-                                    detalhes_adicional = f"Quantidade = {adicional_detalhes[0]} | Preço = {adicional_detalhes[1]}"
-                                    print_alinhado(f"{nome_adicional}:", detalhes_adicional)
-                            else:
-                                print("Nenhum")
-                            continue
+        print(f"Hora: {detalhes['Hora']}")
+        print(f"Funcionário: {detalhes['Funcionário']}")
+        print(f"CPF: {detalhes['CPF']}")
+        linha()
+        
+        pedidos = detalhes['Pedidos Realizados']
+        for pedido_id, pedido_detalhes in pedidos.items():
+            print(f"\nPedido ID: {pedido_id}")
+            print(f"Cliente: {pedido_detalhes[1]}")
+            print(f"Endereço: {pedido_detalhes[2]}")
+            print(f"Produto: {pedido_detalhes[3]}")
+            print(f"Quantidade: {pedido_detalhes[4]}")
 
-                        # Informações do hamburguer
-                        print_alinhado(f"{especificacoes}:", valor)
-                    linha()
-                continue
+            if pedido_detalhes[5]:  # Verifica se há adicionais
+                print("Adicionais:")
+                for adicional in pedido_detalhes[5]:
+                    print(f"  - Item: {adicional[0]}, Quantidade: {adicional[1]}, Preço: {adicional[2]}")
+            else:
+                print("Adicionais: Nenhum")
 
-            # Informações do funcionário
-            print(f"{chaves}: {especificacoes}")
-        linha()    
+            print(f"Preço: R$ {pedido_detalhes[6]:0.2f}")
+            linha()
+
     input(">> Enter para continuar")
 
 
@@ -140,6 +142,8 @@ def exibir_percas():
     """
     limpar_tela()
     data_percas = input_tratado("Data [XX/XX/XXXX] | Todo [Relatorio completo]:  ")
+    limpar_tela()
+
 
     if data_percas.strip() != 'TODO':
         if data_percas not in percas_ingredientes.keys():

@@ -1,10 +1,11 @@
-from tools import *
-from data import *
-from views import *
+# Importações necessárias para a modularização
+from tools import limpar_tela, leia_item, leia_int, leia_float, input_tratado
+from data import save_data, cardapio
+from views import subtitulo, error_msg, sucess_msg, titulo
 
 def exibir_cardapio():
     """
-    Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes.
+    Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes por porção.
     """
     limpar_tela()
     for nome_hamburguer, ingrediente_hamburguer in cardapio.items():

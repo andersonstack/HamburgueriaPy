@@ -665,6 +665,8 @@ def fechar_vendas():
     Exemplo de uso:
         fechar_vendas("77788899911")
     """
+    
+
     cpf = leiaCPF("CPF: ")
 
     funcionario_cpf = ''
@@ -683,12 +685,12 @@ def fechar_vendas():
         "Pedidos Realizados": pedidos.copy(),  
     }
 
+    atualizar_ranking(pedidos)
     pedidos.clear() # Limpar dos pedidos
 
     # Salvamento de dados
     save_data("arquivo_vendas.dat", vendas) 
     save_data("arquivo_pedidos.dat", pedidos)
-    atualizar_ranking(pedidos)
 
     sucess_msg("Vendas fechadas com sucesso!")
     input("<< Enter >>")
@@ -734,12 +736,11 @@ def atualizar_ranking(pedidos):
         atualizar_ranking(pedidos)
         print(ranking_vendas)  # Saída: {'HAMBÚRGUER CLÁSSICO': 1}
     """
-    for data, valores in pedidos.items():
-        for codigo, detalhes in valores['Pedidos Realizados'].items():
-            hambuguer = detalhes[3]
-            quantidade = detalhes[4]
-            if hambuguer in ranking_vendas:
-                ranking_vendas[hambuguer] += quantidade
-            else:
-                ranking_vendas[hambuguer] = quantidade
+    for codigo, infor in pedidos.items():
+        hamburguer = infor[3]
+        quantidade = infor[4]
+        if hamburguer in ranking_vendas:
+            ranking_vendas[hamburguer] += quantidade
+        else:
+            ranking_vendas[hamburguer] = quantidade
     save_data("ranking_vendas.dat", ranking_vendas)
