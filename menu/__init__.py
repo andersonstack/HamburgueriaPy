@@ -58,7 +58,7 @@ def verificar_hamburguer_existente():
     return error_msg("Hambúrguer não existe no cardápio")
 
 
-def atualizar_hamburguer(hamburguer, cardapio):
+def atualizar_hamburguer(hamburguer):
     """
     Atualiza um hambúrguer existente no cardápio, zerando a lista de ingredientes.
 
@@ -109,6 +109,8 @@ def atualizar_hamburguer(hamburguer, cardapio):
             break
     else:
         error_msg(f"Hambúrguer '{hamburguer}' não encontrado no cardápio.")
+    
+    return input(">> Enter")
 
 
 def criar_novo_hamburguer():
@@ -154,8 +156,7 @@ def criar_novo_hamburguer():
 
     sucess_msg(f"Hambúrguer '{hamburguer}' criado com sucesso!")
     save_data("arquivo_cardapio.dat", cardapio)
-    input(">> Enter")
-
+    return input(">> Enter")
 
 def excluir_hamburguer():
     """
