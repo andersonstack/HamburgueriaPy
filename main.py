@@ -112,20 +112,35 @@ while resp != "0":
 
                             match op_admi_cardapio:
                                 case "A" | "1":
-                                    hamburguer = verificar_hamburguer_existente()
+                                    existencia, hamburguer = verificar_hamburguer_existente()
 
-                                    if hamburguer:
+                                    if existencia:
                                         atualizar_hamburguer(hamburguer)
+                                        input(">> Enter")
                                     else:
+                                        error_msg(f"{hamburguer} não encontrado!")
                                         confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
 
                                         if confirmar[0] in 'S':
-                                            criar_novo_hamburguer()
+                                            burguer = criar_novo_hamburguer()
+                                            if burguer:
+                                                sucess_msg("Hambúrguer Criado com sucesso!")
+                                            else:
+                                                error_msg("Erro ao criar o hambúrguer.")
+                                            
+                                            input(">> Enter")
+
                                         else:
                                             break
 
                                 case "E" | "2":
-                                    excluir_hamburguer()
+                                    burguer_delete = excluir_hamburguer()
+                                    if burguer_delete:
+                                        sucess_msg("Hambúrguer excluido com sucesso!")
+                                    else:
+                                        error_msg("Hambúrguer não foi encontrado.")
+                                    
+                                    input(">> Enter")
 
                                 case "0":
                                     break

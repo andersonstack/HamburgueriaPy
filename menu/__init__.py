@@ -3,21 +3,22 @@ from tools import limpar_tela, leia_item, leia_int, leia_float, input_tratado
 from data import save_data, cardapio
 from views import subtitulo, error_msg, sucess_msg, titulo
 
+ID_MENU = 1 if len(cardapio) == 0 else max(cardapio.keys()) + 1
+
 def exibir_cardapio():
     """
     Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes por porção.
     """
     limpar_tela()
-    for nome_hamburguer, ingrediente_hamburguer in cardapio.items():
-        print()
-        subtitulo(nome_hamburguer) # Nome do hambúrguer 
-        print('\033[1;37m')
-        for ingrediente, quantidade in ingrediente_hamburguer.items():
-            
-            if ingrediente == 'Preço':
-                print(f"{ingrediente} {'-' * (116 - (len(ingrediente)))} R$ {quantidade:.2f}")
-            else:
-                print(f"{ingrediente} {'-' * (122 - (len(ingrediente)))} {quantidade}")
+    for codigo, detalhes in cardapio.items():
+        for nome_hamburguer, ingredientes in detalhes.items():
+            if nome_hamburguer != 'PRECO':
+                print()
+                subtitulo(nome_hamburguer)  # Nome do hambúrguer 
+                print('\033[1;37m')
+                for ingrediente, quantidade in ingredientes.items():
+                    print(f"{ingrediente} {'-' * (122 - len(ingrediente))} {quantidade}")
+                print(f"PREÇO {'-' * (116 - len('PREÇO'))} R$ {detalhes['PRECO']:.2f}")
     print()
     print('\033[m') 
     input(">> Enter")
@@ -25,192 +26,91 @@ def exibir_cardapio():
 
 def verificar_hamburguer_existente():
     """
-    Verifica se o hambúrguer já existe no cardápio.
+    Verifica a existência de um hambúrguer no cardápio.
 
-    Solicita o nome do hambúrguer e verifica se o nome existe no cardápio. Caso exista, retorna o hamburguer
-    para continuar o processo.
-    Caso não exista, retorna um mensagem de erro.
-    
     Returns:
-        hamburguer: nome do hambúrguer no cardápio
-        error_msg: mensagem de que o hamburuger não foi encontrado.
-    
-    Fluxo:
-        1. Solicita o nome do hamburguer.
-        2. Verifica se o hamburguer existe no cardápio.
-            2.1 Se existe, retorna o próprio hamburguer.
-            2.2 Se não existe, retorna um error_msg.
-
-    Formato do cardápio:
-        cardapio = {
-            'HAMBURGUER': {
-                'INGREDIENTE 1': quantidade
-                ...
-                'INGREDIENTE n': quantidade
-                'Preço': 6.0
-            }
-        }
+        Nome do hambúrguer se encontrado, caso contrário None.
     """
-    hamburguer = leia_item("Nome do Hambúrguer:   ").upper()
+    hamburguer = leia_item("Hambúrguer: ").upper().replace(" ", "")
+    
+    for codigo, detalhes in cardapio.items():
+        hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
 
-    for nome, _ in cardapio.items(): # Verificação
-        if hamburguer.replace(" ", "") in nome.replace(" ", ""): # Comparação da entrada do hambúrguer com o nome do cardápio
-            return hamburguer
-    return error_msg("Hambúrguer não existe no cardápio")
+        if hamburguer == hamburguer_menu:
+            return True, hamburguer
+        
+    return False, hamburguer
 
 
 def atualizar_hamburguer(hamburguer):
     """
-    Atualiza um hambúrguer existente no cardápio, zerando a lista de ingredientes.
-
-    Args:
-        hamburguer (str): O nome do hambúrguer a ser atualizado.
-        cardapio (dict): Dicionário contendo o cardápio de hambúrgueres.
-
-    Fluxo:
-        1. Recebe como parâmetro o nome do hambúrguer a ser atualizado.
-        2. Intera sobre os elementos do cardápio.
-        3. Compara o hambúrguer com os hambúrguer do cardápio.
-        4. Zera a lista de ingredientes do hambúrguer.
-        5. Faz um laço de repetição para adicionar novos ingredientes.
-        6. Solicita o novo preço por último.
-        7. Atualiza os dados do novo hambúrguer.
-        8. Exibe mensagem de sucesso.
-        9. Salva os novos dados em arquivo.
-    
-    Formato do cardápio:
-        cardapio = {
-            'HAMBURGUER': {
-                'INGREDIENTE 1': quantidade,
-                ...
-                'INGREDIENTE n': quantidade,
-                'Preço': 6.0
-            }
-        }
+    Atualiza os ingredientes de um hambúrguer existente no cardápio.
     """
-    
-    for nome, ingredientes in cardapio.items():
-        if hamburguer.replace(" ", "").upper() == nome.replace(" ", "").upper():
-            print(f"Atualizando o hambúrguer '{nome}':")
-            cardapio[nome] = {}  # Zera a lista de ingredientes
-            
-            while True:
-                ingrediente = input("(SAIR) Ingrediente: ").strip().upper()
-                if ingrediente == "SAIR":
-                    break
+    for codigo, detalhes in cardapio.items():
+        hamburguer_menu = list(detalhes.keys())[0].upper()
 
-                quantidade = int(input("Quantidade: "))
-                cardapio[nome][ingrediente] = quantidade
-            
-            preco = float(input("Preço: "))
-            cardapio[nome]["Preço"] = preco  # Adiciona o preço por último
+        if hamburguer.replace(" ", "") == hamburguer_menu.replace(" ", ""):
+            print(f"Atualizando o hambúrguer {hamburguer_menu}")
+            ingredientes = adicionar_ingredientes()
+            detalhes[hamburguer_menu] = ingredientes
+            detalhes['PRECO'] = ingredientes.pop("PRECO")
 
-            sucess_msg(f"Hambúrguer '{nome}' atualizado com sucesso!")
             save_data("arquivo_cardapio.dat", cardapio)
-            break
-    else:
-        error_msg(f"Hambúrguer '{hamburguer}' não encontrado no cardápio.")
-    
-    return input(">> Enter")
 
 
-def criar_novo_hamburguer():
+def adicionar_ingredientes():
     """
-    Cria um novo hambúrguer no cardápio.
-
-    Fluxo:
-        1. Cria um novo hambúrguer no cardápio.
-        2. Exibe uma mensagem de que um Hambúrguer foi criado e para inserir os dados..
-        3. Faz um laço de repetição para adicionar os ingredientes.
-        4. Solicita o preço do hambúrguer.
-        5. Insere os dados no cardápio.
-        6. Exibe mensagem de sucesso.
-        7. Salva os dados em arquivo.
-        8. Solicita que o usuário dê input para continuar.
-    
-    Formato do cardápio:
-        cardapio = {
-            'HAMBURGUER': {
-                'INGREDIENTE 1': quantidade
-                ...
-                'INGREDIENTE n': quantidade
-                'Preço': 6.0
-            }
-        }
+    Adiciona ingredientes ao hambúrguer.
     """
-    limpar_tela()
-    titulo("HAMBÚRGUERES")
-    hamburguer = leia_item("Nome do Hamburguer: ").upper()
-    cardapio[hamburguer] = {}  # Cria um novo hambúrguer no cardápio
-    sucess_msg(f"Hambúrguer: '{hamburguer}' criado. Por favor, adicione os ingredientes e preço:")
-
+    ingredientes = {}
+    
     while True:
-        ingrediente = leia_item("[SAIR] Ingrediente:    ").upper()
+        ingrediente = input("(SAIR) - Ingrediente:  ").strip().upper()
+
         if ingrediente == "SAIR":
             break
 
-        quantidade = leia_int("Quantidade:   ")
-        cardapio[hamburguer][ingrediente] = quantidade
-            
-    preco = leia_float("Preço:   ")
-    cardapio[hamburguer]["Preço"] = preco
+        quantidade = leia_int("Quantidade:  ")
+        ingredientes[ingrediente] = quantidade        
 
-    sucess_msg(f"Hambúrguer '{hamburguer}' criado com sucesso!")
+    preco = leia_float("Preço:  ")
+    ingredientes["PRECO"] = preco
+
+    return ingredientes
+
+
+def criar_hamburguer():
+    """
+    Cria um novo hambúrguer e adiciona ao cardápio.
+    """
+    global ID_MENU
+
+    nome_hamburguer = leia_item("Novo Hambúrguer: ").strip().upper()
+    ingredientes = adicionar_ingredientes()
+    
+    cardapio[ID_MENU] = {
+        nome_hamburguer: ingredientes,
+        'PRECO': ingredientes.pop("PRECO")
+    }
+    ID_MENU += 1
     save_data("arquivo_cardapio.dat", cardapio)
-    return input(">> Enter")
+    return True
+
 
 def excluir_hamburguer():
     """
-    Exclui um hambúrguer específico do cardápio.
-
-    Fluxo:
-        1. Solicita o nome do hambúrguer a ser excluido.
-        2. Define ham_excluido como False.
-        3. Intera os elementos do cardapio.
-        4. Verifica se o hamburguer existe no cardapio.
-            4.1 Se existe exibe mensagem que foi encontrado.
-                4.1.1 Pede confirmação de exclusão.
-                4.1.2 Se confirmação for confirmativa, deleta o hamburguer e hamb_excluido = True.
-                Salva os dados no cardápio e sai do for.
-                4.1.3 Se confirmação for negativa, cancela a operação e sai for for e define
-                hamb_excluido = True para evitar mensagem de hambúrguer não encontrado.
-            4.2 Se não existe, exibe mensagem de erro que hambúrguer não encontrado.
-        5. Pede input() para prosseguir o código.
-            
-    Formato do cardápio:
-        cardapio = {
-            'HAMBURGUER': {
-                'INGREDIENTE 1': quantidade
-                ...
-                'INGREDIENTE n': quantidade
-                'Preço': 6.0
-            }
-        }
-
+    Exclui um hambúrguer do cardápio.
     """
-    hamburguer = leia_item("Nome:   ")
-    limpar_tela()
-    hamb_excluido = False  # Variável para verificar se o hambúrguer foi excluído
+    hamburguer = leia_item("Excluir Hambúrguer: ").strip().upper().replace(" ", "")
+    
+    for codigo, detalhes in list(cardapio.items()):
+        hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
 
-    for nome in cardapio.keys(): # Verificação de o hambúrguer está no cardápio
-        if hamburguer.replace(" ", "") in nome.replace(" ", ""):
-            sucess_msg("Hambúrguer encontrado")
-            confirmar_exclusao = input_tratado(f"Deseja realmente excluir o hambúrguer '{nome}' do cardápio? [S/N]: ")
-            
-            if confirmar_exclusao == "S":
-                del cardapio[nome]
-                sucess_msg(f"Hambúrguer '{nome}' excluído do cardápio com sucesso!")
-                hamb_excluido = True
+        if hamburguer == hamburguer_menu:
+            del cardapio[codigo]
+            save_data("arquivo_cardapio.dat", cardapio)
+            return True
+        
+    return False
 
-                save_data("arquivo_cardapio.dat", cardapio)
 
-                break
-            else:
-                error_msg("Exclusão cancelada.")
-                hamb_excluido = True  # Define como True para evitar a mensagem de hambúrguer não encontrado
-                break
-
-    if not hamb_excluido: # Caso o hambúrguer não seja encontrado, o hamb_excluido terá valor booleano False
-        error_msg(f"Hambúrguer '{hamburguer}' não encontrado no cardápio.")
-
-    input(">> Enter")
