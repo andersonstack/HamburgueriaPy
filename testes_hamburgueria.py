@@ -1,6 +1,7 @@
 from tools import *
 from views import *
 
+
 cardapio = {
     1: {
         'HAMBÚRGUER CLÁSSICO': {
@@ -13,128 +14,126 @@ cardapio = {
     }
 }
 
-ID_MENU = 1 if len(cardapio) == 0 else max(cardapio.keys()) + 1
+almoxarifado = {
+    1: ['CARNE BOVINA', 100],
+    2: ['OVO', 100],
+    3: ['PÃO', 100],
+    4: ['TOMATE', 100]
+}
 
-def exibir_cardapio():
-    """
-    Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes por porção.
-    """
-    limpar_tela()
-    for codigo, detalhes in cardapio.items():
-        for nome_hamburguer, ingredientes in detalhes.items():
-            if nome_hamburguer != 'PRECO':
-                print()
-                subtitulo(nome_hamburguer)  # Nome do hambúrguer 
-                print('\033[1;37m')
-                for ingrediente, quantidade in ingredientes.items():
-                    print(f"{ingrediente} {'-' * (122 - len(ingrediente))} {quantidade}")
-                print(f"PREÇO {'-' * (116 - len('PREÇO'))} R$ {detalhes['PRECO']:.2f}")
-    print()
-    print('\033[m') 
-    input(">> Enter")
+def criar_pedido():
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    quantidade = leia_int("Quantidade:  ")
+    burguer = verifica_entrada(hamburguer)
+    validar_burguer = validar_hamburguer(burguer)
+
+    if validar_burguer:
+        hamburguer_menu = pegar_ingredientes(burguer, quantidade)
+        pedido_hamburguer, ingredientes = verficiar_ingredientes(hamburguer_menu)
+
+        if pedido_hamburguer:
+            adicionais_pedido = adicionais()
+            if adicionais_pedido:
+                for adicional, (qtd, preco) in adicionais_pedido.items():
+                    if not verificar_adicional(adicional, qtd):
+                        return print(f"Adicional {adicional} em falta para a quantidade solicitada.")
+            print("Pedido realizado com sucesso!")
+        else:
+            print(f"Ingredientes em falta: {ingredientes}")
+
+    else:
+        return print("Hambúrguer não cadastrado.")
 
 
-def verificar_hamburguer_existente():
-    """
-    Verifica a existência de um hambúrguer no cardápio.
+def adicionais():
+    adicional = input_tratado("Adicionais (SIM/NÃO):  ")
+    adicionais_pedido = {}
 
-    Returns:
-        Nome do hambúrguer se encontrado, caso contrário None.
-    """
-    hamburguer = leia_item("Hambúrguer: ").upper().replace(" ", "")
+    if adicional == 'SIM':
+        while True:
+            adicional = leia_item("(SAIR) - Adicional:   ").upper().strip()
+            if adicional == "SAIR":
+                break
+            quantidade = leia_int("Quantidade:  ")
+            preco = leia_float("Preço p/unidade:    ")
+            preco_real = preco * quantidade
+            adicionais_pedido[adicional] = [quantidade, preco_real]
+        return adicionais_pedido
     
-    for codigo, detalhes in cardapio.items():
-        hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
-
-        if hamburguer == hamburguer_menu:
-            return True, hamburguer
-        
-    return False, error_msg("Hambúrguer não encontrado.")
+    else:
+        return False   
 
 
-def atualizar_hamburguer(hamburguer):
-    """
-    Atualiza os ingredientes de um hambúrguer existente no cardápio.
-    """
-    for codigo, detalhes in cardapio.items():
-        hamburguer_menu = list(detalhes.keys())[0].upper()
-
-        if hamburguer.replace(" ", "") == hamburguer_menu.replace(" ", ""):
-            print(f"Atualizando o hambúrguer {hamburguer_menu}")
-            ingredientes = adicionar_ingredientes()
-            detalhes[hamburguer_menu] = ingredientes
-            detalhes['PRECO'] = ingredientes.pop("PRECO")
-
-            save_data("arquivo_cardapio.dat", cardapio)
-
-
-def adicionar_ingredientes():
-    """
-    Adiciona ingredientes ao hambúrguer.
-    """
-    ingredientes = {}
+def verifica_entrada(prompt):
+    try:
+        hamburguer_cod = int(prompt)
+        return hamburguer_cod
     
-    while True:
-        ingrediente = input("(SAIR) - Ingrediente:  ").strip().upper()
-
-        if ingrediente == "SAIR":
-            break
-
-        quantidade = leia_int("Quantidade:  ")
-        ingredientes[ingrediente] = quantidade        
-
-    preco = leia_float("Preço:  ")
-    ingredientes["PRECO"] = preco
-
-    return ingredientes
+    except ValueError:
+        return prompt
 
 
-def criar_hamburguer():
-    """
-    Cria um novo hambúrguer e adiciona ao cardápio.
-    """
-    global ID_MENU
-
-    nome_hamburguer = leia_item("Novo Hambúrguer: ").strip().upper()
-    ingredientes = adicionar_ingredientes()
-    
-    cardapio[ID_MENU] = {
-        nome_hamburguer: ingredientes,
-        'PRECO': ingredientes.pop("PRECO")
-    }
-    ID_MENU += 1
-    save_data("arquivo_cardapio.dat", cardapio)
-    return True
-
-
-def excluir_hamburguer():
-    """
-    Exclui um hambúrguer do cardápio.
-    """
-    hamburguer = leia_item("Excluir Hambúrguer: ").strip().upper().replace(" ", "")
-    
-    for codigo, detalhes in list(cardapio.items()):
-        hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
-
-        if hamburguer == hamburguer_menu:
-            del cardapio[codigo]
-            save_data("arquivo_cardapio.dat", cardapio)
-            print(f"Hambúrguer '{list(detalhes.keys())[0]}' excluído com sucesso!")
-            return True
-        
-    print("Hambúrguer não encontrado.")
+def validar_hamburguer(prompt):
+    if isinstance(prompt, int):
+        return prompt in cardapio
+    else:
+        for codigo, detalhes in cardapio.items():
+            hamburguer_menu = list(detalhes)[0]
+            if prompt.replace(" ", "") == hamburguer_menu.replace(" ", ""):
+                return True
     return False
 
 
-#exibir_cardapio()
-#verificar_hamburguer_existente()
-#atualizar_hamburguer("HAMBÚRGUER CLÁSSICO")
-#criar_hamburguer()
-#excluir_hamburguer()
-print(cardapio)
-existencia, burguer = verificar_hamburguer_existente()
-if existencia:
-    atualizar_hamburguer(burguer)
-else:
-    criar_hamburguer()
-print(cardapio)
+def pegar_ingredientes(pedido, quantidade):
+    ingredientes_reais = {}
+    ingredientes_menu = {}
+    if isinstance(pedido, int):
+        ingredientes = list(cardapio[pedido].values())[0]
+        ingredientes_menu = ingredientes
+    else:
+        for codigo, detalhes in cardapio.items():
+            hamburguer_menu = list(detalhes)[0]
+            if pedido.replace(" ", "") == hamburguer_menu.replace(" ", ""):
+                ingredientes = list(detalhes.values())[0]
+                ingredientes_menu = ingredientes
+                break
+
+    for nome, quantia in ingredientes_menu.items():
+        ingredientes_reais[nome] = quantia * quantidade
+
+    return ingredientes_reais
+            
+
+def verficiar_ingredientes(dicionario):
+    itens_falta = []
+
+    for ingrediente, quantidade in dicionario.items():
+        for itens in almoxarifado.values():
+            item_almoxarifado = itens[0]
+            item_quantidade = itens[1]
+            
+            if ingrediente == item_almoxarifado:
+                if quantidade > item_quantidade:
+                    itens_falta.append([item_almoxarifado, item_quantidade])
+    
+    if len(itens_falta) == 0:
+        return True, itens_falta
+    else:
+        return False, itens_falta
+
+
+def verificar_adicional(adicional, quantidade):
+    for itens in almoxarifado.values():
+        item_almoxarifado = itens[0]
+        item_quantidade = itens[1]
+        if adicional == item_almoxarifado:
+            if quantidade > item_quantidade:
+                return False
+    
+    return True
+
+
+criar_pedido()
+
+
+

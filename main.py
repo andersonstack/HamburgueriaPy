@@ -26,6 +26,7 @@ from views import (
     operacoes_funcionarios, quadro, subtitulo
 )
 
+
 #   Código principal
 resp = ""
 varredura()
