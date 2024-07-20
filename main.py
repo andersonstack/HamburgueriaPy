@@ -11,7 +11,7 @@ from data import almoxarifado, funcionarios
 from funcionarios import contratar, demitir, buscar, editar_funcionario
 from menu import (
     exibir_cardapio, verificar_hamburguer_existente, 
-    atualizar_hamburguer, criar_novo_hamburguer, excluir_hamburguer
+    atualizar_hamburguer, criar_hamburguer, excluir_hamburguer
 )
 from relatorios import processo_compras, processos_vendas, imprimir_ranking, exibir_percas
 from tools import varredura, limpar_tela, input_tratado
@@ -122,7 +122,7 @@ while resp != "0":
                                         confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
 
                                         if confirmar[0] in 'S':
-                                            burguer = criar_novo_hamburguer()
+                                            burguer = criar_hamburguer()
                                             if burguer:
                                                 sucess_msg("Hambúrguer Criado com sucesso!")
                                             else:

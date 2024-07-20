@@ -10,6 +10,7 @@ def exibir_cardapio():
     Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes por porção.
     """
     limpar_tela()
+    titulo("CARDÁPIO")
     for codigo, detalhes in cardapio.items():
         for nome_hamburguer, ingredientes in detalhes.items():
             if nome_hamburguer != 'PRECO':
@@ -46,6 +47,8 @@ def atualizar_hamburguer(hamburguer):
     """
     Atualiza os ingredientes de um hambúrguer existente no cardápio.
     """
+    limpar_tela()
+    titulo("ATUALIZAÇÃO DE HAMBÚRGUER")
     for codigo, detalhes in cardapio.items():
         hamburguer_menu = list(detalhes.keys())[0].upper()
 
@@ -83,6 +86,8 @@ def criar_hamburguer():
     """
     Cria um novo hambúrguer e adiciona ao cardápio.
     """
+    limpar_tela()
+    titulo("CRIAÇÃO DE HAMBÚRGUER")
     global ID_MENU
 
     nome_hamburguer = leia_item("Novo Hambúrguer: ").strip().upper()
@@ -101,6 +106,8 @@ def excluir_hamburguer():
     """
     Exclui um hambúrguer do cardápio.
     """
+    limpar_tela()
+    titulo("EXCLUSÃO DE HAMBÚRGUER")
     hamburguer = leia_item("Excluir Hambúrguer: ").strip().upper().replace(" ", "")
     
     for codigo, detalhes in list(cardapio.items()):

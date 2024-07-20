@@ -14,6 +14,7 @@ def atualizar_compras(id_item, quantidade):
     """
     almoxarifado[id_item][1] += quantidade
 
+
 def cadastrar_compras():
     """
     Função para cadastrar novos itens.
@@ -46,6 +47,7 @@ def cadastrar_compras():
 
     return input(">> Enter")
 
+
 def excluir_item(id_item):
     """
     Exclui um item do almoxarifado.
@@ -59,6 +61,7 @@ def excluir_item(id_item):
         sucess_msg("Item excluído com sucesso")
     else:
         print("ID não encontrado")
+
 
 def processamento_relatorio(nome, quantidade, preco):
     """

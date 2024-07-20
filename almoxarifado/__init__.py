@@ -8,17 +8,6 @@ def buscar_item():
     
     O usuário pode buscar um item pelo seu nome ou pelo seu ID. A função exibe os 
     detalhes do item se ele for encontrado no almoxarifado.
-    
-    Exceções:
-        - A função não lida explicitamente com exceções; entradas inválidas devem ser tratadas
-          pelas funções auxiliares.
-    
-    Entradas:
-        - O usuário é solicitado a inserir o nome ou ID do item.
-    
-    Saídas:
-        - Exibição dos detalhes do item se ele for encontrado no almoxarifado.
-        - Se o item não for encontrado, nenhuma saída específica é definida.
     """
     item = input_tratado("Item ou ID:   ")
 
@@ -46,19 +35,6 @@ def excluir_item():
     O usuário deve fornecer o ID do item a ser excluído. A função verifica se o item
     existe no almoxarifado, exibe seus detalhes e solicita confirmação antes de 
     removê-lo. Se confirmado, o item é removido do almoxarifado e os dados são salvos.
-
-    Exceções:
-        - A função não lida explicitamente com exceções; entradas inválidas devem ser tratadas
-          pelas funções auxiliares.
-
-    Entradas:
-        - O usuário é solicitado a inserir o ID do item a ser excluído.
-        - O usuário deve confirmar a exclusão do item.
-
-    Saídas:
-        - Exibição dos detalhes do item a ser excluído.
-        - Mensagem de sucesso se o item for removido.
-        - Mensagem de operação cancelada se a exclusão não for confirmada.
     """
     item = leia_int("ID: ")
     details = check_id(item)
