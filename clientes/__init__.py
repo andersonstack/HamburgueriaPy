@@ -27,26 +27,6 @@ def cadastrar_cliente():
 
     A função solicita o cpf para o cadastro do cliente, verifica se o cliente existe
     e, se não existir, cadastra e armazena as informações.
-
-    Returns:
-        input: Finalização da tarefa. Exibe uma mensagem de sucesso ou de já cadastrado.
-    
-    Fluxo:
-        1. Solicita entrada do CPF.
-        2. Verifica se CPF existe.
-            2.1 Não existe:
-                - Solicita entrada de nome, rua, numero e bairro.
-                - Insere os dados no dicionário de clientes.
-                    Ex.: clientes = {
-                        '11133322200': {
-                            'Nome': Anderson,
-                            'Endereço': f'{Rua}, {bairro}, {numero}'
-                        }
-                    }
-                - Salva os dados em um arquivo.
-                - Retorna input("Cliente cadastrado")
-            2.2 Já existe:
-                - Retorna input("Cliente já está no sistema")
     """
     limpar_tela()
     cabecalho("Cadastrar clientes")

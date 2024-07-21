@@ -72,14 +72,14 @@ def processamento_relatorio(nome, quantidade, preco):
     e adicionados em compras.
     """
     entrada_relatorio = {
-        "hora": hora,
+        "hora": HORA,
         "nome": nome, 
         "quantidade": quantidade,
         "preço": preco
     }
     
-    if data not in compras:
-        compras[data] = []  # Criação de nova data caso não exista
+    if DATA not in compras:
+        compras[DATA] = []  # Criação de nova data caso não exista
 
-    compras[data].append(entrada_relatorio)  # Adicionando arquivos em compras
+    compras[DATA].append(entrada_relatorio)  # Adicionando arquivos em compras
     save_data("arquivo_relatorio_compras.dat", compras)  # Salvando as compras

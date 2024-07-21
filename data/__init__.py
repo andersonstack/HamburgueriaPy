@@ -1,8 +1,8 @@
 from datetime import datetime
 import pickle as save
 
-data = datetime.now().strftime("%d/%m/%Y") # Define data
-hora = datetime.now().strftime("%H:%M:%S") # Define hora
+DATA = datetime.now().strftime("%d/%m/%Y") # Define data
+HORA = datetime.now().strftime("%H:%M:%S") # Define hora
 
 def load_data(filename, default_value):
     """

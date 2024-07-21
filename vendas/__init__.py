@@ -398,13 +398,13 @@ def gerar_percas(ingrediente, quantidade):
             ...
         }
     """
-    if data not in percas_ingredientes:
-        percas_ingredientes[data] = {}
+    if DATA not in percas_ingredientes:
+        percas_ingredientes[DATA] = {}
     
-    if ingrediente not in percas_ingredientes[data]:
-        percas_ingredientes[data][ingrediente] = 0
+    if ingrediente not in percas_ingredientes[DATA]:
+        percas_ingredientes[DATA][ingrediente] = 0
     
-    percas_ingredientes[data][ingrediente] += quantidade
+    percas_ingredientes[DATA][ingrediente] += quantidade
     save_data("percas_ingredientes.dat", percas_ingredientes)
 
 
@@ -678,8 +678,8 @@ def fechar_vendas():
         return
 
     # Criaças do relatório da data especifica
-    vendas[data] = {
-        "Hora": hora,
+    vendas[DATA] = {
+        "Hora": HORA,
         "Funcionário": funcionario_cpf["Nome"],
         "CPF": cpf,
         "Pedidos Realizados": pedidos.copy(),  
