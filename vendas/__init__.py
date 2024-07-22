@@ -304,7 +304,66 @@ def listar_pedidos():
                 print_alinhado(f"Adicional: {nome}", f"\n\tQuantidade: {detalhes[0]} | Preço R${detalhes[1]}")
         linha()
 
+def editar_pedido(codigo):
+    """
+    Função que modifica o pedido do cliente.
 
+    Args:
+        codigo (int): Chave que está o pedido do cliente.
+    """
+    if codigo in pedidos:
+        adicional = {}
+
+        edicao = ""
+        while True:
+            edicao = input_tratado("Mudar (1) Hamburguer / (2) Adicionais / (0) Sair \n")
+
+            match edicao:
+                case "1" | "HAMBURGUER":
+                    hamburguer, quantidade = mudar_hamburguer()
+                case "2" | "ADICIONAIS":
+                    adicional = mudar_adicionais()
+                case "0":
+                    break
+
+        pedidos[codigo]["hamburguer"] = hamburguer
+        pedidos[codigo]["quantidade"] = quantidade
+        pedidos[codigo]["adicionais"] = adicional
+        pedidos[codigo]["preco"] = pegar_preco(hamburguer, quantidade)
+        save_data("arquivo_pedidos.dat", pedidos)
+        return True
+    else:
+        return False
+
+    
+def mudar_hamburguer():
+    """
+    Função que mudao nome do hambúrguer no pedido realizado.
+
+    Returns:
+        tuple: Tupla com o nome do novo hambúrguer e sua quantidade.
+    """
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    quantidade = leia_int("Quantidade:  ")
+    existe, hamburguer_nome = existencia_hamburguer(hamburguer)
+
+    if existe:
+        ingredientes = extrair_ingredientes(hamburguer_nome, quantidade)
+        if verificar_ingredientes(ingredientes):
+            return hamburguer_nome, quantidade
+        
+    return False
+
+
+def mudar_adicionais():
+    """
+    Função que muda os dicionários
+
+    Returns:
+        dict: Dicionário com os adicionais
+    """
+    adicional = adicionar_adicionais()
+    return adicional
 
 def fechar_vendas():
     """

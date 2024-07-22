@@ -144,9 +144,10 @@ def adicionar_adicionais():
     adicionais = {}
     while True:
         adicional = input_tratado("(SAIR) - Adicional:  ")
-        quantidade = leia_int("Quantidade:  ")
         if adicional == "SAIR":
             break
+        quantidade = leia_int("Quantidade:  ")
+
         if verificar_adicionais(adicional, quantidade):
             preco = leia_float("Preço:  ")
             adicionais[adicional] = preco * quantidade
@@ -284,21 +285,62 @@ def listar_pedidos():
         linha()
 
 
-pedidos = {1: {'nome': 'Anderson Gabriel Pereira Cruz', 'endereco': 'Cicero Dantas, Centro, 157', 'hamburguer': 'X-TUDO', 'quantidade': 1, 'preco': 12.0, 'adicionais': {}}}
-def atualizar_ranking(pedidos):
+def editar_pedido(codigo):
     """
-    Atualiza o ranking de hambúrgueres mais pedidos com base nos dados fornecidos.
+    Função que modifica o pedido do cliente.
 
     Args:
-        pedidos (dict): Um dicionário contendo os pedidos realizados.
+        codigo (int): Chave que está o pedido do cliente.
     """
-    for infor in pedidos.values():
-        hamburguer = infor["hamburguer"]
-        quantidade = infor["quantidade"]
-        #if hamburguer in ranking_vendas:
-        #    #ranking_vendas[hamburguer] += quantidade
-        #else:
-        #    ranking_vendas[hamburguer] = quantidade
-    #save_data("ranking_vendas.dat", ranking_vendas)
+    adicional = {}
 
-atualizar_ranking(pedidos)
+    edicao = ""
+    while True:
+        edicao = input_tratado("Mudar (1) Hamburguer / (2) Adicionais / (0) Sair \n")
+
+        match edicao:
+            case "1" | "HAMBURGUER":
+                hamburguer, quantidade = mudar_hamburguer()
+            case "2" | "ADICIONAIS":
+                adicional = mudar_adicionais()
+            case "0":
+                break
+
+    pedidos[codigo]["hamburguer"] = hamburguer
+    pedidos[codigo]["quantidade"] = quantidade
+    pedidos[codigo]["adicionais"] = adicional
+    pedidos[codigo]["preco"] = pegar_preco(hamburguer, quantidade)
+    save_data("arquivo_pedidos.dat", pedidos)
+
+    
+def mudar_hamburguer():
+    """
+    Função que mudao nome do hambúrguer no pedido realizado.
+
+    Returns:
+        tuple: Tupla com o nome do novo hambúrguer e sua quantidade.
+    """
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    quantidade = leia_int("Quantidade:  ")
+    existe, hamburguer_nome = existencia_hamburguer(hamburguer)
+
+    if existe:
+        ingredientes = extrair_ingredientes(hamburguer_nome, quantidade)
+        if verificar_ingredientes(ingredientes):
+            return hamburguer_nome, quantidade
+        
+    return False
+
+
+def mudar_adicionais():
+    """
+    Função que muda os dicionários
+
+    Returns:
+        dict: Dicionário com os adicionais
+    """
+    adicional = adicionar_adicionais()
+    return adicional
+
+editar_pedido(1)
+print(pedidos)

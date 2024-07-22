@@ -1,5 +1,5 @@
 ####################################
-###         VERSÃO 15            ###
+###         VERSÃO 16            ###
 ####################################
 
 
@@ -217,8 +217,10 @@ while resp != "0":
                                                 if pedido_cliente == '0':
                                                     break
 
-                                                #criar_pedido(pedido_cliente)
-                                                #sucess_msg("Pedido editado")
+                                                if editar_pedido(pedido_cliente):
+                                                    sucess_msg("Pedido editado!")
+                                                else:
+                                                    error_msg("Pedido não encontrado.")
                                                 input(">> Enter")
 
                                 case "F" | "3":
