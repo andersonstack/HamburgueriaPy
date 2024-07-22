@@ -3,22 +3,22 @@
 ####################################
 
 
-#   Importações de módulos do projeto
-from almoxarifado import buscar_item, excluir_item
-from clientes import cadastrar_cliente, quadro_clientes, editar_clientes, excluir_cliente
-from compras import cadastrar_compras
-from data import almoxarifado, funcionarios
-from funcionarios import contratar, demitir, buscar, editar_funcionario
-from menu import (
+# Importações necessárias para main.
+from almoxarifado_pct import buscar_item, excluir_item
+from clientes_pct import cadastrar_cliente, quadro_clientes, editar_clientes, excluir_cliente
+from compras_pct import cadastrar_compras
+from dados_pct import almoxarifado, funcionarios
+from funcionarios_pct import contratar, demitir, buscar, editar_funcionario
+from cardapio_pct import (
     exibir_cardapio, verificar_hamburguer_existente, 
     atualizar_hamburguer, criar_hamburguer, excluir_hamburguer
 )
-from relatorios import processo_compras, processos_vendas, imprimir_ranking, exibir_percas
-from tools import varredura, limpar_tela, input_tratado
-from vendas import *
-from views import (
+from relatorios_pct import processo_compras, processos_vendas, imprimir_ranking
+from ferramentas_pct import varredura, limpar_tela, input_tratado
+from vendas_pct import *
+from estilização_pct import (
     cabecalho, titulo, principal, linha, quadro_almoxarifado, 
-    sucess_msg, error_msg, leia_int, operacoes_clientes, 
+    sucess_msg, error_msg, operacoes_clientes, 
     operacoes_funcionarios, quadro, subtitulo
 )
 
@@ -341,9 +341,6 @@ while resp != "0":
 
                     case "3":
                         imprimir_ranking()
-                    
-                    case "4":
-                        exibir_percas()
 
                     case "0" | "S":
                         break
