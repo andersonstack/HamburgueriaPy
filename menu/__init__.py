@@ -108,16 +108,11 @@ def excluir_hamburguer():
     """
     limpar_tela()
     titulo("EXCLUSÃO DE HAMBÚRGUER")
-    hamburguer = leia_item("Excluir Hambúrguer: ").strip().upper().replace(" ", "")
+    hamburguer = leia_int("Código do Hambúrguer: ")
     
-    for codigo, detalhes in list(cardapio.items()):
-        hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
-
-        if hamburguer == hamburguer_menu:
-            del cardapio[codigo]
-            save_data("arquivo_cardapio.dat", cardapio)
-            return True
+    del cardapio[hamburguer]
+    save_data("arquivo_cardapio.dat", cardapio)
+    return True
         
-    return False
 
 

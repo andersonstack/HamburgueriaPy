@@ -1,16 +1,23 @@
 # Importações necessárias para a modularização.
 from tools import limpar_tela, input_tratado, leia_float, leia_int, leiaCPF
-from views import titulo
+from views import titulo, print_alinhado, linha
 from data import cardapio, almoxarifado, clientes, pedidos, save_data
 from clientes import cadastrar_cliente
 
-cardapio = {1: {
-    "X-TUDO": {
-        "PÃO DE HAMBÚRGUER": 2,
-        "HAMBURGUER BOVINO": 1
-    },
-    "PRECO": 12
-}}
+# Definição do ID do pedido.
+ID_PEDIDO = 1 if len(pedidos) == 0 else len(pedidos) + 1
+
+def salvar_pedido(pedido, codigo):
+    """
+    Função para salvar o pedio nos pedidos.
+
+    Args:
+        pedido (dict): Pedido do cliente.
+        codigo (int): Chave que será guardada o pedido.
+    """
+    pedidos[codigo] = pedido
+    save_data("arquivo_pedidos.dat", pedidos)
+
 
 def criar_pedido():
     """
@@ -27,9 +34,6 @@ def criar_pedido():
     pedido = {} 
     adicional = {}
 
-    # Definição do ID do pedido.
-    ID_PEDIDO = 1 if len(pedidos) == 0 else len(pedidos) + 1
-
     # Entrada dos usuário.
     hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
     quantidade = leia_int("Quantidade:  ")
@@ -39,7 +43,7 @@ def criar_pedido():
         ingredientes = extrair_ingredientes(hamburguer_nome, quantidade)
         if verificar_ingredientes(ingredientes):
             if adicionais():
-                adicional = adicinonar_adicionais()
+                adicional = adicionar_adicionais()
             
             cpf = informacoes_cliente()
 
@@ -51,8 +55,7 @@ def criar_pedido():
                 "preco": pegar_preco(hamburguer_nome, quantidade), 
                 "adicionais": adicional
             }
-            pedidos[ID_PEDIDO] = pedido
-            save_data("arquivo_pedidos.dat", pedidos)
+            salvar_pedido(pedido, ID_PEDIDO)
             return pedido
         else:
             return False
@@ -137,7 +140,7 @@ def adicionais():
     return True if adicional == "SIM" else False
 
 
-def adicinonar_adicionais():
+def adicionar_adicionais():
     adicionais = {}
     while True:
         adicional = input_tratado("(SAIR) - Adicional:  ")
@@ -197,3 +200,105 @@ def pegar_preco(hamburguer, quantidade):
         if hamburguer == list(detalhes.keys())[0]:
             return detalhes['PRECO'] * quantidade
 
+
+def extrair_informacoes(codigo):
+    """
+    Função para extrair as informações necessária do pedido.
+
+    Args:
+        codigo (int): Chave que acessa o pedido dentro do dicionário de pedidos.
+
+    Returns:
+        str, int, dict: Nome do hambúrguer; Quantidade do hambúrguer; Adicionais pedidos.
+    """
+    pedido = pedidos[codigo]
+    hamburguer = pedido['hamburguer']
+    quantidade = pedido['quantidade']
+    adicional = pedido['adicionais']
+    return hamburguer, quantidade, adicional
+
+
+def atualizar_ingredientes(prompt, acao):
+    """
+    Função que atualiza os ingredientes no almoxarifado.
+
+    Args:
+        prompt (tuple): Tupla com o nome do hambúrguer e sua quantidade.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+    """
+    # Definição das variáveis.
+    hamburguer = prompt[0]
+    quantidade = prompt[1]
+
+    # Intera sobre os elementos do cardápio.
+    for codigo, detalhes in cardapio.items():
+        dic_ingredientes = list(detalhes.values())[0]
+        for ingrediente, quantidades in dic_ingredientes.items():
+            for item, infor in almoxarifado.items():
+                if ingrediente == infor[0]: # Comparação de vaores.
+                    if acao == "decrementar":
+                        nova_quantidade = infor[1] - (quantidade * quantidades)
+                        almoxarifado[item] = [infor[0], nova_quantidade]
+                    elif acao == "incrementar":           
+                        nova_quantidade = infor[1] + (quantidade * quantidades)
+                    almoxarifado[item] = [infor[0], nova_quantidade]
+
+
+def atualizar_adicional(adicionais, acao):
+    """
+    Função que atualiza os adicionais no almoxarifado.
+
+    Args:
+        prompt (dict): Dicionário com os ingredientes.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+    """
+    if len(adicionais) == 0:
+        return 
+    for adicional, detalhes in adicionais.items():
+        quantidade = detalhes[0]
+        for item, infor in almoxarifado.items():
+            if adicional == infor[0]:
+                if acao == "decrementar":
+                    nova_quantidade = infor[1] - quantidade
+                    almoxarifado[item] = [infor[0], nova_quantidade]
+                elif acao == "incrementar":           
+                    nova_quantidade = infor[1] + quantidade
+                almoxarifado[item] = [infor[0], nova_quantidade]
+
+
+def listar_pedidos():
+    linha()
+    for codigo, detalhes in pedidos.items():
+        print_alinhado("N° Pedido:", codigo)
+        print_alinhado("Cliente:", detalhes["nome"])
+        print_alinhado("Endereço:", detalhes["endereco"])
+        print_alinhado("Hamburguer:", detalhes["hamburguer"])
+        print_alinhado("Quantidade:", detalhes["quantidade"])
+        print_alinhado("Preço Hambúrguer:", f"R$ {detalhes["preco"]}")
+        print()
+        adicionais = detalhes["adicionais"]
+        adicionais = {'Coca': [1, 4]}
+        if len(adicionais) != 0:
+            for nome, detalhes in adicionais.items():
+                print_alinhado(f"Adicional: {nome}", f"\n\tQuantidade: {detalhes[0]} | Preço R${detalhes[1]}")
+        linha()
+
+
+pedidos = {1: {'nome': 'Anderson Gabriel Pereira Cruz', 'endereco': 'Cicero Dantas, Centro, 157', 'hamburguer': 'X-TUDO', 'quantidade': 1, 'preco': 12.0, 'adicionais': {}}}
+def atualizar_ranking(pedidos):
+    """
+    Atualiza o ranking de hambúrgueres mais pedidos com base nos dados fornecidos.
+
+    Args:
+        pedidos (dict): Um dicionário contendo os pedidos realizados.
+    """
+    for infor in pedidos.values():
+        hamburguer = infor["hamburguer"]
+        quantidade = infor["quantidade"]
+        #if hamburguer in ranking_vendas:
+        #    #ranking_vendas[hamburguer] += quantidade
+        #else:
+        #    ranking_vendas[hamburguer] = quantidade
+    #save_data("ranking_vendas.dat", ranking_vendas)
+
+atualizar_ranking(pedidos)

@@ -15,11 +15,7 @@ from menu import (
 )
 from relatorios import processo_compras, processos_vendas, imprimir_ranking, exibir_percas
 from tools import varredura, limpar_tela, input_tratado
-from vendas import (
-    listar_pedidos, criar_pedido, decrementar_ingredientes, 
-    perca_de_ingredientes, editar_pedido, fechar_vendas,
-    deletar_pedido
-)
+from vendas import *
 from views import (
     cabecalho, titulo, principal, linha, quadro_almoxarifado, 
     sucess_msg, error_msg, leia_int, operacoes_clientes, 
@@ -127,7 +123,7 @@ while resp != "0":
                                             if burguer:
                                                 sucess_msg("Hambúrguer Criado com sucesso!")
                                             else:
-                                                error_msg("Erro ao criar o hambúrguer.")
+                                                error_msg("Erro ao criar o hambúrguer, ingredientes em falta.")
                                             
                                             input(">> Enter")
 
@@ -162,7 +158,11 @@ while resp != "0":
 
                             match op_fazer_venda:
                                 case "V" | "1":
-                                    criar_pedido()
+                                    if criar_pedido():
+                                        sucess_msg("Pedido lançado no sistema!")
+                                    else:
+                                        error_msg("Error ao criar pedido.")
+                                    input(">> Enter")
 
                                 case "L" | "2":
                                     listar_pedidos()
@@ -180,11 +180,19 @@ while resp != "0":
                                                 limpar_tela()
                                                 titulo("Processamento de Pedidos")
                                                 finalizar_pedido = int(input_tratado("N° do Pedido: "))
+                                                if finalizar_pedido in pedidos:
+                                                    pass
+                                                else:
+                                                    error_msg("Pedido não encotrado.")
+                                                    input(">> Enter")
+                                                    break
 
                                                 if finalizar_pedido == '0':
                                                     break
 
-                                                decrementar_ingredientes(finalizar_pedido)
+                                                nome_hamburguer, quantia_hamburguer, adicional = extrair_informacoes(finalizar_pedido)
+                                                atualizar_ingredientes((nome_hamburguer, quantia_hamburguer), "decrementar")
+                                                atualizar_adicional(adicional, "decrementar")
                                                 sucess_msg("Pedido realizado com sucesso!")
                                                 input(">> Enter")
 
@@ -195,17 +203,13 @@ while resp != "0":
 
                                                 if excluir_pedido == '0':
                                                     break
-
-                                                subtitulo("ATENÇÃO")
-                                                deletar_pedido = input_tratado("Pedido já foi confirmado (S/N): ")
-                                                linha()
-
-                                                match deletar_pedido:
-                                                    case 'S':
-                                                        perca_de_ingredientes(excluir_pedido)
-                                                    case 'N':
-                                                        deletar_pedido(excluir_pedido)
-
+                                                
+                                                if deletar_pedido(excluir_pedido):
+                                                    sucess_msg("Pedido excluido com sucesso!")
+                                                else:
+                                                    error_msg("Pedido não alcançado.")
+                                                input(">> Enter")
+                                                
                                             case "3" | "E":
                                                 titulo("Edição de pedidos")
                                                 pedido_cliente = int(input_tratado("N° do Pedido: "))
@@ -213,8 +217,8 @@ while resp != "0":
                                                 if pedido_cliente == '0':
                                                     break
 
-                                                editar_pedido(pedido_cliente)
-
+                                                #criar_pedido(pedido_cliente)
+                                                #sucess_msg("Pedido editado")
                                                 input(">> Enter")
 
                                 case "F" | "3":

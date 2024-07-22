@@ -1,641 +1,309 @@
-from data import *
-from views import *
-from datetime import datetime
-from tools import *
+from data import cardapio, almoxarifado, clientes, pedidos, save_data, DATA, HORA, funcionarios, vendas
+from views import titulo, print_alinhado, linha, error_msg, sucess_msg, ranking_vendas
+from tools import limpar_tela, input_tratado, leia_float, leia_int, leiaCPF
 from clientes import clientes, cadastrar_cliente
-from menu import exibir_cardapio
+
+# Definição do ID do pedido.
+ID_PEDIDO = 1 if len(pedidos) == 0 else len(pedidos) + 1
+
+def salvar_pedido(pedido, codigo):
+    """
+    Função para salvar o pedio nos pedidos.
+
+    Args:
+        pedido (dict): Pedido do cliente.
+        codigo (int): Chave que será guardada o pedido.
+    """
+    pedidos[codigo] = pedido
+    save_data("arquivo_pedidos.dat", pedidos)
+
 
 def criar_pedido():
     """
-    Função para criar um pedido de hambúrguer, adicionando-o ao sistema de pedidos.
-
-    Gera um ID para o pedido, permite selecionar um hambúrguer no cardápio,
-    verifica a disponibilidade de ingredientes, adiciona opcionais, solicita o CPF do
-    cliente cadastro se necessário, e regista o pedido no sistema.
-    
-    Se ingredientes estiverem disponíveis e o pedido for concluído com sucesso, exibe uma
-    mensagem de sucesso e salva os dados do pedido em um arquivo.   
-
-    Retorna: None 
-
-    Fluxo da função:
-        1. Solicita o nome do hamburguer e sua quantidade, define o id_pedido, a lista de pedido_cliente e a lista de adicionais.
-        2. Extrai os ingredientes usando a função extrair_ingredientes(nome_hamburguer, quantidade).
-        3. Verifica a existência dos ingredientes.
-        4. Verifica a quantidade suficiente dos ingredientes e o jogo em uma lista.
-            4.1 Se houver ingredientes insuficientes, exibe um error_msg e uma intera sobre a lista de itens_insuficientes.
-            4.2 Se não houver, solicita os adicionais. Caso sim, o processo da função adicinar_adicionais é ativada.
-        5. Verifica o preço total, quantidade de hambúrguer pelo seu preço.
-        6. Intera sobre os adicionais para atualizar o preço total com o preço dos adicionais.
-        7. Solicita o CPF do cliente.
-            7.1 Caso não esteja cadastrado, o cliente deve ser cadastrado.
-        8. Insere todos os dados em pedido_cliente.
-        9. Exibe mensagem de sucesso.
-        10. Insere pedido_cliente em pedidos a partir do ID definido dinâmicamente.
-        11. Salva os arquivos.
-        12. Incrementa o id em 1.
-    
-    Formato de pedido_cliente e adicionais:
-        pedido_cliente = [
-                id_pedido,
-                clientes[cpf_cliente]['Nome'],
-                clientes[cpf_cliente]['Endereço'],
-                nome_hamburguer,
-                quantidade, 
-                adicionais, 
-                preco_total
-            ]
-        adicionais = [
-            ['ITEM', 2, 4] 
-                # adicionais[0] -> nome do item
-                # adicionais[1] -> quantidade do item
-                # adicionais[2] -> preço unitário
-        ]
-        
-        Ex.:
-        pedido_cliente = [
-                1,
-                "Anderson",
-                "Rua X, Bairro Y, 78",
-                "HAMBÚRGUER CLÁSSICO",
-                "1", 
-                [['COCA', 2, 4]],  
-                14
-            ]
-    """
-    limpar_tela()
-    id_pedido = 1 if len(pedidos) == 0 else list(pedidos.keys())[-1] + 1 # Criação de um ID com base no dict() de pedidos
-    pedido_cliente = [] # Lista para o pedido
-    adicionais = [] # Lista para os adicionais
-    exibir_cardapio() # Exibir o cardápio
-    nome_hamburguer = leia_item("Nome: ").upper()
-    quantidade = leia_int("Quantidade: ")
-
-    ingredientes = extrair_ingredientes(nome_hamburguer, quantidade) # Extrair os ingredientes do hambúrguer caso ele exista
-
-    if ingredientes:
-        itens_insuficientes = verificar_ingredientes(ingredientes)
-
-        if itens_insuficientes:
-            error_msg("Pedido não pode ser feito. Ingredientes insuficientes.")
-            for item in itens_insuficientes:
-                print(item)
-        else:
-            adicionar_adicionais(adicionais) # Adicionais caso necessário
-
-            preco_total = cardapio[nome_hamburguer][
-                                "Preço"] * quantidade
-
-            for i in adicionais:
-                preco_total += i[1] * i[2]
-
-            cpf_cliente = leiaCPF("CPF: ")                                      
-            if cpf_cliente not in clientes:
-                cadastrar_cliente()
-
-            pedido_cliente = [
-                id_pedido,
-                clientes[cpf_cliente]['Nome'],
-                clientes[cpf_cliente]['Endereço'],
-                nome_hamburguer,
-                quantidade, 
-                adicionais, 
-                preco_total
-            ]
-
-            sucess_msg("Pedido lançado no sistema")
-
-            pedidos[id_pedido] = pedido_cliente # Pedido colocado no dict() pedidos
-            save_data("arquivo_pedidos.dat", pedidos) # Salvamento de dados
-            id_pedido += 1
-
-    input("Pressione << Enter >> para continuar...")
-
-
-def adicionar_adicionais(adicionais):
-    """
-    Função para acrescentar os adicionais caso necessário
-
-    Args:
-        adicionais (lista): Lista de adicionais adicionado ao pedido do cliente
-    """
-    adicional = input_tratado("Deseja adicionar algum adicional? [S/N] ").upper()
-    if adicional[0] == 'S':
-        while True:
-            nome_adicional = leia_item("[SAIR] Nome: ").upper()
-            if nome_adicional.upper() == 'SAIR':
-                break
-
-            quantidade_adicional = leia_int("Quantia: ")
-
-            ids, checagem = check_buy(nome_adicional)
-            if checagem:
-                if verificar_acrescimos(checagem, quantidade_adicional):
-                    preco = leia_float("Preço: ")
-                    adicionais.append([nome_adicional, quantidade_adicional, preco])
-            else:
-                error_msg("Acréscimo em falta")
-
-
-def listar_pedidos():
-    """
-    Lista todos os pedidos armazenados no dicionário de pedidos.
-
-    Esta função limpa a tela, imprime uma linha de separação, e então itera sobre
-    cada pedido no dicionário de pedidos, imprimindo detalhes como número do pedido,
-    nome do cliente, endereço, nome do hambúrguer, quantidade, adicionais e o preço total.
-    """
-    limpar_tela()
-    linha()
-    for id_pedido, pedido in pedidos.items():
-        nome_cliente = pedido[1]
-        endereco = pedido[2]
-        nome_hamburguer = pedido[3]
-        quantidade_hamburguer = pedido[4]
-        adicionais = pedido[5]
-        preco_pedido = pedido[-1]
-
-        print_alinhado("N° Pedido", id_pedido)
-        print_alinhado("Cliente:", nome_cliente)
-        print_alinhado("Endereço:", endereco)
-        print_alinhado("Hambúrguer:", nome_hamburguer)
-        print_alinhado("Quantidade:", quantidade_hamburguer)
-        for detalhes in adicionais:
-            nome_adicional = detalhes[0]
-            quantidade_adicional = detalhes[1]
-            preco_adicional = detalhes[2]
-
-            print_alinhado(f"{nome_adicional}:", f"{quantidade_adicional}un. R$ {preco_adicional}")
-            print_alinhado("Preço Total:", f"R$ {preco_pedido}")
-
-        linha()
-
-
-def verificar_pedido(id_pedido):
-    """
-    Função que verifica se o pedido existe no dicionário de pedidos.
-
-    Args:
-        id_pedido (int): ID do pedido em pedidos.
+    Função principal que cria um pedido e adiciona na lista de pedidos.
 
     Returns:
-        booleano: True se existir
-                    False se não existir
+        booleano: False caso o pedido tenha falhado;
+        dict: Caso o pedido tenha sido feito corretamente.
     """
-    return id_pedido in pedidos
+    limpar_tela()
+    titulo("INFORMAÇÕES DO PEDIDO")
+
+    # Inicializações de dicionários necessários.
+    pedido = {} 
+    adicional = {}
+
+    # Entrada dos usuário.
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    quantidade = leia_int("Quantidade:  ")
+    existe, hamburguer_nome = existencia_hamburguer(hamburguer)
+
+    if existe:
+        ingredientes = extrair_ingredientes(hamburguer_nome, quantidade)
+        if verificar_ingredientes(ingredientes):
+            if adicionais():
+                adicional = adicionar_adicionais()
+            
+            cpf = informacoes_cliente()
+
+            pedido = {
+                "nome": clientes[cpf]["Nome"],
+                "endereco": clientes[cpf]["Endereço"],
+                "hamburguer": hamburguer_nome,
+                "quantidade": quantidade,
+                "preco": pegar_preco(hamburguer_nome, quantidade), 
+                "adicionais": adicional
+            }
+            salvar_pedido(pedido, ID_PEDIDO)
+            return True
+        else:
+            return False
+    else:
+        return False
 
 
-def extrair_ingredientes(nome, quantidade):
+def existencia_hamburguer(hamburguer):
     """
-    Extrai os ingredientes e dados do hambúrguer.
+    Verifica se o hambúrguer existe no cardápio.
 
     Args:
-        nome (str): Nome do hambúrguer.
+        hamburguer (int/str): Valor que corresponde o hambúrguer no cardápio.
+
+    Returns:
+        booleano: True caso exista; False caso não.
+    """
+    try:
+        # Tenta converter a entrada para um inteiro (ID)
+        hamburguer_id = int(hamburguer)
+        if hamburguer_id in cardapio:
+            # Retorna o nome do hambúrguer usando o ID
+            return True, list(cardapio[hamburguer_id].keys())[0]
+    except ValueError:
+        # Se a conversão falhar, trata como nome
+        for detalhes in cardapio.values():
+            for hamb in detalhes.keys():
+                if hamb == hamburguer:
+                    return True, hamb
+    
+    # Se não encontrou o hambúrguer
+    return False, False
+
+
+def extrair_ingredientes(hamburguer, quantidade):
+    """
+    Função para extrair os ingredientes do hambúrguer e atualizar suas respectivas quantidades.
+
+    Args:
+        hamburguer (str): Nome do hambúrguer
         quantidade (int): Quantidade solicitada.
 
     Returns:
-        dict or None: Dicionário com os detalhes dos ingredientes ajustados pela quantidade solicitada.
-                      Retorna None se o hambúrguer não for encontrado no cardápio.
+        dict: Dicionário com os ingredientes atualizados.
     """
-    if nome in cardapio: # Verificação se o hambúrguer está no cardápio
-        ingredientes = cardapio[nome]
-        ingredientes_ajustados = {k: v * quantidade for k, v in ingredientes.items() if k != 'Preço'} # Atualização de quantidade
-        ingredientes_ajustados['Preço'] = ingredientes.get('Preço', 0) * quantidade # Atualização de preço
-        return ingredientes_ajustados
+    ingredientes_menu = {}
 
-    else:
-        error_msg("Hambúrguer não encontrado no cardápio") # Caso não exista retorna None
-        return None
+    for codigo, detalhes in cardapio.items():
+        hamburguer_menu = list(detalhes)[0]
+        ingredientes = list(detalhes.values())[0]
+
+        if hamburguer == hamburguer_menu:
+            for ingrediente, quantidades in ingredientes.items():
+                ingredientes_menu[ingrediente] = quantidades * quantidade
     
+    return ingredientes_menu
 
-def verificar_ingredientes(detalhes):
+
+def verificar_ingredientes(ingredientes):
     """
-    Verifica a disponibilidade dos ingredientes no almoxarifado para um determinado item do cardápio.
+    Função que verifica se os ingredientes são suficientes para concluir o pedido.
+
 
     Args:
-        detalhes (dict): Um dicionário contendo os detalhes do item do cardápio. As chaves são os nomes dos ingredientes
-                         e os valores são as quantidades necessárias de cada ingrediente.
+        ingredientes (dict): Dicionário com os ingredientes do hamburguer.
 
     Returns:
-        list: Uma lista contendo os nomes dos ingredientes que estão em falta ou com quantidade insuficiente no almoxarifado.
+        booleano: False caso os ingredientes sejam insuficientes.
     """
-    itens_insuficientes = []
-
-    for nome, quantidade in detalhes.items():
-        if nome == 'Preço':  # Ignora o preço, pois não é um ingrediente
-            continue
-        ids, dados = check_buy(nome)
-        if dados:
-            quantia = dados[1]  # A quantidade está na segunda posição da lista
-            if quantia >= quantidade:
-                continue
-            else:
-                itens_insuficientes.append(nome)
-        else:
-            itens_insuficientes.append(nome)
+    # Definindo list comprehension em itens_dict
+    itens_dict = {itens[0]: itens[1] for itens in almoxarifado.values()}
     
-    return itens_insuficientes
+    # Intera sobre o dicionário de ingredientes.
+    for ingrediente, quantidade in ingredientes.items():
+        if ingrediente not in itens_dict or quantidade > itens_dict[ingrediente]:
+            return False
+    return True
 
 
-def verificar_acrescimos(detalhes, quantia):
+def adicionais():
+    adicional = input_tratado("Adicionais (SIM/NÃO):    ")
+    return True if adicional == "SIM" else False
+
+
+def adicionar_adicionais():
+    adicionais = {}
+    while True:
+        adicional = input_tratado("(SAIR) - Adicional:  ")
+        quantidade = leia_int("Quantidade:  ")
+        if adicional == "SAIR":
+            break
+        if verificar_adicionais(adicional, quantidade):
+            preco = leia_float("Preço:  ")
+            adicionais[adicional] = preco * quantidade
+
+    return adicionais
+
+
+def verificar_adicionais(adicional, quantidade):
     """
-    Verifica se há quantidade suficiente de um item no almoxarifado.
+    Função que verifica se os adicionais no almoxarifado existeme  são suficientes.
 
     Args:
-        detalhes (list): Detalhes do item no almoxarifado, onde o segundo elemento (índice 1) representa a quantidade disponível.
-        quantia (int): Quantidade requerida do item.
+        adicional (str): Nome do item.
+        quantidade (int): Quantidade solicitada.
 
     Returns:
-        bool: Retorna True se a quantidade disponível for suficiente. Retorna False e exibe uma mensagem de erro se a quantidade for insuficiente.
+        booleano: True para possível adicionar adicional; False para o contrário.
     """
-    if detalhes[1] >= quantia:
-        return True
-    else:
-        error_msg(f"Quantia insuficiente: {detalhes[1]} quantidades no almoxarifado ")
+    itens_dict = {itens[0]: itens[1] for itens in almoxarifado.values()}
+    
+    if adicional not in itens_dict or quantidade > itens_dict[adicional]:
         return False
-    
+    return True
 
-def decrementar_ingredientes(codigo):
+
+def informacoes_cliente():
     """
-    Decrementa a quantidade de ingredientes utilizados em um pedido no almoxarifado.
-
-    Utilizada para confirmação de pedidos.
-
-    Args:
-        codigo (int): ID do pedido no dicionário `pedidos`.
+    Função que pega as informações do cliente.
 
     Returns:
-        str: Retorna uma mensagem de aviso se o pedido não for encontrado.
-
-    Fluxo da função:
-        1. Verifica se o pedido existe.
-        2. Decrementa os adicionais se houver.
-        3. Calcula a quantidade total de cada ingrediente do hambúrguer.
-        4. Atualiza as quantidades de ingredientes no almoxarifado.
+        str: CPF do cliente.
     """
-    if verificar_pedido:
-
-        adicionais = pedidos[codigo][-2]
-        
-        if len(adicionais) != 0:
-            decrementar_adicionais(codigo)
-
-        pedido_cliente = pedidos[codigo]
-        nome_hamburguer = pedido_cliente[3]  # Acessar nome do hambúrguer
-        ingredientes_hamburguer = cardapio[nome_hamburguer]  # Acessar o dict de ingredientes do hambúrguer no cardápio
-        quantidade_hamburguer = pedido_cliente[4]  # Acessar quantidade solicitada pelo cliente
-
-        for ingrediente in ingredientes_hamburguer:  # Acessar os ingredientes
-            if ingrediente == 'Preço':
-                continue
-            quantidade_ingrediente = ingredientes_hamburguer[ingrediente] # Definir quantidade de ingredientes
-            quantidade_total = quantidade_hamburguer * quantidade_ingrediente # Quantidade total dos ingredientes 
-            
-            for ids, detalhes in almoxarifado.items():
-                item_almoxarifado = detalhes[0]
-
-                if ingrediente == item_almoxarifado:  # Verificar se o adicional existe no almoxarifado
-                    almoxarifado[ids][1] -= quantidade_total
-            
-    else:
-        return error_msg("Pedido não encontrado!")
+    cpf = leiaCPF("CPF do cliente:  ")
+    if cpf not in clientes:
+        cadastrar_cliente()
+    return cpf
 
 
-def decrementar_adicionais(codigo):
+def pegar_preco(hamburguer, quantidade):
     """
-    Decrementa a quantidade de adicionais utilizados em um pedido no almoxarifado.
-
-    Utilizada para confirmação de pedidos.
+    Função que pega o preço do hambúrguer no cardápio.
 
     Args:
-        codigo (int): Keys do dict() de pedidos
-
-    Fluxo da função:
-        1. Verifica se o pedido existe.
-        2. Acessa a lista de adicionais do pedido.
-        3. Itera sobre cada adicional na lista e decrementa a quantidade no almoxarifado.
-        4. Salva os dados atualizados do almoxarifado.
-    """
-
-    if verificar_pedido:
-        pedido_cliente = pedidos[codigo]
-        lista_adicionais = pedido_cliente[5]  # Acessar a lista dos adicionais
-        for adicional in lista_adicionais:  # Iterar sobre os adicionais da lista
-            nome_adicional = adicional[0]
-            quantidade_adicional = adicional[1]
-
-            for ids, detalhes in almoxarifado.items():
-                item_almoxarifado = detalhes[0]
-                if nome_adicional == item_almoxarifado:  # Verificar se o adicional existe no almoxarifado
-                    almoxarifado[ids][1] -= quantidade_adicional
-        
-    else:
-        return error_msg("Pedido não encontrado!")
-    
-    save_data("arquivo_almoxarifado.dat", almoxarifado)
-
-
-def perca_de_ingredientes(codigo):
-    """
-    Função que recebe o código de um pedido já confirmado e feito. Como os ingredientes de uma hambúrguer real
-    não podem voltar para cozinha, eles são gerados como perca a não ser que outro cliente escolha esse hambúrguer.
-
-    Args:
-        codigo (int): Chave a qual está armazenado o pedido em pedidos.
+        hamburguer (str): Nome do hambúrguer.
+        quantidade (int): Quantidade solicitada.
 
     Returns:
-        input: Solicita enter para continuar o código.
-    
-    Fluxo:
-        1. A função define o hamburguer e a quantidade do pedido
-        2. Intera sobre o cardapio para encontrar os valores correspondentes.
-        3. Compara se o hamburguer no cardaio é igual ao hamburguer definido na função.
-        4. Intera sobre os ingredientes desse hamburguer.
-        5. Se ingrediente for igual a "Preço", ignore.
-        6. Pega a quasntia do cardapio e multiplica pela quantia pedida pelo cliente.
-        7. Ingrediente e quantia é colocado em gerar_percas.
-        8. Pedido é removido de pedidos.
-        9. Arquivos são salvos.
-        10. Exibe mensagem de sucesso.
+        float: Preço do hambúrguer.
     """
-    hamburguer = pedidos[codigo][3]
-    quantidade = pedidos[codigo][4]
-    for hamburguers, ingredientes in cardapio.items():
-        if hamburguers == hamburguer:
-            for ingrediente, quantia in ingredientes.items():
-                
-                if ingrediente == 'Preço':
-                    continue
-
-                quantia *= quantidade
-                gerar_percas(ingrediente, quantia)
-    
-    pedidos.pop(codigo)
-    save_data("arquivo_pedidos.dat", pedidos)
-    sucess_msg("Pedido removido e anexado em percas.")
-    return input(">> Enter")
+    for detalhes in cardapio.values():
+        if hamburguer == list(detalhes.keys())[0]:
+            return detalhes['PRECO'] * quantidade
 
 
-def gerar_percas(ingrediente, quantidade):
+def extrair_informacoes(codigo):
     """
-    Função que gera o relataório de percas de pedidos.
-
-    A função recebe como parâmetro o ingrediente e sua quantidade correspondente do pedido. A partir da data,
-    as informações são adicionais ao dicionário percas_ingredientes.
+    Função para extrair as informações necessária do pedido.
 
     Args:
-        ingrediente (str): Nome do ingrediente
-        quantidade (int): Quantidade do ingrediente
+        codigo (int): Chave que acessa o pedido dentro do dicionário de pedidos.
 
-    Fluxo:
-        1. Verifica se a data existe no dicionario, caso não, cria para receber um dict();
-        2. Verifica se o ingrediente existe naquele data respectiva no dicionário, caso não, cria e iguala a 0.
-        3. Acrescenta as informações em percas_ingredientes a partir de seus dados.
-
-    Formato do dicionário:
-        percas_ingredientes = {
-            "04/07/2024": {"Ingrediente": quantidade}
-            ...
-        }
+    Returns:
+        str, int, dict: Nome do hambúrguer; Quantidade do hambúrguer; Adicionais pedidos.
     """
-    if DATA not in percas_ingredientes:
-        percas_ingredientes[DATA] = {}
-    
-    if ingrediente not in percas_ingredientes[DATA]:
-        percas_ingredientes[DATA][ingrediente] = 0
-    
-    percas_ingredientes[DATA][ingrediente] += quantidade
-    save_data("percas_ingredientes.dat", percas_ingredientes)
+
+    pedido = pedidos[codigo]
+    hamburguer = pedido['hamburguer']
+    quantidade = pedido['quantidade']
+    adicional = pedido['adicionais']
+    return hamburguer, quantidade, adicional
 
 
+
+def atualizar_ingredientes(prompt, acao):
+    """
+    Função que atualiza os ingredientes no almoxarifado.
+
+    Args:
+        prompt (tuple): Tupla com o nome do hambúrguer e sua quantidade.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+    """
+    # Definição das variáveis.
+    hamburguer = prompt[0]
+    quantidade = prompt[1]
+
+    # Intera sobre os elementos do cardápio.
+    for codigo, detalhes in cardapio.items():
+        dic_ingredientes = list(detalhes.values())[0]
+        for ingrediente, quantidades in dic_ingredientes.items():
+            for item, infor in almoxarifado.items():
+                if ingrediente == infor[0]: # Comparação de vaores.
+                    if acao == "decrementar":
+                        nova_quantidade = infor[1] - (quantidade * quantidades)
+                        almoxarifado[item] = [infor[0], nova_quantidade]
+                    elif acao == "incrementar":           
+                        nova_quantidade = infor[1] + (quantidade * quantidades)
+                    almoxarifado[item] = [infor[0], nova_quantidade]
+
+
+def atualizar_adicional(adicionais, acao):
+    """
+    Função que atualiza os adicionais no almoxarifado.
+
+    Args:
+        prompt (dict): Dicionário com os ingredientes.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+    """
+    if len(adicionais) == 0:
+        return 
+    for adicional, detalhes in adicionais.items():
+        quantidade = detalhes[0]
+        for item, infor in almoxarifado.items():
+            if adicional == infor[0]:
+                if acao == "decrementar":
+                    nova_quantidade = infor[1] - quantidade
+                    almoxarifado[item] = [infor[0], nova_quantidade]
+                elif acao == "incrementar":           
+                    nova_quantidade = infor[1] + quantidade
+                almoxarifado[item] = [infor[0], nova_quantidade]
 
 def deletar_pedido(codigo):
     """
-    Função para deletar pedidos que não foram confirmados.
+    Função que deleta um pedido dos pedidos.
 
     Args:
-        codigo (int): ID do pedido a ser deletado.
+        codigo (int): Chave do hambúrguer.
 
     Returns:
-        bool: Retorna True se o pedido foi deletado com sucesso, False caso o pedido não seja encontrado.
+        booleano: True se o pedido tiver sido deletado. False se não encontrado.
     """
-    if verificar_pedido():
-        pedidos.pop(codigo)
-        input(">> Enter")
+    if codigo in pedidos:
+        del pedidos[codigo]
+        save_data("arquivo_pedidos.dat", pedidos)
         return True
     else:
-        error_msg("Pedido não encontrado")
-        input(">> Enter")
         return False
 
 
-def opcoes_edicao():
+def listar_pedidos():
+    """Função para exibir os pedidos.
     """
-    Função para ler e validar a opção de edição escolhida pelo usuário.
-
-    A função continua solicitando uma opção de edição até que o usuário insira uma opção válida entre 1 e 5.
-
-    Returns:
-        int: A opção de edição válida escolhida pelo usuário.
-    """
-    while True:
-        opc = leia_int("Opção de edição ")
-        if opc < 1 or opc > 5:
-            error_msg("Opção fora de alcance")
-        else:
-            return opc
-
-
-def mudar_dados_cliente(detalhes):
-    """
-    Função para mudar os dados do cliente em um pedido.
-
-    Args:
-        detalhes (list): Lista contendo os detalhes do pedido. A estrutura esperada é:
-            [
-                id_pedido (int),
-                cliente_nome (str),
-                cliente_endereco (str),
-                hamburguer (str),
-                quantidade (int),
-                adicionais (list): Lista de listas onde cada sublista contém [nome_adicional (str), quantidade (int), preço (float)],
-                total (float)
-            ]
-    """
-    nome = leia_nome("Nome:    ")
-    rua = leia_nome("Rua: ")
-    numero = leia_int("N° casa:  ")
-    endereco = f"{rua}, {numero}"
-    detalhes[1] = nome
-    detalhes[2] = endereco
-
-
-def mudar_pedido(detalhes):
-    """
-    Função para mudar o hambúrguer em um pedido.
-
-    Args:
-        detalhes (list): Lista contendo os detalhes do pedido. A estrutura esperada é:
-            [
-                id_pedido (int),
-                cliente_nome (str),
-                cliente_endereco (str),
-                hamburguer (str),
-                quantidade (int),
-                adicionais (list): Lista de listas onde cada sublista contém [nome_adicional (str), quantidade (int), preço (float)],
-                total (float)
-            ]
-    """
-    nome = leia_item("Hambúrguer:   ").upper()
-    quantidade = leia_int("Quantidade:  ")
-
-    # Extrair os ingredientes
-    ingredientes = extrair_ingredientes(nome, quantidade)
-    if ingredientes:
-        itens_insuficientes = verificar_ingredientes(ingredientes)
-
-        if itens_insuficientes:
-            error_msg("Pedido não pode ser feito. Ingredientes insuficientes.")
-            for item in itens_insuficientes:
-                print(item)
-        else:
-            detalhes[3] = nome
-            detalhes[4] = quantidade
-    else:
-        # Error de não existência
-        error_msg("Hambúrguer não catalogado!")
-
-
-def mudar_adicionais(detalhes):
-    """
-    Função para modificar os adicionais de um pedido.
-
-    Args:
-        detalhes (list): Lista contendo os detalhes do pedido. A estrutura esperada é:
-            [
-                id_pedido (int),
-                cliente_nome (str),
-                cliente_endereco (str),
-                hamburguer (str),
-                quantidade (int),
-                adicionais (list): Lista de listas onde cada sublista contém [nome_adicional (str), quantidade (int), preço (float)],
-                total (float)
-            ]
-    """
-    detalhes[5] = []  # Reinicializa os adicionais para atualização
-    while True: # Laço para adicionar mais acrescimos
-        nome_adicional = leia_item("[SAIR] Nome: ").upper()
-        if nome_adicional[0] in 'Ss':
-            break
-
-        ids, checagem = check_buy(nome_adicional)
-
-        quantidade_adicional = leia_int("Quantia: ")
-
-        if checagem:
-            if verificar_acrescimos(checagem, quantidade_adicional):
-                preco = leia_float("Preço: ")
-                detalhes[5].append([nome_adicional, quantidade_adicional, preco])
-        else:
-            error_msg("Acréscimo em falta")
-
-
-def calcular_total(detalhes, nome):
-    """
-    Calcula o total do pedido baseado nos detalhes do pedido e no nome do hambúrguer.
-
-    Args:
-        detalhes (list): Lista contendo os detalhes do pedido. A estrutura esperada é:
-            [
-                id_pedido (int),
-                cliente_nome (str),
-                cliente_endereco (str),
-                hamburguer (str),
-                quantidade (int),
-                adicionais (list): Lista de listas onde cada sublista contém [nome_adicional (str), quantidade (int), preço (float)],
-                total (float)
-            ]
-        nome (str): Nome do hambúrguer para buscar o preço no cardápio.
-
-    Returns:
-        float: Total calculado do pedido, incluindo o preço do hambúrguer e dos adicionais.
-    """
-    preco_hamburguer = cardapio[nome]['Preço']  
-    total_hamburguer = preco_hamburguer * detalhes[4]
-    total_adicionais = sum([adicional[1] * adicional[2] for adicional in detalhes[5]])
-    return total_hamburguer + total_adicionais
-
-
-def editar_pedido(id_pedido):
-    """
-    Função para editar um pedido existente.
-
-    Args:
-        id_pedido (int): ID do pedido no dicionário `pedidos`.
-
-    Descrição:
-    - A função exibe e permite a edição dos detalhes de um pedido específico.
-    - Os detalhes do pedido incluem: dados do cliente, pedido de hambúrguer, adicionais e total.
-    - A função verifica se o pedido existe, exibe os detalhes e permite que o usuário faça edições.
-
-    Fluxo da função:
-    1. Exibe o título "Edição de pedido" e limpa a tela.
-    2. Verifica se o pedido com o ID fornecido existe utilizando a função `verificar_pedido`.
-    3. Se o pedido não existir, exibe uma mensagem de erro e retorna.
-    4. Extrai e exibe os detalhes do pedido, incluindo nome do cliente, endereço, hambúrguer, quantidade, adicionais e total.
-    5. Permite ao usuário editar:
-        - Dados do cliente
-        - Pedido de hambúrguer
-        - Adicionais
-    6. Atualiza o total do pedido após cada edição utilizando a função `calcular_total`.
-    7. Exibe uma mensagem de sucesso após cada edição.
-    8. Pergunta ao usuário se deseja continuar editando outras informações do pedido.
-
-    Exemplo de uso:
-        editar_pedido(1)
-    """
-    titulo("Edição de pedido")
     limpar_tela()
-    # Encontra o pedido com o id fornecido
-    if verificar_pedido(id_pedido): 
-        pass
-    else:
-        error_msg("Pedido não existe")
-        return
-    
-    pedido = pedidos[id_pedido]
-    
-    while True:
-        # Extraindo os detalhes do pedido
-        cliente_nome = pedido[1]
-        cliente_endereco = pedido[2]
-        hamburguer = pedido[3]
-        hamburguer_quantidade = pedido[4]
-        adicionais = pedido[5]
-        total = pedido[6]
+    linha()
+    for codigo, detalhes in pedidos.items():
+        print_alinhado("N° Pedido:", codigo)
+        print_alinhado("Cliente:", detalhes["nome"])
+        print_alinhado("Endereço:", detalhes["endereco"])
+        print_alinhado("Hamburguer:", detalhes["hamburguer"])
+        print_alinhado("Quantidade:", detalhes["quantidade"])
+        print_alinhado("Preço Hambúrguer:", f"R$ {detalhes["preco"]}")
+        print()
+        adicionais = detalhes["adicionais"]
 
-        # Exibindo os detalhes do pedido
-        print_alinhado(f"\033[1m 1. Dados Cliente:\033[m", f"{cliente_nome}, {cliente_endereco}")
-        print_alinhado(f"\033[1m 2. Pedido:\033[m", f"{hamburguer} (x{hamburguer_quantidade})")
-        print_alinhado(f"\033[1m 3. Adicionais:\033[m", f"{', '.join([f'{adicional[0]} (x{adicional[1]})' for adicional in adicionais])}")
-        print(f"{'Total:'} {'-' * 75} R$ {total:.2f}")
+        if len(adicionais) != 0:
+            for nome, detalhes in adicionais.items():
+                print_alinhado(f"Adicional: {nome}", f"\n\tQuantidade: {detalhes[0]} | Preço R${detalhes[1]}")
+        linha()
 
-        opc = opcoes_edicao()
-        if opc == 1:
-            mudar_dados_cliente(pedido)
-        elif opc == 2:
-            mudar_pedido(pedido)
-        elif opc == 3:
-            mudar_adicionais(pedido)
-
-        # Calcular novo preço
-        pedido[6] = calcular_total(pedido, hamburguer)
-
-        sucess_msg("Pedido atualizado com sucesso.")
-        sair = input("Deseja editar outra informação? (s/n): ").lower()
-
-        if sair != 's':
-            break
 
 
 def fechar_vendas():
@@ -665,8 +333,6 @@ def fechar_vendas():
     Exemplo de uso:
         fechar_vendas("77788899911")
     """
-    
-
     cpf = leiaCPF("CPF: ")
 
     funcionario_cpf = ''
@@ -701,44 +367,11 @@ def atualizar_ranking(pedidos):
     Atualiza o ranking de hambúrgueres mais pedidos com base nos dados fornecidos.
 
     Args:
-        pedidos (dict): Um dicionário contendo os pedidos realizados. A estrutura do dicionário é a seguinte:
-            {
-                'data': {
-                    'Hora': 'hh:mm:ss',
-                    'Funcionário': 'nome do funcionário',
-                    'CPF': 'cpf do cliente',
-                    'Pedidos Realizados': {
-                        'codigo do pedido': [
-                            1, # Número do pedido
-                            'nome do cliente',
-                            'endereço de entrega',
-                            'nome do hambúrguer',
-                            quantidade_pedida,
-                            [lista de adicionais],
-                            valor_total
-                        ]
-                    }
-                }
-            }
-    
-    Exemplo de uso:
-        pedidos = {
-            '23/06/2024': {
-                'Hora': '10:24:47',
-                'Funcionário': 'Anderson Gabriel Pereira Cruz',
-                'CPF': '77788899911',
-                'Pedidos Realizados': {
-                    1: [1, 'Anderson Gabriel', 'Centro, 157', 'HAMBÚRGUER CLÁSSICO', 1, [['COCA-COLA', 1, 4.0]], 10.0]
-                }
-            }
-        }
-        ranking_vendas = {}
-        atualizar_ranking(pedidos)
-        print(ranking_vendas)  # Saída: {'HAMBÚRGUER CLÁSSICO': 1}
+        pedidos (dict): Um dicionário contendo os pedidos realizados.
     """
-    for codigo, infor in pedidos.items():
-        hamburguer = infor[3]
-        quantidade = infor[4]
+    for infor in pedidos.values():
+        hamburguer = infor["hamburguer"]
+        quantidade = infor["quantidade"]
         if hamburguer in ranking_vendas:
             ranking_vendas[hamburguer] += quantidade
         else:
