@@ -304,6 +304,7 @@ def listar_pedidos():
                 print_alinhado(f"Adicional: {nome}", f"\n\tQuantidade: {detalhes[0]} | Preço R${detalhes[1]}")
         linha()
 
+
 def editar_pedido(codigo):
     """
     Função que modifica o pedido do cliente.
@@ -311,6 +312,8 @@ def editar_pedido(codigo):
     Args:
         codigo (int): Chave que está o pedido do cliente.
     """
+    limpar_tela()
+    titulo("EDIÇÃO DE PEDIDO")
     if codigo in pedidos:
         adicional = {}
 
