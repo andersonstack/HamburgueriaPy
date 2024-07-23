@@ -1,17 +1,9 @@
 # Importações necessárias para o pacote.
-from dados_pct import (
-    almoxarifado,
-    save_data
-)
-from estilização_pct import (
-    exibir_item,
-    error_msg,
-    limpar_tela,
-    sucess_msg
-)
+from dados_pct import almoxarifado, save_data
+from estilização_pct import error_msg, exibir_item, sucess_msg
 from ferramentas_pct import (
-    check_id,
     check_buy,
+    check_id,
     input_tratado,
     leia_int,
     limpar_tela,

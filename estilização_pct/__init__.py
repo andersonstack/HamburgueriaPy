@@ -1,20 +1,19 @@
 # Importações necessárias para o pacote.
-from ferramentas_pct import (
-    limpar_tela
-)
+from ferramentas_pct import limpar_tela
+
 
 def principal():
     """
     Função para mostrar as opções possíveis de main.
     """
-    print("1 ↪︎ Módulo Compras")  
-    print("2 ↪︎ Módulo Almoxarifado")  
-    print("3 ↪︎ Módulo Vendas")  
+    print("1 ↪︎ Módulo Compras")
+    print("2 ↪︎ Módulo Almoxarifado")
+    print("3 ↪︎ Módulo Vendas")
     print("4 ↪︎ Módulo Funcionários")
-    print("5 ↪︎ Módulo Clientes")  
-    print("6 ↪︎ Módulo Relatórios")  
-    print("7 ↪︎ Módulo Informações")  
-    print("0 ↪︎ Sair") 
+    print("5 ↪︎ Módulo Clientes")
+    print("6 ↪︎ Módulo Relatórios")
+    print("7 ↪︎ Módulo Informações")
+    print("0 ↪︎ Sair")
     linha()
 
 
@@ -24,24 +23,23 @@ def operacoes_clientes():
     """
     limpar_tela()
     titulo("Clientes")
-    print("1 ↪︎ Cadastrar Cliente")  
-    print("2 ↪︎ Lista de Clientes") 
+    print("1 ↪︎ Cadastrar Cliente")
+    print("2 ↪︎ Lista de Clientes")
     print("3 ↪︎ Editar Clientes")
-    print("4 ↪︎ Excluir Clientes")   
-    print("0 ↪︎ Sair")  
+    print("4 ↪︎ Excluir Clientes")
+    print("0 ↪︎ Sair")
 
 
 def operacoes_funcionarios():
-  """
-  Função auxiliar que mostra as operações possíveis em módulos de funcionários.
-  """
-  limpar_tela()
-  titulo("Funcionários")  
-  print("↪︎ 1.  Quadro de funcionários      ")
-  print("↪︎ 2.  Gerenciar funcionários      ")
-  print("↪︎ 0.  Sair      ")
-  linha()
-
+    """
+    Função auxiliar que mostra as operações possíveis em módulos de funcionários.
+    """
+    limpar_tela()
+    titulo("Funcionários")
+    print("↪︎ 1.  Quadro de funcionários      ")
+    print("↪︎ 2.  Gerenciar funcionários      ")
+    print("↪︎ 0.  Sair      ")
+    linha()
 
 
 def exibir_item(informacoes, prompt):
@@ -61,6 +59,7 @@ def quadro_almoxarifado(almoxarifado):
         quantidade = valor[1]
         print(f"{id_item:^5}|{nome:^60}|{quantidade:^60}")
         print('-' * 125)
+
 
 def print_alinhado(text, valor=""):
     print(f"{text:<15}", valor)
@@ -82,7 +81,6 @@ def titulo(text):
 
 
 def subtitulo(text):
-    tam = len(text) + 4
     print("\033[31m=\033[m" * 125)
     print(f"\033[1;31m{text.center(125)}")
     print("\033[31m=\033[m" * 125)
@@ -137,9 +135,8 @@ def error_msg(text):
     print("\033[1;31;7m >> " + text + "\033[m")
     print()
 
+
 def sucess_msg(text):
     print()
     print("\033[1;32;7m >> " + text + "\033[m")
     print()
-
-

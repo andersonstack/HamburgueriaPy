@@ -1,27 +1,24 @@
 # Importações necessárias para o pacote.
+from dados_pct import cardapio, save_data
+from estilização_pct import subtitulo, titulo
 from ferramentas_pct import (
-    limpar_tela, 
-    leia_item, 
-    leia_int, 
-    leia_float, 
+    leia_float,
+    leia_int,
+    leia_item,
+    limpar_tela,
 )
-from dados_pct import (
-    save_data, cardapio
-)
-from estilização_pct import (
-    subtitulo, 
-    titulo)
 
 
 ID_MENU = 1 if len(cardapio) == 0 else max(cardapio.keys()) + 1
 
 def exibir_cardapio():
     """
-    Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus ingredientes por porção.
+    Exibe o cardápio da hamburgueria, mostrando os hambúrgueres disponíveis e seus 
+    ingredientes por porção.
     """
     limpar_tela()
     titulo("CARDÁPIO")
-    for codigo, detalhes in cardapio.items():
+    for detalhes in cardapio.values():
         for nome_hamburguer, ingredientes in detalhes.items():
             if nome_hamburguer != 'PRECO':
                 print()
@@ -44,7 +41,7 @@ def verificar_hamburguer_existente():
     """
     hamburguer = leia_item("Hambúrguer: ").upper().replace(" ", "")
     
-    for codigo, detalhes in cardapio.items():
+    for detalhes in cardapio.values():
         hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
 
         if hamburguer == hamburguer_menu:
@@ -59,7 +56,7 @@ def atualizar_hamburguer(hamburguer):
     """
     limpar_tela()
     titulo("ATUALIZAÇÃO DE HAMBÚRGUER")
-    for codigo, detalhes in cardapio.items():
+    for detalhes in cardapio.values():
         hamburguer_menu = list(detalhes.keys())[0].upper()
 
         if hamburguer.replace(" ", "") == hamburguer_menu.replace(" ", ""):

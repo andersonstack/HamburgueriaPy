@@ -1,8 +1,6 @@
 # Importações necessárias para o pacote.
-from os import (
-    system, 
-    name
-)
+from os import name, system
+
 from dados_pct import almoxarifado
 
 
@@ -53,8 +51,9 @@ def check_buy(nome):
         # A tupla retorna a chave e seu value (1, ("ITEM", 50))
     
     """
-    for ids, detalhes in almoxarifado.items():  # Itera sobre chave e valor do almoxarifado
-        if nome in detalhes:  # Verifica se o nome está presente nos detalhes  
+    # Itera sobre chave e valor do almoxarifado.
+    for ids, detalhes in almoxarifado.items(): 
+        if nome in detalhes:  # Verifica se o nome está presente nos detalhes.
             return ids, detalhes
     return None, None 
 
@@ -69,10 +68,7 @@ def checker_fields(texto):
     Returns:
         booleano: True se o texto é valido / False se inválido.
     """
-    if not texto or texto.isspace():
-        return False
-    else:
-        return True
+    return not (not texto or texto.isspace())
 
 
 def input_tratado(prompt):
@@ -218,12 +214,13 @@ def varredura():
         2. Verifica se a quanstidade é menor ou igual a 10.
             2.1 Caso o IF seja satisfeito, adiciona a lista de itens_baixos.
         3. Verifica o tamanho da lista de itens_baixos.
-        4. Se a lista for maior que 0, faz um laço de repetição para interar sobre a lista.
+        4. Se a lista for maior que 0, faz um laço de repetição para interar sobre a 
+        lista.
         5. Exibe a lista e uma mensagem de quantia baixa.
     """
     itens_baixos = []
 
-    for keys, values in almoxarifado.items():
+    for values in almoxarifado.values():
         quantia = values[1]
         if quantia <= 10:
             itens_baixos.append(values)

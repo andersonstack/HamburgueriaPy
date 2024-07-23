@@ -1,30 +1,24 @@
 # Importações necessárias para o pacote.
-from dados_pct import (
-    compras,
-    vendas, 
-    ranking_vendas
-)
-from estilização_pct import (
-    print_alinhado,
-    linha,
-    subtitulo,
-    cabecalho
-)
+from dados_pct import compras, ranking_vendas, vendas
+from estilização_pct import cabecalho, linha, print_alinhado, subtitulo
 from ferramentas_pct import (
+    error_msg,
     input_tratado,
     limpar_tela,
-    error_msg,
 )
 
 
 def processo_compras():
     """
-    Função para exibir detalhes de compras com base em uma data específica ou todas as compras.
+    Função para exibir detalhes de compras com base em uma data específica ou todas 
+    as compras.
 
-    Permite ao usuário selecionar uma data específica ou exibir um relatório completo de compras.
-    Se a data especificada não existir no dicionário de compras, exibe uma mensagem de erro.
-    Para cada data ou todas as compras exibidas, mostra detalhes como hora, nome do item,
-    quantidade e preço unitário.
+    Permite ao usuário selecionar uma data específica ou exibir um relatório completo 
+    de compras.
+    Se a data especificada não existir no dicionário de compras, exibe uma mensagem 
+    de erro.
+    Para cada data ou todas as compras exibidas, mostra detalhes como hora, nome do 
+    item, quantidade e preço unitário.
 
     Retorna: None
     """
@@ -32,17 +26,17 @@ def processo_compras():
     limpar_tela()
 
     if data_compra.strip() != 'TODO':
-        if data_compra not in compras.keys():
-          error_msg("Data não encontrada")
-          return input("<< Enter >>")
+        if data_compra not in compras:
+            error_msg("Data não encontrada")
+            return input("<< Enter >>")
 
         else:
-          data = {data_compra: compras[data_compra]}
+            data = {data_compra: compras[data_compra]}
     else:
         data = compras
 
-    for data, compra in data.items():
-        print_alinhado("\033[1mDATA:",f"{data}\033[m")
+    for data_chave, compra in data.items():
+        print_alinhado("\033[1mDATA:",f"{data_chave}\033[m")
         print("=" * 50)
         for detalhes in compra:
             print_alinhado("Hora:",detalhes['hora'])
@@ -56,11 +50,16 @@ def processo_compras():
 
 def processos_vendas():
     """
-    Função para exibir relatório de vendas com base em uma data específica ou todas as vendas.
-    Permite ao usuário selecionar uma data específica ou exibir um relatório completo de vendas.
-    Se a data especificada não existir no dicionário de vendas, exibe uma mensagem de erro.
-    Para cada data ou todas as vendas exibidas, mostra detalhes como pedidos realizados, 
-    informações adicionais (se houver), e informações dos funcionários envolvidos.
+    Função para exibir relatório de vendas com base em uma data específica ou 
+    todas as vendas.
+    Permite ao usuário selecionar uma data específica ou exibir um relatório completo 
+    de vendas.
+    Se a data especificada não existir no dicionário de vendas, exibe uma mensagem de 
+    erro.
+    Para cada data ou todas as vendas exibidas, mostra detalhes como 
+    pedidos realizados, informações adicionais (se houver), e informações dos 
+    funcionários envolvidos.
+    
     Retorna: None
     """
 
@@ -69,7 +68,7 @@ def processos_vendas():
     limpar_tela()
 
     if data_venda.strip().upper() != 'TODO':
-        if data_venda not in vendas.keys():
+        if data_venda not in vendas:
             error_msg("Data não encontrada")
             input(">> Enter para continuar")
             return
@@ -78,8 +77,8 @@ def processos_vendas():
     else:
         data = vendas
 
-    for data, detalhes in data.items():
-        subtitulo(data)
+    for data_chave, detalhes in data.items():
+        subtitulo(data_chave)
         print(f"Hora: {detalhes['Hora']}")
         print(f"Funcionário: {detalhes['Funcionário']}")
         print(f"CPF: {detalhes['CPF']}")
@@ -96,7 +95,8 @@ def processos_vendas():
             if pedido_detalhes['adicionais']:  # Verifica se há adicionais
                 print("Adicionais:")
                 for adicional, adicional_detalhes in pedido_detalhes['adicionais'].items():
-                    print(f"  - Item: {adicional}, Quantidade: {adicional_detalhes[0]}, Preço: R$ {adicional_detalhes[1]:0.2f}")
+                    print(f"  - Item: {adicional}, Quantidade: {adicional_detalhes[0]},"
+                        f"Preço: R$ {adicional_detalhes[1]:0.2f}")
             else:
                 print("Adicionais: Nenhum")
 
@@ -129,8 +129,8 @@ def imprimir_ranking():
     """
     Imprime o ranking de vendas ordenado por quantidade de forma formatada.
 
-    Utiliza a função ordenar_vendas para obter um dicionário ordenado de vendas e imprime
-    os resultados formatados em uma tabela.
+    Utiliza a função ordenar_vendas para obter um dicionário ordenado de vendas e
+    imprime os resultados formatados em uma tabela.
 
     Retorna: None
     """

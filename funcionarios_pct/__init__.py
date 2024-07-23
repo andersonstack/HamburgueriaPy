@@ -1,21 +1,15 @@
 # Importações necessárias para o pacote.
-from estilização_pct import (
-  subtitulo,
-  linha,
-  quadro,
-  error_msg,
-) 
 from dados_pct import (
   funcionarios,
   save_data,
 )
-from ferramentas_pct import (
-  limpar_tela,
-  leia_int,
-  leia_nome,
-  leiaCPF,
-  input_tratado
+from estilização_pct import (
+  error_msg,
+  linha,
+  quadro,
+  subtitulo,
 )
+from ferramentas_pct import input_tratado, leia_int, leia_nome, leiaCPF, limpar_tela
 
 
 def adm(acesso): # Função não utilizada diretamente por main.
@@ -29,10 +23,7 @@ def adm(acesso): # Função não utilizada diretamente por main.
       Booleana: Acesso autorizado ou negado
   """
   chave = input(acesso)
-  if chave == "cpD13":
-    return True
-  else:
-    return False 
+  return chave == "cpD13" 
   
 
 def contratar():
@@ -98,8 +89,10 @@ def demitir():
   """
   Função para demitir funcionários.
 
-  Solicita primeiro o CPF. Se o CPF não existir, retorna um input informando que a pessoa não foi encontrada.
-  Se o CPF existir, mostra os dados do funcionário a ser demitido e solicita confirmação. 
+  Solicita primeiro o CPF. Se o CPF não existir, retorna um input informando que a 
+  pessoa não foi encontrada.
+  Se o CPF existir, mostra os dados do funcionário a ser demitido e solicita 
+  confirmação. 
   Se confirmado, remove o funcionário do dicionário e salva as alterações no arquivo. 
   Caso contrário, a operação é cancelada.
 
@@ -110,7 +103,9 @@ def demitir():
       1. Solicita o CPF.
       2. Verifica existência do CPF no dicionário de funcionários.
         2.1 Se não existe:
-          - Retorna input("Pessoa não encontrada nos registros de funcionários. >> Enter")
+          - Retorna input("Pessoa não encontrada nos registros de funcionários. 
+          
+          >> Enter")
         2.2 Se existe:
           - Mostra dados do funcionário a ser demitido.
           - Solicita confirmação (S/N).
@@ -136,7 +131,7 @@ def demitir():
 
   cpf = leiaCPF("CPF: ")
   if cpf not in funcionarios:
-    return input(f"Pessoa não encontrada nos registros de funcionários << Enter >>")
+    return input("Pessoa não encontrada nos registros de funcionários << Enter >>")
   
   else:
     error_msg(f"Funcionário a ser desligado:  {funcionarios[cpf]['Nome']}")
@@ -150,7 +145,7 @@ def demitir():
           funcionarios.pop(cpf)
           save_data("arquivo_funcionarios.dat", funcionarios)
           
-          return input(f"Funcionário desligado da empresa com sucesso! >> Enter")
+          return input("Funcionário desligado da empresa com sucesso! >> Enter")
         
         elif confirmacao[0].upper() in 'N':
           return input("Operação cancelada. >> Enter")
@@ -160,8 +155,10 @@ def buscar():
   """
   Função para buscar funcionário.
 
-  Solicita primeiro o CPF. Se o CPF existir no dicionário de funcionários, exibe os dados do funcionário.
-  Se o CPF não existir, retorna um input informando que o funcionário não foi encontrado.
+  Solicita primeiro o CPF. Se o CPF existir no dicionário de funcionários, exibe os 
+  dados do funcionário.
+  Se o CPF não existir, retorna um input informando que o funcionário 
+  não foi encontrado.
 
   Returns:
       input: Mostrar ação finalizada e seguir o código.
@@ -209,7 +206,8 @@ def editar_funcionario():
   """
   Função para edição dos dados do funcionário.
 
-  Solicita primeiro o CPF. Se o CPF existir no dicionário de funcionários, permite a edição dos dados (Nome, Idade, Rua, Número, Cidade, Estado).
+  Solicita primeiro o CPF. Se o CPF existir no dicionário de funcionários, permite a 
+  edição dos dados (Nome, Idade, Rua, Número, Cidade, Estado).
   Se o CPF não existir, retorna False.
 
   Returns:
@@ -220,7 +218,8 @@ def editar_funcionario():
       1. Solicita o CPF.
       2. Verifica existência do CPF no dicionário de funcionários.
         2.1 Se existe:
-          - Solicita os novos dados do funcionário (Nome, Idade, Rua, Número, Cidade, Estado).
+          - Solicita os novos dados do funcionário (Nome, Idade, Rua, Número, Cidade, 
+          Estado).
           - Atualiza o dicionário com os novos dados.
           - Salva os dados no arquivo.
           - Retorna o CPF do funcionário.
@@ -244,7 +243,7 @@ def editar_funcionario():
     idade = leia_int("Idade: ")
     rua = leia_nome("Rua:  ")
     if "Rua" in rua:
-       rua.replace("Rua", "")
+      rua.replace("Rua", "")
 
     numero = leia_int("Número: ")
     cidade = leia_nome("Cidade:  ")

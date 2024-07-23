@@ -1,21 +1,12 @@
 # Importações necessárias para o pacote.
+from dados_pct import clientes, save_data
 from estilização_pct import (
     cabecalho,
-    print_alinhado,
-    linha,
     error_msg,
+    linha,
+    print_alinhado,
 )
-from dados_pct import (
-    clientes,
-    save_data
-)
-from ferramentas_pct import (
-    limpar_tela,
-    leiaCPF,
-    leia_nome, 
-    leia_int,
-    input_tratado
-)
+from ferramentas_pct import input_tratado, leia_int, leia_nome, leiaCPF, limpar_tela
 
 
 def quadro_clientes():
@@ -24,7 +15,7 @@ def quadro_clientes():
     """
     limpar_tela()
     cabecalho("Lista de Clientes")
-    for cpf, dados in clientes.items():
+    for cpf in clientes.values():
         cliente = clientes[cpf]['Nome']
         endereco = clientes[cpf]['Endereço']
 
@@ -50,31 +41,33 @@ def cadastrar_cliente():
     cpf = leiaCPF("CPF:   ")
 
     if cpf not in clientes:
-      nome = leia_nome("Nome:  ")
-      rua = leia_nome("Rua:  ")
-      bairro = leia_nome("Bairro:   ")
-      numero = leia_int("Número:  ")
-      endereco = f"{rua}, {bairro}, {numero}"
+        nome = leia_nome("Nome:  ")
+        rua = leia_nome("Rua:  ")
+        bairro = leia_nome("Bairro:   ")
+        numero = leia_int("Número:  ")
+        endereco = f"{rua}, {bairro}, {numero}"
 
-      clientes[cpf] = {"Nome": nome, "Endereço": endereco}
+        clientes[cpf] = {"Nome": nome, "Endereço": endereco}
 
-      save_data("arquivo_clientes.dat", clientes)
+        save_data("arquivo_clientes.dat", clientes)
 
-      return input("Cliente cadastrado.")
+        return input("Cliente cadastrado.")
 
     else:
-      return input("Cliente já está no sistema.")
-  
+        return input("Cliente já está no sistema.")
+
 
 def editar_clientes():
     """
     Função para edição de clientes.
 
-    A função solicita o CPF a ser editado para fazer as edições do escolhido. Verifica a existência 
+    A função solicita o CPF a ser editado para fazer as edições do escolhido. Verifica a 
+    existência 
     e caso exista, as edições podem ser feitas.
 
     Returns:
-        input: Retorna um input de "Cliente editado" ou um error_msg "Cliente não encontrado".
+        input: Retorna um input de "Cliente editado" ou um error_msg "Cliente não 
+        encontrado".
 
     Fluxo:
         1. Solicita a entrada de um CPF.
@@ -113,15 +106,17 @@ def editar_clientes():
 
         return input("Cliente editado.")
     else:
-       error_msg("Cliente não encontrado.")
-       return input(">> Enter.")
+        error_msg("Cliente não encontrado.")
+        return input(">> Enter.")
+
 
 def excluir_cliente():
     """
     Função para excluir um cliente.
 
-    A função solicita o CPF. Se o CPF estiver em Clientes, pede confirmação de exclusão, caso
-    sim, o cliente é removido e os arquivos são salvos. Caso não, a operação é cancelada.
+    A função solicita o CPF. Se o CPF estiver em Clientes, pede confirmação de exclusão, 
+    casosim, o cliente é removido e os arquivos são salvos. Caso não, a operação é 
+    cancelada.
 
     Returns:
         input: De exclusão do cliente.
@@ -129,7 +124,8 @@ def excluir_cliente():
     """
     cpf = leiaCPF("CPF: ")
     if cpf in clientes:
-        confirm = input_tratado(f"Deseja excluir o cliente {clientes[cpf]['Nome']} (S/N)")
+        confirm = input_tratado(
+            f"Deseja excluir o cliente {clientes[cpf]['Nome']} (S/N)")
         match confirm:
             case 'S':
                 clientes.pop(cpf)

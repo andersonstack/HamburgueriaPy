@@ -1,6 +1,6 @@
 # Importações necessárias para o pacote.
-from datetime import datetime
 import pickle as save
+from datetime import datetime
 
 DATA = datetime.now().strftime("%d/%m/%Y") # Define data
 HORA = datetime.now().strftime("%H:%M:%S") # Define hora
@@ -12,7 +12,8 @@ def load_data(filename, default_value):
 
     Args:
         filename (str): Nome do arquivo de onde os dados serão carregados.
-        default_value (dict): Dicionário com os dados padrão a serem usados se o arquivo não existir ou estiver vazio.
+        default_value (dict): Dicionário com os dados padrão a serem usados se o 
+        arquivo não existir ou estiver vazio.
 
     Returns:
         dict: Dicionário com os dados carregados do arquivo ou o valor padrão.

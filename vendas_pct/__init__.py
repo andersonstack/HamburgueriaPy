@@ -1,34 +1,18 @@
+# Importações necessárias para o pacote.
+from clientes_pct import cadastrar_cliente, clientes
 from dados_pct import (
-    cardapio, 
-    almoxarifado, 
-    clientes, 
-    pedidos, 
-    save_data, 
-    DATA, 
-    HORA, 
-    funcionarios, 
-    vendas, 
-    ranking_vendas
+    DATA,
+    HORA,
+    almoxarifado,
+    cardapio,
+    funcionarios,
+    pedidos,
+    ranking_vendas,
+    save_data,
+    vendas,
 )
-from estilização_pct import (
-    titulo, 
-    print_alinhado, 
-    linha, 
-    error_msg, 
-    sucess_msg
-)
-from ferramentas_pct import (
-    limpar_tela, 
-    input_tratado, 
-    leia_float, 
-    leia_int, 
-    leiaCPF
-)
-from clientes_pct import (
-    clientes, 
-    cadastrar_cliente
-)
-
+from estilização_pct import error_msg, linha, print_alinhado, sucess_msg, titulo
+from ferramentas_pct import input_tratado, leia_float, leia_int, leiaCPF, limpar_tela
 
 # Definição do ID do pedido.
 ID_PEDIDO = 1 if len(pedidos) == 0 else len(pedidos) + 1
@@ -110,7 +94,7 @@ def existencia_hamburguer(hamburguer):
     except ValueError:
         # Se a conversão falhar, trata como nome
         for detalhes in cardapio.values():
-            for hamb in detalhes.keys():
+            for hamb in detalhes:
                 if hamb == hamburguer:
                     return True, hamb
     
@@ -120,7 +104,8 @@ def existencia_hamburguer(hamburguer):
 
 def extrair_ingredientes(hamburguer, quantidade):
     """
-    Função para extrair os ingredientes do hambúrguer e atualizar suas respectivas quantidades.
+    Função para extrair os ingredientes do hambúrguer e atualizar suas respectivas 
+    quantidades.
 
     Args:
         hamburguer (str): Nome do hambúrguer
@@ -131,7 +116,7 @@ def extrair_ingredientes(hamburguer, quantidade):
     """
     ingredientes_menu = {}
 
-    for codigo, detalhes in cardapio.items():
+    for detalhes in cardapio.values():
         hamburguer_menu = list(detalhes)[0]
         ingredientes = list(detalhes.values())[0]
 
@@ -165,7 +150,7 @@ def verificar_ingredientes(ingredientes):
 
 def adicionais():
     adicional = input_tratado("Adicionais (SIM/NÃO):    ")
-    return True if adicional == "SIM" else False
+    return adicional == "SIM"
 
 
 def adicionar_adicionais():
@@ -238,7 +223,8 @@ def extrair_informacoes(codigo):
         codigo (int): Chave que acessa o pedido dentro do dicionário de pedidos.
 
     Returns:
-        str, int, dict: Nome do hambúrguer; Quantidade do hambúrguer; Adicionais pedidos.
+        str, int, dict: Nome do hambúrguer; Quantidade do hambúrguer; 
+        Adicionais pedidos.
     """
 
     pedido = pedidos[codigo]
@@ -254,14 +240,14 @@ def atualizar_ingredientes(prompt, acao):
 
     Args:
         prompt (tuple): Tupla com o nome do hambúrguer e sua quantidade.
-        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque 
+        normal dos ingredientes.
     """
     # Definição das variáveis.
-    hamburguer = prompt[0]
     quantidade = prompt[1]
 
     # Intera sobre os elementos do cardápio.
-    for codigo, detalhes in cardapio.items():
+    for detalhes in cardapio.values():
         dic_ingredientes = list(detalhes.values())[0]
         for ingrediente, quantidades in dic_ingredientes.items():
             for item, infor in almoxarifado.items():
@@ -280,7 +266,8 @@ def atualizar_adicional(adicionais, acao):
 
     Args:
         prompt (dict): Dicionário com os ingredientes.
-        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque normal dos ingredientes.
+        acao (incrementar/decrementar): Ação que irá diminuir ou voltar para o estoque 
+        normal dos ingredientes.
     """
     if len(adicionais) == 0:
         return 
@@ -407,27 +394,34 @@ def mudar_adicionais():
 
 def fechar_vendas():
     """
-    Fecha as vendas do dia para um funcionário específico, limpa os pedidos e salva os dados no relatório de vendas.
+    Fecha as vendas do dia para um funcionário específico, limpa os pedidos e salva os 
+    dados no relatório de vendas.
 
     Parâmetros:
     - cpf (str): CPF do funcionário que está fechando as vendas.
 
     Estruturas de dados usadas:
-    - funcionarios (dict): Dicionário contendo os dados dos funcionários. Cada chave é o CPF e o valor é um dicionário com detalhes do funcionário.
-    - vendas (dict): Dicionário onde as chaves são datas e os valores são dicionários com detalhes das vendas daquele dia.
-    - pedidos (dict): Dicionário contendo os pedidos realizados. Cada chave é o id_pedido e o valor é um dicionário com detalhes do pedido.
+    - funcionarios (dict): Dicionário contendo os dados dos funcionários. Cada chave é 
+    o CPF e o valor é um dicionário com detalhes do funcionário.
+    - vendas (dict): Dicionário onde as chaves são datas e os valores são dicionários 
+    com detalhes das vendas daquele dia.
+    - pedidos (dict): Dicionário contendo os pedidos realizados. Cada chave é o 
+    id_pedido e o valor é um dicionário com detalhes do pedido.
 
     Fluxo da função:
     1. Solicita o CPF do funcionário e define a data e hora atuais.
     2. Verifica se o funcionário existe no dicionário `funcionarios`.
-    3. Se o funcionário for encontrado, cria um relatório de vendas para a data atual contendo a hora, nome do funcionário, CPF e os pedidos realizados.
+    3. Se o funcionário for encontrado, cria um relatório de vendas para a data atual 
+    contendo a hora, nome do funcionário, CPF e os pedidos realizados.
     4. Limpa os pedidos realizados do dicionário `pedidos`.
-    5. Salva os dados atualizados nos arquivos "arquivo_vendas.dat" e "arquivo_pedidos.dat".
+    5. Salva os dados atualizados nos arquivos "arquivo_vendas.dat" 
+    e "arquivo_pedidos.dat".
     6. Atualiza o ranking de vendas com base nos pedidos realizados.
     7. Exibe uma mensagem de sucesso e aguarda o pressionamento da tecla Enter.
 
     Exceções:
-    - KeyError: Lançada se o CPF fornecido não corresponder a nenhum funcionário no dicionário `funcionarios`.
+    - KeyError: Lançada se o CPF fornecido não corresponder a nenhum funcionário no 
+    dicionário `funcionarios`.
 
     Exemplo de uso:
         fechar_vendas("77788899911")

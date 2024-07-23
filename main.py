@@ -5,23 +5,47 @@
 
 # Importações necessárias para main.
 from almoxarifado_pct import buscar_item, excluir_item
-from clientes_pct import cadastrar_cliente, quadro_clientes, editar_clientes, excluir_cliente
-from compras_pct import cadastrar_compras
-from dados_pct import almoxarifado, funcionarios
-from funcionarios_pct import contratar, demitir, buscar, editar_funcionario
 from cardapio_pct import (
-    exibir_cardapio, verificar_hamburguer_existente, 
-    atualizar_hamburguer, criar_hamburguer, excluir_hamburguer
+    atualizar_hamburguer,
+    criar_hamburguer,
+    excluir_hamburguer,
+    exibir_cardapio,
+    verificar_hamburguer_existente,
 )
-from relatorios_pct import processo_compras, processos_vendas, imprimir_ranking
-from ferramentas_pct import varredura, limpar_tela, input_tratado
-from vendas_pct import *
+from clientes_pct import (
+    cadastrar_cliente,
+    editar_clientes,
+    excluir_cliente,
+    quadro_clientes,
+)
+from compras_pct import cadastrar_compras
+from dados_pct import almoxarifado, funcionarios, pedidos
 from estilização_pct import (
-    cabecalho, titulo, principal, linha, quadro_almoxarifado, 
-    sucess_msg, error_msg, operacoes_clientes, 
-    operacoes_funcionarios, quadro, subtitulo
+    cabecalho,
+    error_msg,
+    linha,
+    operacoes_clientes,
+    operacoes_funcionarios,
+    principal,
+    quadro,
+    quadro_almoxarifado,
+    subtitulo,
+    sucess_msg,
+    titulo,
 )
-
+from ferramentas_pct import input_tratado, limpar_tela, varredura
+from funcionarios_pct import buscar, contratar, demitir, editar_funcionario
+from relatorios_pct import imprimir_ranking, processo_compras, processos_vendas
+from vendas_pct import (
+    atualizar_adicional,
+    atualizar_ingredientes,
+    criar_pedido,
+    deletar_pedido,
+    editar_pedido,
+    extrair_informacoes,
+    fechar_vendas,
+    listar_pedidos,
+)
 
 #   Código principal
 resp = ""
@@ -116,7 +140,7 @@ while resp != "0":
                                         input(">> Enter")
                                     else:
                                         error_msg(f"{hamburguer} não encontrado!")
-                                        confirmar = input_tratado("Deseja cria-lo?[S/N]: ")
+                                        confirmar = input_tratado("Deseja cria-lo?[S/N]:\n")
 
                                         if confirmar[0] in 'S':
                                             burguer = criar_hamburguer()
