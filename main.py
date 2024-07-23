@@ -327,7 +327,6 @@ while resp != "0":
                 print("1 ↪︎ Relatório de Compras")
                 print("2 ↪︎ Relatório de Vendas")
                 print("3 ↪︎ Relatório de mais vendidos")
-                print("4 ↪︎ Relatório de percas")
                 print("0 ↪︎ Menu Principal")
 
                 op_relatorio = input_tratado("Operação:   ")

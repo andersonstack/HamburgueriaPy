@@ -57,12 +57,10 @@ def processo_compras():
 def processos_vendas():
     """
     Função para exibir relatório de vendas com base em uma data específica ou todas as vendas.
-
     Permite ao usuário selecionar uma data específica ou exibir um relatório completo de vendas.
     Se a data especificada não existir no dicionário de vendas, exibe uma mensagem de erro.
     Para cada data ou todas as vendas exibidas, mostra detalhes como pedidos realizados, 
     informações adicionais (se houver), e informações dos funcionários envolvidos.
-
     Retorna: None
     """
 
@@ -75,12 +73,11 @@ def processos_vendas():
             error_msg("Data não encontrada")
             input(">> Enter para continuar")
             return
-        
         else:
             data = {data_venda: vendas[data_venda]}
     else:
         data = vendas
-     
+
     for data, detalhes in data.items():
         subtitulo(data)
         print(f"Hora: {detalhes['Hora']}")
@@ -91,19 +88,19 @@ def processos_vendas():
         pedidos = detalhes['Pedidos Realizados']
         for pedido_id, pedido_detalhes in pedidos.items():
             print(f"\nPedido ID: {pedido_id}")
-            print(f"Cliente: {pedido_detalhes[1]}")
-            print(f"Endereço: {pedido_detalhes[2]}")
-            print(f"Produto: {pedido_detalhes[3]}")
-            print(f"Quantidade: {pedido_detalhes[4]}")
-
-            if pedido_detalhes[5]:  # Verifica se há adicionais
+            print(f"Cliente: {pedido_detalhes['nome']}")
+            print(f"Endereço: {pedido_detalhes['endereco']}")
+            print(f"Produto: {pedido_detalhes['hamburguer']}")
+            print(f"Quantidade: {pedido_detalhes['quantidade']}")
+            
+            if pedido_detalhes['adicionais']:  # Verifica se há adicionais
                 print("Adicionais:")
-                for adicional in pedido_detalhes[5]:
-                    print(f"  - Item: {adicional[0]}, Quantidade: {adicional[1]}, Preço: {adicional[2]}")
+                for adicional, adicional_detalhes in pedido_detalhes['adicionais'].items():
+                    print(f"  - Item: {adicional}, Quantidade: {adicional_detalhes[0]}, Preço: R$ {adicional_detalhes[1]:0.2f}")
             else:
                 print("Adicionais: Nenhum")
 
-            print(f"Preço: R$ {pedido_detalhes[6]:0.2f}")
+            print(f"Preço: R$ {pedido_detalhes['preco']:0.2f}")
             linha()
 
     input(">> Enter para continuar")

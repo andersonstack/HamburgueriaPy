@@ -53,6 +53,7 @@ def criar_pedido():
         booleano: False caso o pedido tenha falhado;
         dict: Caso o pedido tenha sido feito corretamente.
     """
+    global ID_PEDIDO
     limpar_tela()
     titulo("INFORMAÇÕES DO PEDIDO")
 
@@ -82,6 +83,7 @@ def criar_pedido():
                 "adicionais": adicional
             }
             salvar_pedido(pedido, ID_PEDIDO)
+            ID_PEDIDO += 1
             return True
         else:
             return False
@@ -175,7 +177,8 @@ def adicionar_adicionais():
         quantidade = leia_int("Quantidade:  ")
         if verificar_adicionais(adicional, quantidade):
             preco = leia_float("Preço:  ")
-            adicionais[adicional] = [quantidade, preco * quantidade]
+            preco_real = preco * quantidade
+            adicionais[adicional] = [quantidade, preco_real]
 
     return adicionais
 
@@ -245,7 +248,6 @@ def extrair_informacoes(codigo):
     return hamburguer, quantidade, adicional
 
 
-
 def atualizar_ingredientes(prompt, acao):
     """
     Função que atualiza os ingredientes no almoxarifado.
@@ -293,6 +295,7 @@ def atualizar_adicional(adicionais, acao):
                     nova_quantidade = infor[1] + quantidade
                 almoxarifado[item] = [infor[0], nova_quantidade]
 
+
 def deletar_pedido(codigo):
     """
     Função que deleta um pedido dos pedidos.
@@ -317,19 +320,21 @@ def listar_pedidos():
     linha()
     if len(pedidos) != 0:
         for codigo, detalhes in pedidos.items():
-            print_alinhado("N° Pedido", codigo)
-            print_alinhado("Cliente", detalhes["nome"])
-            print_alinhado("Endereço", detalhes["endereco"])
-            print_alinhado("Hamburguer", detalhes["hamburguer"])
-            print_alinhado("Quantidade", detalhes["quantidade"])
-            print_alinhado("Preço Hambúrguer", f"R$ {detalhes['preco']:.2f}")
+            print_alinhado("N° Pedido:", codigo)
+            print_alinhado("Cliente:", detalhes["nome"])
+            print_alinhado("Endereço:", detalhes["endereco"])
+            print_alinhado("Hamburguer:", detalhes["hamburguer"])
+            print_alinhado("Quantidade:", detalhes["quantidade"])
+            print()
+            print_alinhado("Prç. Hambúrguer's:", f"R$ {detalhes['preco']:.2f}")
             print()
             adicionais = detalhes["adicionais"]
 
             if adicionais:
-                for nome, preco in adicionais.items():
+                for nome, infor in adicionais.items():
                     print(f"Adicional: {nome}")
-                    print(f"\tPreço: R$ {preco:.2f}")
+                    print(f"\tQuantidade: {infor[0]} unidade(s)")
+                    print(f"\tPreço: R$ {infor[1]}")
             linha()
     else:
         error_msg("Não há pedidos para listar.")
