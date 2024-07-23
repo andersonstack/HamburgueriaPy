@@ -2,6 +2,7 @@
 from dados_pct import (
   funcionarios,
   save_data,
+  funcionarios_demitidos
 )
 from estilização_pct import (
   error_msg,
@@ -71,7 +72,7 @@ def contratar():
     rua = leia_nome("Rua:  ")
     bairro = leia_nome("Bairro: ")
     if "Rua" in rua:
-       rua.replace("Rua", "")
+      rua.replace("Rua", "")
 
     numero = leia_int("Número: ")
     cidade = leia_nome("Cidade:  ")
@@ -258,3 +259,17 @@ def editar_funcionario():
   else:
     return False
   
+
+def atualizar_funcionarios_demitidos(cpf):
+  nome = funcionarios[cpf]["Nome"]
+  idade = funcionarios[cpf]["Idade"]
+  endereco = funcionarios[cpf]["Endereço"]
+  if cpf not in funcionarios_demitidos:
+    funcionarios_demitidos[cpf] = {}
+
+  funcionarios_demitidos[cpf] = {
+    "Nome": nome,
+    "Idade": idade,
+    "Endereço": endereco
+  }
+  save_data("funcionarios_desligados.dat", funcionarios_demitidos)

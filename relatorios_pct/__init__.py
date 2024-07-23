@@ -34,7 +34,7 @@ def processo_compras():
             data = {data_compra: compras[data_compra]}
     else:
         data = compras
-
+        
     for data_chave, compra in data.items():
         print_alinhado("\033[1mDATA:",f"{data_chave}\033[m")
         print("=" * 50)
@@ -76,7 +76,7 @@ def processos_vendas():
             data = {data_venda: vendas[data_venda]}
     else:
         data = vendas
-
+    preco_total = 0
     for data_chave, detalhes in data.items():
         subtitulo(data_chave)
         print(f"Hora: {detalhes['Hora']}")
@@ -101,8 +101,10 @@ def processos_vendas():
                 print("Adicionais: Nenhum")
 
             print(f"Preço: R$ {pedido_detalhes['preco']:0.2f}")
-            linha()
-
+            preco_total += pedido_detalhes['preco']
+            print() 
+        print(f"Total do dia {data_chave}: R$ {preco_total:0.2f}")
+        linha()
     input(">> Enter para continuar")
 
 

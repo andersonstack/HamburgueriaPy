@@ -1,5 +1,5 @@
 # Importações necessárias para o pacote.
-from dados_pct import clientes, save_data
+from dados_pct import clientes, save_data, clientes_inativos
 from estilização_pct import (
     cabecalho,
     error_msg,
@@ -128,6 +128,7 @@ def excluir_cliente():
             f"Deseja excluir o cliente {clientes[cpf]['Nome']} (S/N)")
         match confirm:
             case 'S':
+                atualizar_clientes_inativos(cpf)
                 clientes.pop(cpf)
                 save_data("arquivo_clientes.dat", clientes)
 
@@ -137,3 +138,22 @@ def excluir_cliente():
     else:
         error_msg("Cliente não encontrado.")
         input(">> Enter")
+
+
+def atualizar_clientes_inativos(cpf):
+    """
+    Função que pega os dados dos clientes deletados e coloca-os em um arquivo para manter os dados.
+
+    Args:
+        cpf (str): CPF do cliente.
+    """
+    nome = clientes[cpf]["Nome"]
+    endereco = clientes[cpf]["Endereço"]
+    if cpf not in clientes_inativos:
+        clientes_inativos[cpf] = {}
+        
+    clientes_inativos[cpf] = {
+        "Nome": nome,
+        "Endereço": endereco
+    }
+    save_data("clientes_deletados.dat", clientes_inativos)

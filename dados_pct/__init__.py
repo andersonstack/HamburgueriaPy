@@ -41,6 +41,8 @@ pedidos = load_data("arquivo_pedidos.dat", {})
 funcionarios = load_data("arquivo_funcionarios.dat", {})
 cardapio = load_data("arquivo_cardapio.dat", {})
 ranking_vendas = load_data("ranking_vendas.dat", {})
+clientes_inativos = load_data("clientes_deletados.dat", {})
+funcionarios_demitidos = load_data("funcionarios_desligados.dat", {})
 #percas_ingredientes = load_data("percas_ingredientes.dat", {})
 
 

@@ -316,12 +316,15 @@ def listar_pedidos():
             print_alinhado("Prç. Hambúrguer's:", f"R$ {detalhes['preco']:.2f}")
             print()
             adicionais = detalhes["adicionais"]
+            preco_adc = 0
 
             if adicionais:
                 for nome, infor in adicionais.items():
                     print(f"Adicional: {nome}")
                     print(f"\tQuantidade: {infor[0]} unidade(s)")
                     print(f"\tPreço: R$ {infor[1]}")
+                    preco_adc += infor[1]
+            print(f"Total: R$ {preco_adc + detalhes['preco']}")
             linha()
     else:
         error_msg("Não há pedidos para listar.")
