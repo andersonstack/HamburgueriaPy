@@ -15,7 +15,7 @@ def quadro_clientes():
     """
     limpar_tela()
     cabecalho("Lista de Clientes")
-    for cpf in clientes.values():
+    for cpf in clientes:
         cliente = clientes[cpf]['Nome']
         endereco = clientes[cpf]['Endereço']
 
