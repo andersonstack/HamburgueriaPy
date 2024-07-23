@@ -64,7 +64,8 @@ def criar_pedido():
                 "hamburguer": hamburguer_nome,
                 "quantidade": quantidade,
                 "preco": pegar_preco(hamburguer_nome, quantidade), 
-                "adicionais": adicional
+                "adicionais": adicional,
+                "status": False
             }
             salvar_pedido(pedido, ID_PEDIDO)
             ID_PEDIDO += 1
@@ -455,7 +456,6 @@ def fechar_vendas():
     save_data("arquivo_pedidos.dat", pedidos)
 
     sucess_msg("Vendas fechadas com sucesso!")
-    input("<< Enter >>")
 
 
 def atualizar_ranking(pedidos):
@@ -473,3 +473,34 @@ def atualizar_ranking(pedidos):
         else:
             ranking_vendas[hamburguer] = quantidade
     save_data("ranking_vendas.dat", ranking_vendas)
+
+
+def mudar_status_hamburguer(codigo):
+    """
+    Função que modifica o status do hamburguer confirmado
+
+    Args:
+        codigo (int): O hamburguer torna True, ou seja, 
+        ele foi confirmado.
+    """
+    pedidos[codigo]['status'] = True
+    save_data("arquivo_pedidos.dat", pedidos)
+
+
+def verificar_pedidos():
+    """
+    Verifica se todos os pedidos foram confirmados.
+
+    Returns:
+        booleano: False para pedidos pendentes; True para o 
+        contrário.
+    """
+    liberar = True
+    for detalhes in pedidos.values():
+        if detalhes['status'] == True:
+            continue
+        else:
+            detalhes['status'] == False
+            liberar = False
+            return liberar
+    return liberar

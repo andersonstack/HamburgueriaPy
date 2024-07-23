@@ -45,6 +45,8 @@ from vendas_pct import (
     extrair_informacoes,
     fechar_vendas,
     listar_pedidos,
+    mudar_status_hamburguer,
+    verificar_pedidos
 )
 
 #   Código principal
@@ -217,6 +219,7 @@ while resp != "0":
                                                 nome_hamburguer, quantia_hamburguer, adicional = extrair_informacoes(finalizar_pedido)
                                                 atualizar_ingredientes((nome_hamburguer, quantia_hamburguer), "decrementar")
                                                 atualizar_adicional(adicional, "decrementar")
+                                                mudar_status_hamburguer(finalizar_pedido)
                                                 sucess_msg("Pedido realizado com sucesso!")
                                                 input(">> Enter")
 
@@ -248,7 +251,11 @@ while resp != "0":
                                                 input(">> Enter")
 
                                 case "F" | "3":
-                                    fechar_vendas()
+                                    if verificar_pedidos():
+                                        fechar_vendas()
+                                    else:
+                                        error_msg("Existem pedidos pendentes.")
+                                    input(">> Enter")
 
                                 case "0":
                                     break

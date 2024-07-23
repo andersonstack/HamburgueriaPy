@@ -1,9 +1,5 @@
 # Importações necessárias para o pacote.
-from dados_pct import (
-  funcionarios,
-  save_data,
-  funcionarios_demitidos
-)
+from dados_pct import funcionarios, funcionarios_demitidos, save_data
 from estilização_pct import (
   error_msg,
   linha,
@@ -11,7 +7,6 @@ from estilização_pct import (
   subtitulo,
 )
 from ferramentas_pct import input_tratado, leia_int, leia_nome, leiaCPF, limpar_tela
-
 
 def adm(acesso): # Função não utilizada diretamente por main.
   """
@@ -29,7 +24,8 @@ def adm(acesso): # Função não utilizada diretamente por main.
 
 def contratar():
   """
-  Função para contratar novos funcionários.
+  Função para contratar novos funcionários. Se o CPF já estiver existido, ele recupera
+  os dados do funcionário.
 
   Solicita primeiro o CPF, se o CPF existir, retorna um input de pessoa já cadastrada.
   Se não, solicita nome, idade, rua, bairro, numero, cidade, uf e retorna um input
@@ -63,6 +59,18 @@ def contratar():
   subtitulo("Contratação")
 
   cpf = leiaCPF("CPF: ")
+  if cpf in funcionarios_demitidos:
+        funcionarios[cpf] = {}
+        funcionarios[cpf] = {
+            "Nome": funcionarios_demitidos[cpf]["Nome"],
+            "Endereço": funcionarios_demitidos[cpf]["Endereço"]
+        }
+        funcionarios_demitidos.pop(cpf)
+        save_data("arquivo_funcionarios.dat", funcionarios)
+        save_data("funcionarios_desligados.dat", funcionarios_demitidos)
+        input("Dados do funcionário recuperados!\n")
+        return
+  
   if cpf in funcionarios:
     return input("Pessoa já cadastrada.")
   

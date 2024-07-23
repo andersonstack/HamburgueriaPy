@@ -5,6 +5,7 @@ from datetime import datetime
 DATA = datetime.now().strftime("%d/%m/%Y") # Define data
 HORA = datetime.now().strftime("%H:%M:%S") # Define hora
 
+# Baseado no código ChatGPT
 def load_data(filename, default_value):
     """
     Função para carregar dados de um arquivo. Se o arquivo não existir ou estiver vazio,

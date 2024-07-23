@@ -1,5 +1,5 @@
 # Importações necessárias para o pacote.
-from dados_pct import clientes, save_data, clientes_inativos
+from dados_pct import clientes, clientes_inativos, save_data
 from estilização_pct import (
     cabecalho,
     error_msg,
@@ -30,15 +30,28 @@ def quadro_clientes():
 
 def cadastrar_cliente():
     """
-    Função para cadastrar clientes.
+    Função para cadastrar clientes. Se o CPF já estiver existido, ele recupera
+    os dados do cliente.
 
     A função solicita o cpf para o cadastro do cliente, verifica se o cliente existe
     e, se não existir, cadastra e armazena as informações.
     """
+    global clientes
     limpar_tela()
     cabecalho("Cadastrar clientes")
 
     cpf = leiaCPF("CPF:   ")
+    if cpf in clientes_inativos:
+        clientes[cpf] = {}
+        clientes[cpf] = {
+            "Nome": clientes_inativos[cpf]["Nome"],
+            "Endereço": clientes_inativos[cpf]["Endereço"]
+        }
+        clientes_inativos.pop(cpf)
+        save_data("clientes_deletados.dat", clientes_inativos)
+        save_data("arquivo_clientes.dat", clientes)
+        input("Dados do cliente recuperados do sistema!\n")
+        return 
 
     if cpf not in clientes:
         nome = leia_nome("Nome:  ")
