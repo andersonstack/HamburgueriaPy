@@ -41,7 +41,7 @@ pedidos = load_data("arquivo_pedidos.dat", {})
 funcionarios = load_data("arquivo_funcionarios.dat", {})
 cardapio = load_data("arquivo_cardapio.dat", {})
 ranking_vendas = load_data("ranking_vendas.dat", {})
-percas_ingredientes = load_data("percas_ingredientes.dat", {})
+#percas_ingredientes = load_data("percas_ingredientes.dat", {})
 
 
 # Ex.: save_data("arquivo_almoxarifado.dat", almoxarifado)
