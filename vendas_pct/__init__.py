@@ -12,7 +12,14 @@ from dados_pct import (
     vendas,
 )
 from estilização_pct import error_msg, linha, print_alinhado, sucess_msg, titulo
-from ferramentas_pct import input_tratado, leia_float, leia_int, leiaCPF, limpar_tela
+from ferramentas_pct import (
+    input_tratado,
+    leia_float,
+    leia_int,
+    leia_item,
+    leiaCPF,
+    limpar_tela,
+)
 
 # Definição do ID do pedido.
 ID_PEDIDO = 1 if len(pedidos) == 0 else len(pedidos) + 1
@@ -157,7 +164,7 @@ def adicionais():
 def adicionar_adicionais():
     adicionais = {}
     while True:
-        adicional = input_tratado("(SAIR) - Adicional:  ")
+        adicional = leia_item("(SAIR) - Adicional:  ").upper()
         if adicional == "SAIR":
             break
         quantidade = leia_int("Quantidade:  ")

@@ -80,34 +80,35 @@ def processos_vendas():
             data = {data_venda: vendas[data_venda]}
     else:
         data = vendas
-    preco_total = 0
+    
     for data_chave, detalhes in data.items():
         subtitulo(data_chave)
         print(f"Hora: {detalhes['Hora']}")
         print(f"Funcionário: {detalhes['Funcionário']}")
         print(f"CPF: {detalhes['CPF']}")
         linha()
-        
+        preco_total = preco_adicional = 0 
         pedidos = detalhes['Pedidos Realizados']
         for pedido_id, pedido_detalhes in pedidos.items():
-            print(f"\nPedido ID: {pedido_id}")
-            print(f"Cliente: {pedido_detalhes['nome']}")
-            print(f"Endereço: {pedido_detalhes['endereco']}")
-            print(f"Produto: {pedido_detalhes['hamburguer']}")
-            print(f"Quantidade: {pedido_detalhes['quantidade']}")
+            print_alinhado("Pedido ID:", pedido_id)
+            print_alinhado("Cliente:", pedido_detalhes['nome'])
+            print_alinhado("Endereço:", pedido_detalhes['endereco'])
+            print_alinhado("Produto:", pedido_detalhes['hamburguer'])
+            print_alinhado("Quantidade:", pedido_detalhes['quantidade'])
             
             if pedido_detalhes['adicionais']:  # Verifica se há adicionais
                 print("Adicionais:")
                 for adicional, adicional_detalhes in pedido_detalhes['adicionais'].items():
-                    print(f"  - Item: {adicional}, Quantidade: {adicional_detalhes[0]},"
+                    preco_adicional = adicional_detalhes[1]
+                    print(f"  - Item: {adicional}, Quantidade: {adicional_detalhes[0]}, "
                         f"Preço: R$ {adicional_detalhes[1]:0.2f}")
             else:
                 print("Adicionais: Nenhum")
 
-            print(f"Preço: R$ {pedido_detalhes['preco']:0.2f}")
-            preco_total += pedido_detalhes['preco']
+            print(f"Total: R$ {pedido_detalhes['preco'] + preco_adicional:0.2f}")
+            preco_total += pedido_detalhes['preco'] + preco_adicional
             print() 
-        print(f"Total do dia {data_chave}: R$ {preco_total:0.2f}")
+        print_alinhado(f"Total do dia {data_chave}:", f"R$ {preco_total:0.2f}")
         linha()
     input(">> Enter para continuar")
 
