@@ -82,7 +82,9 @@ def input_tratado(prompt):
         text: Texto que o usuário digitou.
     """
     while True:
-        text = input(prompt).upper().strip()
+        text = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""").upper().strip()
         if not text:
             error_msg("Operação inválida")
         else:
@@ -110,7 +112,9 @@ def leia_int(prompt):
     """
     while True:
         try:
-            inteiro_input = input(prompt)
+            inteiro_input = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""")
             inteiro_input = int(inteiro_input)
             return inteiro_input
         except ValueError:
@@ -134,7 +138,9 @@ def leia_float(prompt):
     """
     while True:
         try:
-            float_input = input(prompt).replace(",", ".")
+            float_input = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""").replace(",", ".")
             float_input = float(float_input)
             return float_input
         except ValueError:
@@ -154,7 +160,9 @@ def leia_item(prompt):
     Valida que o nome do item contenha apenas letras, espaços ou '-' e não esteja vazio.
     """
     while True:
-        texto = input(prompt)
+        texto = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""")
         
         if checker_fields(texto):
             if (texto.isalpha() or '-' in texto or ' ' in texto) and len(texto) > 3:
@@ -178,7 +186,9 @@ def leiaCPF(prompt):
     Valida que o CPF tenha 11 dígitos e esteja no formato correto.
     """
     while True:
-        cpf_func = input(prompt).strip()
+        cpf_func = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""").strip()
         cpf_limpar = cpf_func.replace(".", "").replace("-", "")
         if len(cpf_limpar) == 11 and cpf_limpar.isdigit():
             return cpf_func
@@ -199,7 +209,9 @@ def leia_nome(prompt):
     Valida que o nome contenha apenas letras e espaços, e o formata em título.
     """
     while True:
-        nome = input(prompt).strip().title()
+        nome = input(f"""
+{"¨" * 125}
+{prompt:<10}\t""").strip().title()
         if nome.replace(" ", "").isalpha():
             return nome
         else:

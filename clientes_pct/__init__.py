@@ -5,6 +5,7 @@ from estilização_pct import (
     error_msg,
     linha,
     print_alinhado,
+    sucess_msg,
 )
 from ferramentas_pct import input_tratado, leia_int, leia_nome, leiaCPF, limpar_tela
 
@@ -63,11 +64,15 @@ def cadastrar_cliente():
         clientes[cpf] = {"Nome": nome, "Endereço": endereco}
 
         save_data("arquivo_clientes.dat", clientes)
-
-        return input("Cliente cadastrado.")
+        sucess_msg("Cliente Cadastrado!")
+        print()
+        input(">> Enter")
+        return cpf
 
     else:
-        return input("Cliente já está no sistema.")
+        error_msg("Cliente já está no sistema!")
+        input(">> Enter")
+        return 
 
 
 def editar_clientes():
@@ -116,11 +121,12 @@ def editar_clientes():
         clientes[cpf] = {"Nome": nome, "Endereço": endereco}
 
         save_data("arquivo_clientes.dat", clientes)
-
-        return input("Cliente editado.")
+        sucess_msg("Cliente editado!")
+        input(">> Enter")
+        return 
     else:
         error_msg("Cliente não encontrado.")
-        return input(">> Enter.")
+        return input(">> Enter")
 
 
 def excluir_cliente():
@@ -144,10 +150,15 @@ def excluir_cliente():
                 atualizar_clientes_inativos(cpf)
                 clientes.pop(cpf)
                 save_data("arquivo_clientes.dat", clientes)
-
-                return input("Cliente deletado. >> Enter")
+                sucess_msg("Cliente deletado")
+                print()
+                input(">> Enter")
+                return 
             case 'N':
-                return input("Operação cancelada. >> Enter")
+                error_msg("Cliente deletado")
+                print()
+                input(">> Enter")
+                return 
     else:
         error_msg("Cliente não encontrado.")
         input(">> Enter")

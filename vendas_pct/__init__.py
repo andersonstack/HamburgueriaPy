@@ -1,8 +1,10 @@
 # Importações necessárias para o pacote.
 from clientes_pct import cadastrar_cliente, clientes
+from compras_pct import exibir_adicionais
 from dados_pct import (
     DATA,
     HORA,
+    adicionais_dict,
     almoxarifado,
     cardapio,
     funcionarios,
@@ -16,7 +18,6 @@ from ferramentas_pct import (
     input_tratado,
     leia_float,
     leia_int,
-    leia_item,
     leiaCPF,
     limpar_tela,
 )
@@ -53,7 +54,7 @@ def criar_pedido():
     adicional = {}
 
     # Entrada dos usuário.
-    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer:")
     quantidade = leia_int("Quantidade:  ")
     existe, hamburguer_nome = existencia_hamburguer(hamburguer)
 
@@ -157,21 +158,25 @@ def verificar_ingredientes(ingredientes):
 
 
 def adicionais():
-    adicional = input_tratado("Adicionais (SIM/NÃO):    ")
+    adicional = input_tratado("Adicionais (SIM/NÃO):")
     return adicional == "SIM"
 
 
 def adicionar_adicionais():
     adicionais = {}
+    exibir_adicionais()
     while True:
-        adicional = leia_item("(SAIR) - Adicional:  ").upper()
+        adicional = input_tratado("(SAIR) - Adicional/Código:")
         if adicional == "SAIR":
             break
-        quantidade = leia_int("Quantidade:  ")
+        quantidade = leia_int("Quantidade:")
         if verificar_adicionais(adicional, quantidade):
             preco = leia_float("Preço:  ")
             preco_real = preco * quantidade
             adicionais[adicional] = [quantidade, preco_real]
+        else:
+            error_msg(" AQUI? Adicional não disponível!")
+            input()
 
     return adicionais
 
@@ -187,11 +192,45 @@ def verificar_adicionais(adicional, quantidade):
     Returns:
         booleano: True para possível adicionar adicional; False para o contrário.
     """
-    itens_dict = {itens[0]: itens[1] for itens in almoxarifado.values()}
-    
-    if adicional not in itens_dict or quantidade > itens_dict[adicional]:
+    # Verifica se o adicional está disponível.
+    exitir, nome = verificar_lista_adicionais(adicional)
+    if exitir:  
+        # Faz um novo dict com os itens do almoxarifado.
+        itens_dict = {itens[0]: itens[1] for itens in almoxarifado.values()}
+
+        # Compara se o nome existe e se sua quantidade é suficiente.
+        if nome not in itens_dict or quantidade > itens_dict[nome]:
+            return False
+        return True
+    else:
+        error_msg("Adicional não disponível!")
+        input(">> Enter")
         return False
-    return True
+
+
+def verificar_lista_adicionais(codigo):
+    """
+    Função que verifica se o adicional escolhido está disponível nos adicionais
+    liberados para opção.
+
+    Args:
+        codigo (str): Nome do adicional ou sua chave.
+
+    Returns:
+        tuple: Tupla com o nome do adicional e seu valor booleano.
+    """
+    try:
+        # Verifica se o argumento pode ser a chave do dicionário.
+        id_adicional = int(codigo) 
+        # Retorna um booleano e seu nome correspondente.
+        return id_adicional in adicionais_dict, adicionais_dict[id_adicional] 
+    
+    except ValueError:
+        # Se não for possível converter, faz uma list comprehension em adicionais_dict
+        # e verifica se o nome do adicional existe nessa lista.
+        lista_adicionais = [i for i in adicionais_dict.values()]
+        return codigo in lista_adicionais, codigo
+
 
 
 def informacoes_cliente():
@@ -203,7 +242,8 @@ def informacoes_cliente():
     """
     cpf = leiaCPF("CPF do cliente:  ")
     if cpf not in clientes:
-        cadastrar_cliente()
+        cpf_cliente = cadastrar_cliente()
+        return cpf_cliente
     return cpf
 
 
@@ -380,7 +420,7 @@ def mudar_hamburguer():
     Returns:
         tuple: Tupla com o nome do novo hambúrguer e sua quantidade.
     """
-    hamburguer = input_tratado("Nome ou ID do Hambúrguer: ")
+    hamburguer = input_tratado("Nome ou ID do Hambúrguer:")
     quantidade = leia_int("Quantidade:  ")
     existe, hamburguer_nome = existencia_hamburguer(hamburguer)
 

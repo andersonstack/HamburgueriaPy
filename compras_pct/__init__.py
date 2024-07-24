@@ -1,16 +1,17 @@
 # Importações necessárias para o pacote.
-from dados_pct import DATA, HORA, almoxarifado, compras, save_data
-from estilização_pct import sucess_msg, titulo
+from dados_pct import DATA, HORA, adicionais_dict, almoxarifado, compras, save_data
+from estilização_pct import error_msg, sucess_msg, titulo, print_alinhado, linha
 from ferramentas_pct import (
     check_buy,
     leia_float,
     leia_int,
     leia_item,
     limpar_tela,
+    input_tratado,
 )
 
 # Define o próximo ID a ser usado.
-ID_COMPRAS = 0 if len(almoxarifado) == 0 else max(almoxarifado.keys()) + 1  
+ID_COMPRAS = 1 if len(almoxarifado) == 0 else max(almoxarifado.keys()) + 1  
 
 
 def atualizar_compras(id_item, quantidade):
@@ -40,9 +41,15 @@ def cadastrar_compras():
     limpar_tela()
     titulo("Cadastramento de Mercadorias")
 
-    nome = leia_item(" - Nome: \n ").upper().strip()
-    quantidade = leia_int("- Quantidade: \n ")
-    preco = leia_float("- Preço: \n R$ ")
+    nome = leia_item(" - Nome:").upper().strip()
+    quantidade = leia_int("- Quantidade:")
+    preco = leia_float("- Preço:")
+
+    linha()
+    adicional = input_tratado("Deseja adiciona-lo em adicionais? (Sim / Não)")
+    linha()
+    if adicional == "SIM":
+        lista_adicionais(nome)
 
     id_item, detalhes = check_buy(nome)  # Retornar os itens.
     
@@ -60,6 +67,42 @@ def cadastrar_compras():
     return input(">> Enter")
 
 
+def lista_adicionais(nome):
+    if nome not in adicionais_dict.values():
+        adicionais_dict[ID_COMPRAS] = nome
+        save_data("arquivo_adicionais.dat", adicionais_dict)
+    else:
+        error_msg("Adicional já existe.")
+        print()
+        input(">> Enter")
+    return 
+
+
+def deletar_adicional():
+    exibir_adicionais()
+    codigo = leia_int("(0) Código do adicional:")
+    if codigo == 0:
+        return
+    
+    if codigo in adicionais_dict:
+        adicionais_dict.pop(codigo)
+        save_data("arquivo_adicionais.dat", adicionais_dict)
+    else:
+        error_msg("Código não encontrado!")
+        print()
+        input(">> Enter")
+    return
+
+
+def exibir_adicionais():
+    limpar_tela()
+    titulo("Lista de adicionais")
+    linha()
+    for codigo, item  in adicionais_dict.items():
+        print_alinhado(f"Código: {codigo} ", f"Nome: {item}")
+    linha()
+
+
 def excluir_item(id_item):
     """
     Exclui um item do almoxarifado.
@@ -73,7 +116,7 @@ def excluir_item(id_item):
         save_data("arquivo_almoxarifado.dat", almoxarifado)  # Atualiza o arquivo.
         sucess_msg("Item excluído com sucesso")
     else:
-        print("ID não encontrado")
+        error_msg("ID não encontrado")
 
 
 def processamento_relatorio(nome, quantidade, preco):

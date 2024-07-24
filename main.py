@@ -18,7 +18,7 @@ from clientes_pct import (
     excluir_cliente,
     quadro_clientes,
 )
-from compras_pct import cadastrar_compras
+from compras_pct import cadastrar_compras, deletar_adicional
 from dados_pct import almoxarifado, funcionarios, pedidos
 from estilização_pct import (
     cabecalho,
@@ -53,13 +53,12 @@ from vendas_pct import (
 resp = ""
 varredura()
 
-
 while resp != "0":
     limpar_tela()
     cabecalho("Hamburgueria do Py")
     principal()
 
-    resp = input_tratado("Operação: ")
+    resp = input_tratado("Operação:")
 
     match resp:
         case "1" | "C":
@@ -70,13 +69,16 @@ while resp != "0":
                 limpar_tela()
                 titulo("Compras")
                 print("↪︎ 1.  Cadastrar Mercadorias")
+                print("↪︎ 2.  Excluir adicional")
                 print("↪︎ 0.  Menu principal")
                 linha()
-                op_compra = input_tratado("Operação:    ")
+                op_compra = input_tratado("Operação:")
 
                 match op_compra:
                     case "1":
                         cadastrar_compras()
+                    case "2":
+                        deletar_adicional()
                     case "0":
                         break
 
@@ -91,7 +93,7 @@ while resp != "0":
                 print("↪︎ 2.  Excluir item")
                 print("↪︎ 0.  Menu principal")
                 linha()
-                op_almoxarifado = input_tratado("Operação:  ")
+                op_almoxarifado = input_tratado("Operação:")
 
                 match op_almoxarifado:
                     case "B" | "1":
@@ -114,7 +116,7 @@ while resp != "0":
                 print("↪︎ 0.  Menu Principal")
                 linha()
 
-                op_vender = input_tratado("Operação:    ")
+                op_vender = input_tratado("Operação:")
 
                 match op_vender:
                     case "C" | "1":
@@ -131,7 +133,7 @@ while resp != "0":
                             print("↪︎ 2.  Excluir Hambúrguer")
                             print("↪︎ 0.  Vendas")
 
-                            op_admi_cardapio = input_tratado("Operação: ")
+                            op_admi_cardapio = input_tratado("Operação:")
 
                             match op_admi_cardapio:
                                 case "A" | "1":
@@ -142,7 +144,7 @@ while resp != "0":
                                         input(">> Enter")
                                     else:
                                         error_msg(f"{hamburguer} não encontrado!")
-                                        confirmar = input_tratado("Deseja cria-lo?[S/N]:\n")
+                                        confirmar = input_tratado("Deseja cria-lo?(Sim / Não)")
 
                                         if confirmar[0] in 'S':
                                             burguer = criar_hamburguer()
@@ -180,7 +182,7 @@ while resp != "0":
                             print("↪︎ 3.  Fechar vendas")
                             print("↪︎ 0.  Vendas")
 
-                            op_fazer_venda = input_tratado("Operação:   ")
+                            op_fazer_venda = input_tratado("Operação:")
 
                             match op_fazer_venda:
                                 case "V" | "1":
@@ -199,13 +201,13 @@ while resp != "0":
                                         print("↪︎ 2.  Remover Pedido")
                                         print("↪︎ 3.  Editar Pedido")
                                         print("↪︎ 0.  Retornar")
-                                        op_finalizar = input_tratado("Operação: ")
+                                        op_finalizar = input_tratado("Operação:")
 
                                         match op_finalizar:
                                             case "1" | "C":
                                                 limpar_tela()
                                                 titulo("Processamento de Pedidos")
-                                                finalizar_pedido = int(input_tratado("N° do Pedido: "))
+                                                finalizar_pedido = int(input_tratado("N° do Pedido:"))
                                                 if finalizar_pedido in pedidos:
                                                     pass
                                                 else:
@@ -226,7 +228,7 @@ while resp != "0":
                                             case "2" | "R":
                                                 limpar_tela()
                                                 titulo("Remoção de pedidos")
-                                                excluir_pedido = int(input_tratado("N° do Pedido: "))
+                                                excluir_pedido = int(input_tratado("N° do Pedido:"))
 
                                                 if excluir_pedido == '0':
                                                     break
@@ -239,7 +241,7 @@ while resp != "0":
                                                 
                                             case "3" | "E":
                                                 titulo("Edição de pedidos")
-                                                pedido_cliente = int(input_tratado("N° do Pedido: "))
+                                                pedido_cliente = int(input_tratado("N° do Pedido:"))
 
                                                 if pedido_cliente == '0':
                                                     break
@@ -265,7 +267,7 @@ while resp != "0":
 
             while op_funcionarios != "0":
                 operacoes_funcionarios()
-                op_funcionarios = input_tratado("Operação:  ")
+                op_funcionarios = input_tratado("Operação:")
 
                 match op_funcionarios:
                     case "1" | "Q":
@@ -295,7 +297,7 @@ while resp != "0":
                                 print("↪︎ 4.  Editar funcionário")
                                 print("↪︎ 0. Menu Principal")
                                 linha()
-                                op_gerenciar = input_tratado("Operação: ")
+                                op_gerenciar = input_tratado("Operação:")
 
                                 match op_gerenciar:
                                     case "1":
@@ -328,7 +330,7 @@ while resp != "0":
             while op_cliente != "0":
                 operacoes_clientes()
 
-                op_cliente = input_tratado("Operação:   ")
+                op_cliente = input_tratado("Operação:")
 
                 match op_cliente:
                     case "1" | "C":
@@ -360,7 +362,7 @@ while resp != "0":
                 print("3 ↪︎ Relatório de mais vendidos")
                 print("0 ↪︎ Menu Principal")
 
-                op_relatorio = input_tratado("Operação:   ")
+                op_relatorio = input_tratado("Operação:")
 
                 match op_relatorio:
                     case "1" | "C":

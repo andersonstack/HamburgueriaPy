@@ -28,7 +28,8 @@ def exibir_cardapio():
                     print(f"{ingrediente} {'-' * (122 - len(ingrediente))} {quantidade}")
                 print(f"PREÇO {'-' * (116 - len('PREÇO'))} R$ {detalhes['PRECO']:.2f}")
     print()
-    print('\033[m') 
+    print('\033[m')
+    print() 
     input(">> Enter")
 
 
@@ -39,7 +40,7 @@ def verificar_hamburguer_existente():
     Returns:
         Nome do hambúrguer se encontrado, caso contrário None.
     """
-    hamburguer = leia_item("Hambúrguer: ").upper().replace(" ", "")
+    hamburguer = leia_item("Hambúrguer:").upper().replace(" ", "")
     
     for detalhes in cardapio.values():
         hamburguer_menu = list(detalhes.keys())[0].replace(" ", "").upper()
@@ -75,12 +76,12 @@ def adicionar_ingredientes():
     ingredientes = {}
     
     while True:
-        ingrediente = input("(SAIR) - Ingrediente:  ").strip().upper()
+        ingrediente = input("(SAIR) - Ingrediente:").strip().upper()
 
         if ingrediente == "SAIR":
             break
 
-        quantidade = leia_int("Quantidade:  ")
+        quantidade = leia_int("Quantidade:")
         ingredientes[ingrediente] = quantidade        
 
     preco = leia_float("Preço:  ")
@@ -97,7 +98,7 @@ def criar_hamburguer():
     titulo("CRIAÇÃO DE HAMBÚRGUER")
     global ID_MENU
 
-    nome_hamburguer = leia_item("Novo Hambúrguer: ").strip().upper()
+    nome_hamburguer = leia_item("Novo Hambúrguer:").strip().upper()
     ingredientes = adicionar_ingredientes()
     
     cardapio[ID_MENU] = {
@@ -115,7 +116,7 @@ def excluir_hamburguer():
     """
     limpar_tela()
     titulo("EXCLUSÃO DE HAMBÚRGUER")
-    hamburguer = leia_int("Código do Hambúrguer: ")
+    hamburguer = leia_int("Código do Hambúrguer:")
     
     del cardapio[hamburguer]
     save_data("arquivo_cardapio.dat", cardapio)
