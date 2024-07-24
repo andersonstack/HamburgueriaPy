@@ -170,10 +170,11 @@ def adicionar_adicionais():
         if adicional == "SAIR":
             break
         quantidade = leia_int("Quantidade:")
-        if verificar_adicionais(adicional, quantidade):
+        possivel, nome_adicional = verificar_adicionais(adicional, quantidade)
+        if possivel:
             preco = leia_float("Preço:  ")
             preco_real = preco * quantidade
-            adicionais[adicional] = [quantidade, preco_real]
+            adicionais[nome_adicional] = [quantidade, preco_real]
         else:
             error_msg(" AQUI? Adicional não disponível!")
             input()
@@ -190,22 +191,23 @@ def verificar_adicionais(adicional, quantidade):
         quantidade (int): Quantidade solicitada.
 
     Returns:
-        booleano: True para possível adicionar adicional; False para o contrário.
+        tuple: True e Nome do adicional para possível; False e False para
+        não possível.
     """
     # Verifica se o adicional está disponível.
     exitir, nome = verificar_lista_adicionais(adicional)
-    if exitir:  
+    if exitir:
         # Faz um novo dict com os itens do almoxarifado.
         itens_dict = {itens[0]: itens[1] for itens in almoxarifado.values()}
 
         # Compara se o nome existe e se sua quantidade é suficiente.
         if nome not in itens_dict or quantidade > itens_dict[nome]:
-            return False
-        return True
+            return False, False
+        return True, nome
     else:
         error_msg("Adicional não disponível!")
         input(">> Enter")
-        return False
+        return False, False
 
 
 def verificar_lista_adicionais(codigo):
