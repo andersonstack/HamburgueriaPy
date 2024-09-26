@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "plyconfig.json": "jsonc"
-    },
-    "editor.rulers": [79]
-}
