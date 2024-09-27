@@ -68,10 +68,11 @@ def tela_relatorios() -> None:
 
 def tela_informacoes() -> None:
     cabecalho("informações")
-    opcoes(
-        "Anderson G. Pereira Cruz",
-        "github: andersoncruz-13"
-    )
+    print("""
+    Equipe:
+        Anderson G.Pereira Cruz
+        github: andersoncruz-13
+    """)
 
 
 if __name__ == "__main__":
