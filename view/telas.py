@@ -23,6 +23,7 @@ def tela_principal() -> None:
         "relatórios",
         "informações",
         "sair")
+    print(">> Escolha uma opção\n")
 
 
 def tela_almoxarifado() -> None:
@@ -34,6 +35,7 @@ def tela_almoxarifado() -> None:
         "excluir item",
         "editar item",
         "menu principal")
+    print(">> Escolha uma opção\n")
 
 
 def tela_funcionarios() -> None:
@@ -45,6 +47,7 @@ def tela_funcionarios() -> None:
         "demitir funcionário",
         "editar funcionário",
         "menu principal")
+    print(">> Escolha uma opção\n")
 
 
 def tela_clientes() -> None:
@@ -56,6 +59,7 @@ def tela_clientes() -> None:
         "excluir cliente",
         "editar cliente",
         "menu principal")
+    print(">> Escolha uma opção\n")
 
 
 def tela_relatorios() -> None:
@@ -63,6 +67,17 @@ def tela_relatorios() -> None:
     opcoes(
         "relatório de compra",
         "relatorio de vendas",
+    )
+    print(">> Escolha uma opção\n")
+
+
+def tela_vendas() -> None:
+    cabecalho("vendas")
+    opcoes(
+        "vender",
+        "lista de vendas",
+        "fechar vendas",
+        "menu principal"
     )
 
 
@@ -73,6 +88,7 @@ def tela_informacoes() -> None:
         Anderson G.Pereira Cruz
         github: andersoncruz-13
     """)
+    print(">> Escolha uma opção\n")
 
 
 if __name__ == "__main__":
