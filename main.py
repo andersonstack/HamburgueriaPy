@@ -1,4 +1,5 @@
 from view import telas
+from almoxarifado.controller import Almoxarifado
 
 get_out = False
 
@@ -9,6 +10,9 @@ while not get_out:
     match option:
         case '1':
             telas.tela_almoxarifado()
+            buy = Almoxarifado()
+            buy.add_buy(name="Coca", quantity=10)
+            input("")
         case '2':
             telas.tela_funcionarios()
         case '3':
