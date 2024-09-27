@@ -10,7 +10,7 @@ class SaveJson:
         self.file = os.path.join(self.path, name_file)
 
     def _create_json(self, data: Dict[str, Any]) -> None:
-        if not os.path.join(self.file, 'w'):
+        if not os.path.exists(self.file):
             with open(self.file, 'w') as arq:
                 json.dump(data, arq, indent=4)
 
