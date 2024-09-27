@@ -21,6 +21,7 @@ def tela_principal() -> None:
         "funcionarios",
         "clientes",
         "relatórios",
+        "vendas",
         "informações",
         "sair")
     print(">> Escolha uma opção\n")
