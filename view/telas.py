@@ -1,3 +1,10 @@
+from os import system
+
+
+def clear() -> None:
+    system("clear")
+
+
 def cabecalho(title: str) -> None:
     line = "=" * 29
     print(f"=|{line}|=")
