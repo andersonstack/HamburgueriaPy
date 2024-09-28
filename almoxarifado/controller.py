@@ -41,7 +41,7 @@ class Almoxarifado:
                 return {cod: det}
         return {}
 
-    def _udpate_quantity(self, key, quantity):
+    def _udpate_quantity(self, key, quantity) -> None:
         if key in self.load_almoxarifado:
             self.load_almoxarifado[key][1] += quantity
             self.almoxarifado.modify_json(self.load_almoxarifado)

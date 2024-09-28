@@ -1,8 +1,11 @@
-from os import system
+from os import system, name
 
 
 def clear() -> None:
-    system("clear")
+    if name == 'nt':
+        system("cls")
+    else:
+        system("clear")
 
 
 def cabecalho(title: str) -> None:

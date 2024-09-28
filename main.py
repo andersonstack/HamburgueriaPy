@@ -1,5 +1,6 @@
 from view import telas
-from almoxarifado.controller import Almoxarifado
+from almoxarifado.funcionalidades import main_almoxarifado
+
 
 get_out = False
 
@@ -9,10 +10,7 @@ while not get_out:
 
     match option:
         case '1':
-            telas.tela_almoxarifado()
-            buy = Almoxarifado()
-            buy.add_buy(name="Coca", quantity=10)
-            input("")
+            main_almoxarifado()
         case '2':
             telas.tela_funcionarios()
         case '3':
@@ -29,5 +27,3 @@ while not get_out:
             break
         case _:
             print("Opção inválida...\n")
-
-    option = input("Escolha outra opção ou '0' para voltar: \n")
