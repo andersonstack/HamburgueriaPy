@@ -15,13 +15,14 @@ def cabecalho(title: str) -> None:
     print(f"=|{line}|=")
 
 
-def cabecalho_status(label):
+def cabecalho_status(label, dict_file):
     row = 100
     text = label
+    items = len(dict_file)
     text_width = len(text)
     space = row - text_width - 2
     print(f"-|{'-' * row}|-")
-    print(f" | {text} {0:<{space}}|")
+    print(f" | {text} {items:<{space}}|")
     print(f"-|{'-' * row}|-")
 
 
