@@ -1,11 +1,14 @@
 from almoxarifado.controller import Almoxarifado
-from view.telas import tela_almoxarifado, clear
+from view.telas import tela_almoxarifado, clear, cabecalho
 
 
 def add_buy():
     clear()
+    cabecalho("compras")
+    print("")
     name = input("Item:\n")
-    quantity = input("Quantidade:\n")
+    quantity = int(input("Quantidade:\n"))
+    print("")
     buy = Almoxarifado()
     buy.add_buy(name=name, quantity=quantity)
 

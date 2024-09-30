@@ -1,5 +1,6 @@
 from data.saveJson import SaveJson
 from typing import Dict
+from almoxarifado.view import cabecalho_infor
 
 
 class Almoxarifado:
@@ -26,8 +27,8 @@ class Almoxarifado:
         self.almoxarifado.modify_json(data=new_item)
         return id_
 
-    def view_buy(self, id) -> dict:
-        return {}
+    def view_buy(self) -> None:
+        cabecalho_infor(self.load_almoxarifado, "Items em almoxarifado:")
 
     def delete_buy(self, id) -> bool:
         return True
