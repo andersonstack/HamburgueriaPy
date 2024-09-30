@@ -15,6 +15,16 @@ def cabecalho(title: str) -> None:
     print(f"=|{line}|=")
 
 
+def cabecalho_status(label):
+    row = 100
+    text = label
+    text_width = len(text)
+    space = row - text_width - 2
+    print(f"-|{'-' * row}|-")
+    print(f" | {text} {0:<{space}}|")
+    print(f"-|{'-' * row}|-")
+
+
 def opcoes(*args) -> None:
     for index, option in enumerate(args, start=1):
         if option == "sair" or option == "menu principal":
