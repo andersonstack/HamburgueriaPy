@@ -1,4 +1,17 @@
+from view.telas import cabecalho, opcoes
 from typing import Dict
+
+
+def tela_almoxarifado() -> None:
+    cabecalho("almoxarifado")
+    opcoes(
+        "adicionar compra",
+        "visualizar almoxarifado",
+        "buscar item",
+        "excluir item",
+        "editar item",
+        "menu principal")
+    print(">> Escolha uma opção\n")
 
 
 def cabecalho_status(label: str, dict_file):
@@ -25,7 +38,3 @@ def cabecalho_infor(infor: Dict, text: str):
         print(f" |{key:^{ids}}|{value[0].title():^{name}}| \
 {value[1]:^{quantity}}  |")
         print(f"-|-----|{"-" * 90}|-------------|-")
-
-
-if __name__ == '__main__':
-    ...

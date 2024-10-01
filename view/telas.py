@@ -37,18 +37,6 @@ def tela_principal() -> None:
     print(">> Escolha uma opção\n")
 
 
-def tela_almoxarifado() -> None:
-    cabecalho("almoxarifado")
-    opcoes(
-        "adicionar compra",
-        "visualizar almoxarifado",
-        "buscar item",
-        "excluir item",
-        "editar item",
-        "menu principal")
-    print(">> Escolha uma opção\n")
-
-
 def tela_funcionarios() -> None:
     cabecalho("funcionários")
     opcoes(
@@ -100,12 +88,3 @@ def tela_informacoes() -> None:
         github: andersoncruz-13
     """)
     print(">> Escolha uma opção\n")
-
-
-if __name__ == "__main__":
-    tela_principal()
-    tela_almoxarifado()
-    tela_funcionarios()
-    tela_clientes()
-    tela_relatorios()
-    tela_informacoes()

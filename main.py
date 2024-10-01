@@ -1,6 +1,5 @@
 from view import telas
-from almoxarifado.funcionalidades import main_almoxarifado
-
+from almoxarifado.view import main_almoxarifado
 
 get_out = False
 
