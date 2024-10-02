@@ -15,9 +15,12 @@ def tela_almoxarifado() -> None:
 
 
 def cabecalho_status(
-        label: str,
+        label: str | None = "",
         dict_file: dict | None = None,
         ids: int | None = None):
+
+    if not label:
+        return
 
     row = 110
     text = label.upper()
@@ -32,8 +35,10 @@ def cabecalho_status(
     print(f" {'.' * row}\033[m")
 
 
-def cabecalho_infor(infor: Dict, text: str):
-    cabecalho_status(text, infor)
+def cabecalho_infor(infor: Dict, text: str | None = ""):
+    if text:
+        cabecalho_status(text, infor)
+
     ids = 5
     name = 90
     quantity = 10

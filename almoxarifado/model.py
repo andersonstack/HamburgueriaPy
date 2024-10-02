@@ -27,10 +27,18 @@ class Almoxarifado:
         self.almoxarifado.modify_json(data=new_item)
         return id_
 
-    def view_buy(self) -> None:
+    def view_buys(self) -> None:
         cabecalho_infor(self.load_almoxarifado, "Items em almoxarifado:")
 
-    def delete_buy(self, ids) -> None:
+    def view_buy(self, ids: str) -> bool:
+        if ids not in self.load_almoxarifado:
+            return False
+
+        new_dict = {ids: self.load_almoxarifado[ids]}
+        cabecalho_infor(new_dict, "")
+        return True
+
+    def delete_buy(self, ids: str) -> None:
         print(self.load_almoxarifado)
         del self.load_almoxarifado[ids]
         new_dict = self.load_almoxarifado
