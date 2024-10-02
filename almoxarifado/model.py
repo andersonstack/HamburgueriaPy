@@ -30,8 +30,11 @@ class Almoxarifado:
     def view_buy(self) -> None:
         cabecalho_infor(self.load_almoxarifado, "Items em almoxarifado:")
 
-    def delete_buy(self, id) -> bool:
-        return True
+    def delete_buy(self, ids) -> None:
+        print(self.load_almoxarifado)
+        del self.load_almoxarifado[ids]
+        new_dict = self.load_almoxarifado
+        self.almoxarifado.update_json(new_dict)
 
     def edit_buy(self, id) -> dict:
         return {}
