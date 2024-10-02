@@ -1,5 +1,5 @@
 from view import telas
-from almoxarifado.view import main_almoxarifado
+from almoxarifado.controller import main_almoxarifado
 
 get_out = False
 

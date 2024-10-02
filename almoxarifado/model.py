@@ -39,7 +39,6 @@ class Almoxarifado:
         return True
 
     def delete_buy(self, ids: str) -> None:
-        print(self.load_almoxarifado)
         del self.load_almoxarifado[ids]
         new_dict = self.load_almoxarifado
         self.almoxarifado.update_json(new_dict)

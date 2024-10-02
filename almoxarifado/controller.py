@@ -3,15 +3,35 @@ from almoxarifado.model import Almoxarifado
 from almoxarifado.view import tela_almoxarifado
 
 
-def add_buy():
+def _basic(text: str):
     clear()
-    cabecalho("compras")
+    cabecalho(text)
     print("")
+
+
+def add_buy():
+    _basic("adicionar compra")
     name = input("Item:\n")
     quantity = int(input("Quantidade:\n"))
     print("")
     buy = Almoxarifado()
     buy.add_buy(name=name, quantity=quantity)
+    input("> Enter para continuar")
+
+
+def delete_buy():
+    _basic("deletar compra")
+    cod = input("Código:\n")
+    buy = Almoxarifado()
+    if buy.view_buy(cod):
+        confirm = input(f"Deletar {cod}?\n")
+        match confirm:
+            case 'S':
+                buy.delete_buy(cod)
+                print("Compra deletada!\n")
+            case _:
+                print("Ação cancelada.\n")
+    input("> Enter para continuar")
 
 
 def main_almoxarifado():
@@ -24,13 +44,13 @@ def main_almoxarifado():
             case '1':
                 add_buy()
             case '2':
-                # visualizar almoxarifado
+                # visualizar compras
                 ...
             case '3':
                 # buscar item
                 ...
             case '4':
-                # excluir item
+                delete_buy()
                 ...
             case '5':
                 # editar item
