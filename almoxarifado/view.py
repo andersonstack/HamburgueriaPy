@@ -14,10 +14,17 @@ def tela_almoxarifado() -> None:
     print(">> Escolha uma opção\n")
 
 
-def cabecalho_status(label: str, dict_file):
+def cabecalho_status(
+        label: str,
+        dict_file: dict | None = None,
+        ids: int | None = None):
+
     row = 110
     text = label.upper()
-    items = len(dict_file)
+    if not dict_file:
+        items = ids
+    else:
+        items = len(dict_file)
     text_width = len(text)
     space = row - text_width - 2
     print(f"\033[1m {'.' * row} ")
