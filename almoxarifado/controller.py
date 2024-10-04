@@ -1,6 +1,7 @@
 from view.telas import clear, cabecalho
 from almoxarifado.model import Almoxarifado
 from almoxarifado.view import tela_almoxarifado
+from controller.inputs import inputStr, inputInt
 
 
 def _basic(text: str):
@@ -11,8 +12,8 @@ def _basic(text: str):
 
 def add_buy():
     _basic("adicionar compra")
-    name = input("Item:\n")
-    quantity = int(input("Quantidade:\n"))
+    name = inputStr("Item:\n")
+    quantity = inputInt("Quantidade:\n")
     print("")
     buy = Almoxarifado()
     buy.add_buy(name=name, quantity=quantity)
@@ -21,10 +22,10 @@ def add_buy():
 
 def delete_buy():
     _basic("deletar compra")
-    cod = input("Código:\n")
+    cod = inputInt("Código:\n")
     buy = Almoxarifado()
-    if buy.view_buy(cod):
-        confirm = input(f"Deletar {cod}?\n")
+    if buy.view_buy(str(cod)):
+        confirm = input(f"Deletar {cod}?\n").upper()
         match confirm:
             case 'S':
                 buy.delete_buy(cod)
@@ -47,7 +48,7 @@ def visualise_buys():
 def search_buy():
     _basic("Busca de item")
     buy = Almoxarifado()
-    cod = input("Digite o ID do produto:\n")
+    cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
         print("Código não alcançado!\n")
 
@@ -57,11 +58,11 @@ def search_buy():
 def edit_buy():
     _basic("Edição de item")
     buy = Almoxarifado()
-    cod = input("Digite o ID do produto:\n")
+    cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
         print("Código não alcançado!\n")
 
-    name = input("Nome do novo produto:\n")
+    name = inputStr("Nome do novo produto:\n")
     buy.edit_buy(str(cod), str(name))
 
     input("> Item editado. Enter para continuar")

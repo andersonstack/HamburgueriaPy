@@ -5,7 +5,7 @@ def inputStr(text: str) -> str:
     while True:
         user_input = input(text)
         if user_input.isalpha():
-            return user_input
+            return user_input.title()
         else:
             printE("Digite somente texto")  # Mensagem de erro
 
