@@ -2,6 +2,7 @@ from view.telas import clear, cabecalho
 from almoxarifado.model import Almoxarifado
 from almoxarifado.view import tela_almoxarifado
 from controller.inputs import inputStr, inputInt
+from view.styles import printS, printW, printE
 
 
 def _basic(text: str):
@@ -17,7 +18,8 @@ def add_buy():
     print("")
     buy = Almoxarifado()
     buy.add_buy(name=name, quantity=quantity)
-    input("> Enter para continuar")
+    printS("Compra cadastrada com sucesso. <Enter>")
+    input()
 
 
 def delete_buy():
@@ -28,21 +30,22 @@ def delete_buy():
         confirm = input(f"Deletar {cod}?\n").upper()
         match confirm:
             case 'S':
-                buy.delete_buy(cod)
-                print("Compra deletada!\n")
+                buy.delete_buy(str(cod))
+                printS("Compra deletada com sucesso. <Enter>")
             case _:
-                print("Ação cancelada.\n")
+                printW("Ação cancelada. <Enter>")
     else:
-        print("Código não alcançado!\n")
+        printE("Código não alcançado! <Enter>")
 
-    input("> Enter para continuar")
+    input()
 
 
 def visualise_buys():
     _basic("Compras em almoxarifado")
     buy = Almoxarifado()
     buy.view_buys()
-    input("> Enter para continuar")
+    printW("> Enter para continuar")
+    input()
 
 
 def search_buy():
@@ -50,9 +53,10 @@ def search_buy():
     buy = Almoxarifado()
     cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
-        print("Código não alcançado!\n")
+        printE("Código não alcançado! <Enter>")
 
-    input("> Enter para continuar")
+    printW("> Enter para continuar")
+    input()
 
 
 def edit_buy():
@@ -60,12 +64,15 @@ def edit_buy():
     buy = Almoxarifado()
     cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
-        print("Código não alcançado!\n")
+        printE("Código não alcançado! <Enter>")
+        input()
+        return
 
     name = inputStr("Nome do novo produto:\n")
     buy.edit_buy(str(cod), str(name))
 
-    input("> Item editado. Enter para continuar")
+    printS("Item editado com sucesso. <Enter>")
+    input("")
 
 
 def main_almoxarifado():

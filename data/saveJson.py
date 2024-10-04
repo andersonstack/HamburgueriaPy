@@ -17,7 +17,6 @@ class SaveJson:
     def modify_json(self, data: Dict[str, Any]) -> None:
         if os.path.exists(self.file):
             existing_data = self.load_json()
-            print(existing_data)
             existing_data.update(data)
             with open(self.file, 'w') as arq:
                 json.dump(existing_data, arq, indent=4)
