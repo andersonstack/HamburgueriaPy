@@ -1,14 +1,8 @@
-from view.telas import clear, cabecalho
+from view.telas import clear, _basic
 from almoxarifado.model import Almoxarifado
 from almoxarifado.view import tela_almoxarifado
 from controller.inputs import inputStr, inputInt
 from view.styles import printS, printW, printE
-
-
-def _basic(text: str):
-    clear()
-    cabecalho(text)
-    print("")
 
 
 def add_buy():

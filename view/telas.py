@@ -8,6 +8,12 @@ def clear() -> None:
         system("clear")
 
 
+def _basic(text: str):
+    clear()
+    cabecalho(text)
+    print("")
+
+
 def cabecalho(title: str) -> None:
     row = 110
     print(f"\033[1m |{'.' * row}|")
@@ -34,18 +40,6 @@ def tela_principal() -> None:
         "vendas",
         "informações",
         "sair")
-    print(">> Escolha uma opção\n")
-
-
-def tela_funcionarios() -> None:
-    cabecalho("funcionários")
-    opcoes(
-        "contratar funcionário",
-        "visualizar funcionário",
-        "buscar funcionário",
-        "demitir funcionário",
-        "editar funcionário",
-        "menu principal")
     print(">> Escolha uma opção\n")
 
 

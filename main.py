@@ -1,5 +1,7 @@
 from view import telas
 from almoxarifado.controller import main_almoxarifado
+from funcionarios.controller import main_funcionarios
+
 
 get_out = False
 
@@ -11,7 +13,7 @@ while not get_out:
         case '1':
             main_almoxarifado()
         case '2':
-            telas.tela_funcionarios()
+            main_funcionarios()
         case '3':
             telas.tela_clientes()
         case '4':
