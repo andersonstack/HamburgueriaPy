@@ -1,4 +1,4 @@
-from data.saveJson import SaveJson
+from data.saveJson import SaveJson  # type: ignore
 from typing import Dict
 from almoxarifado.view import cabecalho_infor
 
@@ -43,8 +43,8 @@ class Almoxarifado:
         new_dict = self.load_almoxarifado
         self.almoxarifado.update_json(new_dict)
 
-    def edit_buy(self, id) -> dict:
-        return {}
+    def edit_buy(self, ids: str) -> bool:
+        return False
 
     def _verify_buy(self, name) -> Dict[int, list]:
         for cod, det in self.load_almoxarifado.items():
@@ -56,3 +56,8 @@ class Almoxarifado:
         if key in self.load_almoxarifado:
             self.load_almoxarifado[key][1] += quantity
             self.almoxarifado.modify_json(self.load_almoxarifado)
+
+
+if __name__ == '__main__':
+    buy = Almoxarifado()
+    buy.edit_buy(str(2))

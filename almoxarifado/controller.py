@@ -31,6 +31,26 @@ def delete_buy():
                 print("Compra deletada!\n")
             case _:
                 print("Ação cancelada.\n")
+    else:
+        print("Código não alcançado!\n")
+
+    input("> Enter para continuar")
+
+
+def visualise_buys():
+    _basic("Compras em almoxarifado")
+    buy = Almoxarifado()
+    buy.view_buys()
+    input("> Enter para continuar")
+
+
+def search_buy():
+    _basic("Busca de item")
+    buy = Almoxarifado()
+    cod = input("Digite o ID do produto:\n")
+    if not buy.view_buy(str(cod)):
+        print("Código não alcançado!\n")
+
     input("> Enter para continuar")
 
 
@@ -44,10 +64,10 @@ def main_almoxarifado():
             case '1':
                 add_buy()
             case '2':
-                # visualizar compras
+                visualise_buys()
                 ...
             case '3':
-                # buscar item
+                search_buy()
                 ...
             case '4':
                 delete_buy()
