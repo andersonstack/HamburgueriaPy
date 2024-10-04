@@ -21,3 +21,6 @@ class Employee:
 
     def edit_employee(self, cpf: str) -> None:
         ...
+
+    def search_employee(self, cpf: str) -> None:
+        ...
