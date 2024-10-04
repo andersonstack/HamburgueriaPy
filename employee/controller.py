@@ -5,6 +5,21 @@ from employee.model import Employee
 from view.styles import printS, printW
 
 
+def delete_employee():
+    _basic("Deletando funcionário")
+
+    cpf = input("CPF:\t")
+
+    contract = Employee()
+    if not contract.remove_employee(cpf):
+        printW(f"{cpf} não alcançado!")
+        input()
+        return
+
+    printS(f"{cpf} desligado do sistema!")
+    input()
+
+
 def new_employee():
     _basic("Adicionando novo funcionário")
 
@@ -23,6 +38,7 @@ def new_employee():
                             phone=phone
                     ):
         printW(f"Não foi possível adicionar {cpf} ao sistema. CPF já existe!")
+        input()
         return
 
     printS(f"{name} foi adicionado ao sistema com sucesso!")
@@ -43,7 +59,7 @@ def main_employee() -> None:
             case '3':
                 ...
             case '4':
-                ...
+                delete_employee()
             case '5':
                 ...
             case '0':

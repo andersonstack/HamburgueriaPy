@@ -29,7 +29,7 @@ class SaveJson:
 
     def load_json(self) -> Dict[str, Any]:
         if os.path.exists(self.file):
-            with open(self.file, 'r') as arq:
+            with open(self.file, 'r', encoding="utf8") as arq:
                 return json.load(arq)
         else:
             self._create_json({})
