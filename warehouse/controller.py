@@ -1,6 +1,6 @@
-from view.telas import clear, _basic
-from almoxarifado.model import Almoxarifado
-from almoxarifado.view import tela_almoxarifado
+from view.screens import clear, _basic
+from warehouse.model import Warehouse
+from warehouse.view import screen_warehouse
 from controller.inputs import inputStr, inputInt
 from view.styles import printS, printW, printE
 
@@ -10,7 +10,7 @@ def add_buy():
     name = inputStr("Item:\n")
     quantity = inputInt("Quantidade:\n")
     print("")
-    buy = Almoxarifado()
+    buy = Warehouse()
     buy.add_buy(name=name, quantity=quantity)
     printS("Compra cadastrada com sucesso. <Enter>")
     input()
@@ -19,7 +19,7 @@ def add_buy():
 def delete_buy():
     _basic("deletar compra")
     cod = inputInt("Código:\n")
-    buy = Almoxarifado()
+    buy = Warehouse()
     if buy.view_buy(str(cod)):
         confirm = input(f"Deletar {cod}?\n").upper()
         match confirm:
@@ -36,15 +36,15 @@ def delete_buy():
 
 def visualise_buys():
     _basic("Compras em almoxarifado")
-    buy = Almoxarifado()
-    buy.view_buys()
+    buy = Warehouse()
+    buy.view_warehouse()
     printW("> Enter para continuar")
     input()
 
 
 def search_buy():
     _basic("Busca de item")
-    buy = Almoxarifado()
+    buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
         printE("Código não alcançado! <Enter>")
@@ -55,7 +55,7 @@ def search_buy():
 
 def edit_buy():
     _basic("Edição de item")
-    buy = Almoxarifado()
+    buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
     if not buy.view_buy(str(cod)):
         printE("Código não alcançado! <Enter>")
@@ -69,10 +69,10 @@ def edit_buy():
     input("")
 
 
-def main_almoxarifado():
+def main_warehouse():
     while True:
         clear()
-        tela_almoxarifado()
+        screen_warehouse()
         option = input("")
 
         match option:

@@ -1,9 +1,9 @@
-from view.telas import cabecalho, opcoes
+from view.screens import header, options
 
 
-def tela_funcionarios() -> None:
-    cabecalho("funcionários")
-    opcoes(
+def screen_employee() -> None:
+    header("funcionários")
+    options(
         "contratar funcionário",
         "visualizar funcionário",
         "buscar funcionário",

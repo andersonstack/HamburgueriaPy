@@ -1,11 +1,11 @@
-from view.telas import clear
-from funcionarios.view import tela_funcionarios
+from view.screens import clear
+from employee.view import screen_employee
 
 
-def main_funcionarios() -> None:
+def main_employee() -> None:
     while True:
         clear()
-        tela_funcionarios()
+        screen_employee()
         option = input("")
 
         match option:

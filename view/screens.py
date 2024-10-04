@@ -10,18 +10,18 @@ def clear() -> None:
 
 def _basic(text: str):
     clear()
-    cabecalho(text)
+    header(text)
     print("")
 
 
-def cabecalho(title: str) -> None:
+def header(title: str) -> None:
     row = 110
     print(f"\033[1m |{'.' * row}|")
     print(f" |{title.title():^{row}}|")
     print(f" |{'.' * row}|\033[m")
 
 
-def opcoes(*args) -> None:
+def options(*args) -> None:
     for index, option in enumerate(args, start=1):
         if option == "sair" or option == "menu principal":
             print(f"=| 0. {option.title():<105} |=")
@@ -30,9 +30,9 @@ def opcoes(*args) -> None:
     print(f"{'=' * 114}")
 
 
-def tela_principal() -> None:
-    cabecalho("hamburgueria py")
-    opcoes(
+def screen_main() -> None:
+    header("hamburgueria py")
+    options(
         "almoxarifado",
         "funcionarios",
         "clientes",
@@ -43,9 +43,9 @@ def tela_principal() -> None:
     print(">> Escolha uma opção\n")
 
 
-def tela_clientes() -> None:
-    cabecalho("clientes")
-    opcoes(
+def screen_client() -> None:
+    header("clientes")
+    options(
         "adicionar cliente",
         "visualizar cliente",
         "buscar cliente",
@@ -55,18 +55,18 @@ def tela_clientes() -> None:
     print(">> Escolha uma opção\n")
 
 
-def tela_relatorios() -> None:
-    cabecalho("relatórios")
-    opcoes(
+def screen_report() -> None:
+    header("relatórios")
+    options(
         "relatório de compra",
         "relatorio de vendas",
     )
     print(">> Escolha uma opção\n")
 
 
-def tela_vendas() -> None:
-    cabecalho("vendas")
-    opcoes(
+def screen_sales() -> None:
+    header("vendas")
+    options(
         "vender",
         "lista de vendas",
         "fechar vendas",
@@ -74,8 +74,8 @@ def tela_vendas() -> None:
     )
 
 
-def tela_informacoes() -> None:
-    cabecalho("informações")
+def screen_infor() -> None:
+    header("informações")
     print("""
     Equipe:
         Anderson G.Pereira Cruz

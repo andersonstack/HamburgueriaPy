@@ -1,27 +1,27 @@
-from view import telas
-from almoxarifado.controller import main_almoxarifado
-from funcionarios.controller import main_funcionarios
+from view import screens
+from warehouse.controller import main_warehouse
+from employee.controller import main_employee
 
 
 get_out = False
 
 while not get_out:
-    telas.tela_principal()
+    screens.screen_main()
     option = input("")
 
     match option:
         case '1':
-            main_almoxarifado()
+            main_warehouse()
         case '2':
-            main_funcionarios()
+            main_employee()
         case '3':
-            telas.tela_clientes()
+            screens.screen_client()
         case '4':
-            telas.tela_relatorios()
+            screens.screen_report()
         case '5':
-            telas.tela_vendas()
+            screens.screen_sales()
         case '6':
-            telas.tela_informacoes()
+            screens.screen_infor()
         case '0':
             print("Obrigado por usar o programa! :)\n")
             get_out = True

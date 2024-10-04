@@ -1,15 +1,15 @@
 from data.saveJson import SaveJson
 
 
-class Funcionarios:
+class Employee:
     def __init__(self):
         self.name = ""
         self.age = ""
         self.cpf = ""
         self.adress = ""
         self.phone = ""
-        self.funcionarios = SaveJson("funcionrios.json")
-        self.load_funcionarios = self.funcionarios.load_json()
+        self.employee = SaveJson("funcionrios.json")
+        self.load_employee = self.employee.load_json()
 
     def add_employee(
             self, name: str, cpf: str,

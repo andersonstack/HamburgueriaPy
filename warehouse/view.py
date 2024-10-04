@@ -1,10 +1,10 @@
-from view.telas import cabecalho, opcoes
+from view.screens import header, options
 from typing import Dict
 
 
-def tela_almoxarifado() -> None:
-    cabecalho("almoxarifado")
-    opcoes(
+def screen_warehouse() -> None:
+    header("almoxarifado")
+    options(
         "adicionar compra",
         "visualizar almoxarifado",
         "buscar item",
@@ -14,7 +14,7 @@ def tela_almoxarifado() -> None:
     print(">> Escolha uma opção\n")
 
 
-def cabecalho_status(
+def bar_warehouse(
         label: str | None = "",
         dict_file: dict | None = None,
         ids: int | None = None):
@@ -35,9 +35,9 @@ def cabecalho_status(
     print(f" {'.' * row}\033[m")
 
 
-def cabecalho_infor(infor: Dict, text: str | None = ""):
+def infor_warehouse(infor: Dict, text: str | None = ""):
     if text:
-        cabecalho_status(text, infor)
+        bar_warehouse(text, infor)
 
     ids = 5
     name = 90
