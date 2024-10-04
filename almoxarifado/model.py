@@ -13,7 +13,8 @@ class Almoxarifado:
 
     def add_buy(self, name: str, quantity: int) -> int:
         if self.load_almoxarifado:
-            id_ = len(self.load_almoxarifado) + 1
+            last_key = int(list(self.load_almoxarifado.keys())[-1])
+            id_ = last_key + 1
         else:
             id_ = 1
 
