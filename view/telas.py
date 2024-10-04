@@ -9,19 +9,19 @@ def clear() -> None:
 
 
 def cabecalho(title: str) -> None:
-    line = "=" * 29
-    print(f"=|{line}|=")
-    print(f" | {title.title():^28}|")
-    print(f"=|{line}|=")
+    row = 110
+    print(f"\033[1m |{'.' * row}|")
+    print(f" |{title.title():^{row}}|")
+    print(f" |{'.' * row}|\033[m")
 
 
 def opcoes(*args) -> None:
     for index, option in enumerate(args, start=1):
         if option == "sair" or option == "menu principal":
-            print(f"=| 0. {option.title():<24} |=")
+            print(f"=| 0. {option.title():<105} |=")
         else:
-            print(f"=| {index}. {option.title():<24} |=")
-    print(f"{'=' * 33}")
+            print(f"=| {index}. {option.title():<105} |=")
+    print(f"{'=' * 114}")
 
 
 def tela_principal() -> None:
