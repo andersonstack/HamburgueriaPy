@@ -43,8 +43,11 @@ class Almoxarifado:
         new_dict = self.load_almoxarifado
         self.almoxarifado.update_json(new_dict)
 
-    def edit_buy(self, ids: str) -> bool:
-        return False
+    def edit_buy(self, ids: str, name: str) -> None:
+        for key, value in self.load_almoxarifado.items():
+            if key == ids:
+                self.load_almoxarifado[ids] = [name, value[1]]
+                self.almoxarifado.update_json(self.load_almoxarifado)
 
     def _verify_buy(self, name) -> Dict[int, list]:
         for cod, det in self.load_almoxarifado.items():
@@ -60,4 +63,4 @@ class Almoxarifado:
 
 if __name__ == '__main__':
     buy = Almoxarifado()
-    buy.edit_buy(str(2))
+    buy.edit_buy(str(5), "Queijo")

@@ -54,6 +54,19 @@ def search_buy():
     input("> Enter para continuar")
 
 
+def edit_buy():
+    _basic("Edição de item")
+    buy = Almoxarifado()
+    cod = input("Digite o ID do produto:\n")
+    if not buy.view_buy(str(cod)):
+        print("Código não alcançado!\n")
+
+    name = input("Nome do novo produto:\n")
+    buy.edit_buy(str(cod), str(name))
+
+    input("> Item editado. Enter para continuar")
+
+
 def main_almoxarifado():
     while True:
         clear()
@@ -65,15 +78,11 @@ def main_almoxarifado():
                 add_buy()
             case '2':
                 visualise_buys()
-                ...
             case '3':
                 search_buy()
-                ...
             case '4':
                 delete_buy()
-                ...
             case '5':
-                # editar item
-                ...
+                edit_buy()
             case '0':
                 return
