@@ -16,5 +16,16 @@ def inputInt(text: str) -> int:
             print("Digite apenas númeors inteiros.\n")
 
 
+def inputFloat(text: str) -> float:
+    while True:
+        number = input(text)
+        newNumber = number.replace(",", ".")
+        try:
+            numberFloat = float(newNumber)
+            return numberFloat
+        except ValueError:
+            print("Digite apenas número com virgula ou ponto.\n")
+
+
 if __name__ == '__main__':
-    inputInt("Digite uma quantia: ")
+    inputFloat("Digite uma quantia: ")
