@@ -10,3 +10,14 @@ class Funcionarios:
         self.phone = ""
         self.funcionarios = SaveJson("funcionrios.json")
         self.load_funcionarios = self.funcionarios.load_json()
+
+    def add_employee(
+            self, name: str, cpf: str,
+            age: int, adress: str, phone: str) -> None:
+        ...
+
+    def remove_employee(self, cpf: str) -> None:
+        ...
+
+    def edit_employee(self, cpf: str) -> None:
+        ...
