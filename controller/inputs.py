@@ -1,10 +1,13 @@
+from view.styles import printE
+
+
 def inputStr(text: str) -> str:
     while True:
-        text = input(text)
-        if all(not char.isdigit() for char in text):
-            return text
+        user_input = input(text)
+        if user_input.isalpha():
+            return user_input
         else:
-            print("Digite somente texto.\n")  # Mensagem de erro
+            printE("Digite somente texto")  # Mensagem de erro
 
 
 def inputInt(text: str) -> int:
@@ -13,7 +16,7 @@ def inputInt(text: str) -> int:
         if number.isdigit():
             return int(number)
         else:
-            print("Digite apenas númeors inteiros.\n")
+            printE("Digite apenas númeors inteiros")
 
 
 def inputFloat(text: str) -> float:
@@ -24,8 +27,10 @@ def inputFloat(text: str) -> float:
             numberFloat = float(newNumber)
             return numberFloat
         except ValueError:
-            print("Digite apenas número com virgula ou ponto.\n")
+            printE("Digite apenas número com virgula ou ponto")
 
 
 if __name__ == '__main__':
-    inputFloat("Digite uma quantia: ")
+    inputFloat("Digite um float: ")
+    inputInt("Digite um int: ")
+    inputStr("Digite uma str: ")
