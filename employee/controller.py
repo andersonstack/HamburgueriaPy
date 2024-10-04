@@ -47,4 +47,5 @@ def main_employee() -> None:
             case '5':
                 ...
             case '0':
+                clear()
                 return

@@ -87,4 +87,5 @@ def main_warehouse():
             case '5':
                 edit_buy()
             case '0':
+                clear()
                 return
