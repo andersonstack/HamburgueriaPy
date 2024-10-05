@@ -1,4 +1,5 @@
 from data.saveJson import SaveJson
+from employee.view import all_employee
 
 
 class Employee:
@@ -38,6 +39,9 @@ class Employee:
                         self.employee.update_json(self.load_employee)
                         return True
         return False
+
+    def visualize_employees(self) -> None:
+        all_employee(self.load_employee)
 
     def edit_employee(self, cpf: str) -> None:
         ...

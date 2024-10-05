@@ -5,6 +5,13 @@ from employee.model import Employee
 from view.styles import printS, printW
 
 
+def visualize_all_employees():
+    employee = Employee()
+    employee.visualize_employees()
+    printW("> Enter para continuar")
+    input()
+
+
 def delete_employee():
     _basic("Deletando funcionário")
 
@@ -55,7 +62,7 @@ def main_employee() -> None:
             case '1':
                 new_employee()
             case '2':
-                ...
+                visualize_all_employees()
             case '3':
                 ...
             case '4':
