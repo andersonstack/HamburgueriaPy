@@ -1,6 +1,6 @@
 from view.screens import clear, _basic
 from employee.view import screen_employee
-from controller.inputs import inputInt
+from controller.inputs import inputInt, inputStr, inputAdrs
 from employee.model import Employee
 from view.styles import printS, printW
 
@@ -61,10 +61,10 @@ def delete() -> None:
 def new_employee() -> None:
     _basic("Adicionando novo funcionário")
 
-    name = input("Nome:\t")
+    name = inputStr("Nome:\t")
     age = inputInt("Idade:\t")
     cpf = input("CPF:\t")
-    adress = input("Endereço:\t")
+    adress = inputAdrs("Endereço:\t")
     phone = input("Telefone:\t")
 
     contract = Employee()
