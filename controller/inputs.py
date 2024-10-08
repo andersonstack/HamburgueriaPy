@@ -13,6 +13,18 @@ def inputt(text: str) -> str:
         sys.exit()
 
 
+def inputAdrs(text: str) -> str:
+    while True:
+        user_input = inputt(text)
+
+        if "/" in user_input:
+            city, uf = user_input.split("/")
+            if (city.replace(" ", "").isalpha() and len(uf) == 2
+                    and uf.isalpha()):
+                return f"{city.title()}/{uf.upper()}"
+        printE("> Enderço deve estar no formato Cidade/UF")
+
+
 def inputStr(text: str) -> str:
     while True:
         user_input = inputt(text)
