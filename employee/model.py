@@ -28,7 +28,14 @@ class Employee:
             }
             self.employee.modify_json(data=new_employee)
             return True
-        return False
+        else:
+            print("Dados do funcionários pré-existentes")
+            active = input("Pressione <S> para ativar o cadastro\n")
+            if active.upper() in 'S':
+                self.load_employee[cpf][-1] = True
+                self.employee.update_json(self.load_employee)
+                return True
+            return False
 
     def remove_employee(self, cpf: str) -> bool:
         if self._verify_cpf(cpf):
@@ -43,8 +50,35 @@ class Employee:
     def visualize_employees(self) -> None:
         view_employee(self.load_employee)
 
-    def edit_employee(self, cpf: str) -> None:
-        ...
+    def edit_employee(self, cpf: str) -> bool:
+        if self._verify_cpf(cpf):
+            employee_details = self.load_employee[cpf]
+
+            print(f"Nome atual: {employee_details[0]}")
+            print(f"Idade atual: {employee_details[1]}")
+            print(f"Endereço atual: {employee_details[2]}")
+            print(f"Telefone atual: {employee_details[3]}")
+
+            print("Informações em branco permancem inalteradas\n")
+            name = input("Novo nome:\t")
+            age = input("Nova idade:\t")
+            adress = input("Novo endereço:\t")
+            phone = input("Novo telefone:\t")
+
+            updated_employee = {
+                cpf: [
+                    name if name else employee_details[0],
+                    int(age) if age else employee_details[1],
+                    adress if adress else employee_details[2],
+                    phone if phone else employee_details[3],
+                    True
+                ]
+            }
+
+            self.employee.update_json(data=updated_employee)
+            return True
+
+        return False
 
     def search_employee(self, cpf: str) -> bool:
         if self._verify_cpf(cpf):

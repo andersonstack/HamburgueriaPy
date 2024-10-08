@@ -5,6 +5,21 @@ from employee.model import Employee
 from view.styles import printS, printW
 
 
+def edit():
+    cpf = input(" | CPF:\t")
+
+    employee = Employee()
+
+    if employee.edit_employee(cpf):
+        printS("Funcionário editado. <Enter>")
+        input()
+        return
+
+    printW("CPF não alcançado! <Enter>")
+    input()
+    return
+
+
 def search():
     cpf = input(" | CPF:\t")
 
@@ -28,7 +43,7 @@ def visualize_all_employees():
     input()
 
 
-def delete_employee():
+def delete():
     _basic("Deletando funcionário")
 
     cpf = input("CPF:\t")
@@ -82,9 +97,9 @@ def main_employee() -> None:
             case '3':
                 search()
             case '4':
-                delete_employee()
+                delete()
             case '5':
-                ...
+                edit()
             case '0':
                 clear()
                 return
