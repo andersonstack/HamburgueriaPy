@@ -5,7 +5,7 @@ from controller.inputs import inputStr, inputInt
 from view.styles import printS, printW, printE
 
 
-def add_buy():
+def add_buy() -> None:
     _basic("adicionar compra")
     name = inputStr("Item:\n")
     quantity = inputInt("Quantidade:\n")
@@ -16,7 +16,7 @@ def add_buy():
     input()
 
 
-def delete_buy():
+def delete_buy() -> None:
     _basic("deletar compra")
     cod = inputInt("Código:\n")
     buy = Warehouse()
@@ -34,7 +34,7 @@ def delete_buy():
     input()
 
 
-def visualise_buys():
+def visualise_buys() -> None:
     _basic("Compras em almoxarifado")
     buy = Warehouse()
     buy.view_warehouse()
@@ -42,7 +42,7 @@ def visualise_buys():
     input()
 
 
-def search_buy():
+def search_buy() -> None:
     _basic("Busca de item")
     buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
@@ -53,7 +53,7 @@ def search_buy():
     input()
 
 
-def edit_buy():
+def edit_buy() -> None:
     _basic("Edição de item")
     buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
@@ -69,7 +69,7 @@ def edit_buy():
     input("")
 
 
-def main_warehouse():
+def main_warehouse() -> None:
     while True:
         clear()
         screen_warehouse()

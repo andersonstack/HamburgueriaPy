@@ -5,7 +5,7 @@ from employee.model import Employee
 from view.styles import printS, printW
 
 
-def edit():
+def edit() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
@@ -20,7 +20,7 @@ def edit():
     return
 
 
-def search():
+def search() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
@@ -35,7 +35,7 @@ def search():
     printW("> CPF não alcanãdo!")
 
 
-def visualize_all_employees():
+def visualize_all_employees() -> None:
     _basic("Todos os funcionários")
     employee = Employee()
     employee.visualize_employees()
@@ -43,7 +43,7 @@ def visualize_all_employees():
     input()
 
 
-def delete():
+def delete() -> None:
     _basic("Deletando funcionário")
 
     cpf = input("CPF:\t")
@@ -58,7 +58,7 @@ def delete():
     input()
 
 
-def new_employee():
+def new_employee() -> None:
     _basic("Adicionando novo funcionário")
 
     name = input("Nome:\t")

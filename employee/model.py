@@ -3,7 +3,7 @@ from employee.view import view_employee
 
 
 class Employee:
-    def __init__(self):
+    def __init__(self) -> None:
         self.name = ""
         self.age = ""
         self.cpf = ""
