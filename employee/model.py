@@ -1,5 +1,5 @@
 from data.saveJson import SaveJson
-from employee.view import all_employee
+from employee.view import view_employee
 
 
 class Employee:
@@ -41,13 +41,19 @@ class Employee:
         return False
 
     def visualize_employees(self) -> None:
-        all_employee(self.load_employee)
+        view_employee(self.load_employee)
 
     def edit_employee(self, cpf: str) -> None:
         ...
 
-    def search_employee(self, cpf: str) -> None:
-        ...
+    def search_employee(self, cpf: str) -> bool:
+        if self._verify_cpf(cpf):
+            employee = {
+                cpf: self.load_employee[cpf]
+            }
+            view_employee(employee)
+            return True
+        return False
 
     def _verify_cpf(self, cpf: str) -> bool:
         if cpf in self.load_employee:

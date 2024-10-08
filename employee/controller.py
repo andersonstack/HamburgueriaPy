@@ -5,7 +5,23 @@ from employee.model import Employee
 from view.styles import printS, printW
 
 
+def search():
+    cpf = input(" | CPF:\t")
+
+    employee = Employee()
+    _search = employee.search_employee(cpf)
+    print(_search)
+    if _search:
+        employee.search_employee(cpf)
+        printS("> Enter para continuar")
+        input()
+        return
+
+    printW("> CPF não alcanãdo!")
+
+
 def visualize_all_employees():
+    _basic("Todos os funcionários")
     employee = Employee()
     employee.visualize_employees()
     printW("> Enter para continuar")
@@ -64,7 +80,7 @@ def main_employee() -> None:
             case '2':
                 visualize_all_employees()
             case '3':
-                ...
+                search()
             case '4':
                 delete_employee()
             case '5':
@@ -72,3 +88,7 @@ def main_employee() -> None:
             case '0':
                 clear()
                 return
+
+
+if __name__ == "__main__":
+    main_employee()
