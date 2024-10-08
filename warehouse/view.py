@@ -17,7 +17,7 @@ def screen_warehouse() -> None:
 def bar_warehouse(
         label: str | None = "",
         dict_file: dict | None = None,
-        ids: int | None = None):
+        ids: int | None = None) -> None:
 
     if not label:
         return
@@ -35,7 +35,7 @@ def bar_warehouse(
     print(f" {'.' * row}\033[m")
 
 
-def infor_warehouse(infor: Dict, text: str | None = ""):
+def infor_warehouse(infor: Dict, text: str | None = "") -> None:
     if text:
         bar_warehouse(text, infor)
 
