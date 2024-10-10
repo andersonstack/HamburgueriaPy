@@ -9,9 +9,14 @@ class Customer:
         self.load_customer = self.customer.load_json()
 
     def add_customer(self, name: str, adress: str) -> None:
-        ...
+        cod = len(self.load_customer) + 1 if len(self.load_customer) > 0 else 1
+        new_customer = {
+            cod: [name, adress, True]
+        }
+        self.customer.modify_json(data=new_customer)
 
     def visualize_customer(self, cod: str) -> None:
+
         ...
 
     def remove_customer(self, cod: str) -> None:
