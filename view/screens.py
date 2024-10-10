@@ -43,18 +43,6 @@ def screen_main() -> None:
     print(">> Escolha uma opção\n")
 
 
-def screen_client() -> None:
-    header("clientes")
-    options(
-        "adicionar cliente",
-        "visualizar cliente",
-        "buscar cliente",
-        "excluir cliente",
-        "editar cliente",
-        "menu principal")
-    print(">> Escolha uma opção\n")
-
-
 def screen_report() -> None:
     header("relatórios")
     options(
