@@ -35,7 +35,11 @@ MANIFEST
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
-teste.py
+
+# Ignorar todos os arquivos de teste
+tests/
+test_*.py
+*_test.py
 
 # Installer logs
 pip-log.txt
