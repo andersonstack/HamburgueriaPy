@@ -111,15 +111,15 @@ def new_employee() -> None:
     name = inputStr("Nome:\t")
     age = inputInt("Idade:\t")
     cpf = input("CPF:\t")
-    adress = inputAdrs("Endereço:\t")
+    address = inputAdrs("Endereço:\t")
     phone = input("Telefone:\t")
 
     contract = Employee()
-    if not contract.add_employee(
+    if not contract.insert_data(
                             name=name,
                             age=age,
                             cpf=cpf,
-                            adress=adress,
+                            address=address,
                             phone=phone
                     ):
         printW(f"Não foi possível adicionar {cpf} ao sistema. CPF já existe!")
