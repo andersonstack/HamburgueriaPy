@@ -1,3 +1,7 @@
+from controller.inputs import inputStr, inputInt
+from typing import Dict, Union
+
+
 class Client:
     def __init__(self):
         """
@@ -13,7 +17,7 @@ class Client:
     def client(
             self, name: str,
             adress: str | None = None,
-            table: int | None = None) -> None:
+            table: int | None = None) -> Dict[str, Union[int, str]]:
         """
         Creates a new client.
 
@@ -23,6 +27,14 @@ class Client:
         table (int | None): The table of the client (optional)
 
         Returns:
-        None
+        Dict[str, Union[int, str]]: A dictionary with the name,
+        adress or table of the client
         """
         ...
+        name = inputStr("Nome: ")
+        if adress is not None and table is None:
+            adress = inputStr("Endereço: ")
+            return {"name": name, "adress": adress}
+        else:
+            table = inputInt("Mesa: ")
+            return {"name": name, "table": table}
