@@ -1,4 +1,4 @@
-from data.saveJson import SaveJson
+from data.saveJson import SaveDatabase
 from employee.view import view_employee
 
 
@@ -25,7 +25,7 @@ class Employee:
         self.cpf = ""
         self.adress = ""
         self.phone = ""
-        self.employee = SaveJson("funcionarios.json")
+        self.employee = SaveDatabase("funcionarios.json")
         self.load_employee = self.employee.load_json()
 
     def add_employee(

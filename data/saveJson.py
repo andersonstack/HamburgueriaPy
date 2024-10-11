@@ -1,36 +1,23 @@
-import json
-import os
-from typing import Dict, Any
+import sqlite3
+from abc import ABC, abstractmethod
 
 
-class SaveJson:
+class SaveData(ABC):
     def __init__(self, name_file: str) -> None:
-        self.path = os.path.join("./data/arquivos_json")
-        os.makedirs(self.path, exist_ok=True)
-        self.file = os.path.join(self.path, name_file)
+        self.db_path = f"./data/{name_file}.db"
+        self.conn = sqlite3.connect(self.db_path)
+        self.create_table()
 
-    def _create_json(self, data: Dict[str, Any]) -> None:
-        if not os.path.exists(self.file):
-            with open(self.file, 'w', encoding="utf8") as arq:
-                json.dump(data, arq, indent=4, ensure_ascii=False)
+    @abstractmethod
+    def create_table(self) -> None:
+        pass
 
-    def modify_json(self, data: Dict[str, Any]) -> None:
-        if os.path.exists(self.file):
-            existing_data = self.load_json()
-            existing_data.update(data)
-            with open(self.file, 'w', encoding="utf8") as arq:
-                json.dump(existing_data, arq, indent=4, ensure_ascii=False)
-        else:
-            self._create_json(data)
-
-    def update_json(self, data: Dict[str, Any]) -> None:
-        with open(self.file, "w", encoding="utf8") as arq:
-            json.dump(data, arq, indent=4, ensure_ascii=False)
-
-    def load_json(self) -> Dict[str, Any]:
-        if os.path.exists(self.file):
-            with open(self.file, 'r', encoding="utf8") as arq:
-                return json.load(arq)
-        else:
-            self._create_json({})
-            return {}
+    @abstractmethod
+    def insert_data(
+                    self,
+                    cpf: str,
+                    name: str,
+                    address: str,
+                    age: int,
+                    phone: str) -> bool:
+        pass

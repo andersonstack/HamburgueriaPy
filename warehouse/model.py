@@ -1,4 +1,4 @@
-from data.saveJson import SaveJson  # type: ignore
+from data.saveJson import SaveDatabase  # type: ignore
 from typing import Dict
 from warehouse.view import infor_warehouse
 
@@ -8,7 +8,7 @@ class Warehouse:
         self.name = ""
         self.price = 0.0
         self.quantity = 0
-        self.warehouse = SaveJson("almoxarifado.json")
+        self.warehouse = SaveDatabase("almoxarifado.json")
         self.load_warehouse = self.warehouse.load_json()
 
     def add_buy(self, name: str, quantity: int) -> int:
