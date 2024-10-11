@@ -38,21 +38,26 @@ class Employee(SaveDatabase):
             """, [cpf, name, address, age, phone, True])
         return True
 
-    def remove_employee(self, cpf: str) -> bool:
-        if self._find_cpf(cpf):
-            with self.conn:
-                self.conn.execute("""
-                    UPDATE data
-                    SET active = ?
-                    WHERE cpf = ?
-                """, [False, cpf])
-                return True
+    def update_employee(self, cpf: str) -> bool:
+        current_status = self._find_cpf(cpf)
+
+        if current_status is not None:
+            new_status = not current_status[6]
+
+            if self._find_cpf(cpf):
+                with self.conn:
+                    self.conn.execute("""
+                        UPDATE data
+                        SET active = ?
+                        WHERE cpf = ?
+                    """, [new_status, cpf])
+                    return True
         return False
 
-    def _find_cpf(self, cpf: str) -> bool:
+    def _find_cpf(self, cpf: str):
         with self.conn:
             cursor = self.conn.execute("""
                 SELECT * FROM data
                 WHERE cpf = ?
             """, [cpf])
-            return bool(cursor.fetchall())
+            return cursor.fetchall()

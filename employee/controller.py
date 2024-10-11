@@ -85,7 +85,7 @@ def delete() -> None:
     cpf = input("CPF:\t")
 
     contract = Employee()
-    if not contract.remove_employee(cpf):
+    if not contract.update_employee(cpf):
         printW(f"{cpf} não alcançado!")
         input()
         return
@@ -122,7 +122,12 @@ def new_employee() -> None:
                             address=address,
                             phone=phone
                     ):
-        printW(f"Não foi possível adicionar {cpf} ao sistema. CPF já existe!")
+        printW(f"{cpf} já foi registrado! Deseja ativa-lo ?")
+        option = inputStr("Sim/Não:\t").lower()
+        if option.startswith("s"):
+            contract.update_employee(cpf)
+        else:
+            printW("Operação cancelada!\n")
         input()
         return
 
