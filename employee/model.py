@@ -4,6 +4,22 @@ from employee.view import view_employee
 
 class Employee:
     def __init__(self) -> None:
+        """
+        Constructor method.
+
+        Parameters:
+        self (Employee): The instance of the class
+
+        Initialize the Employee class with the following attributes:
+        - name (str): The name of the employee
+        - age (str): The age of the employee
+        - cpf (str): The CPF of the employee
+        - adress (str): The address of the employee
+        - phone (str): The phone of the employee
+        - employee (SaveJson): The SaveJson object to save and load the data
+        - load_employee (Dict[str, Any]): The dictionary with the data of all
+        the employees
+        """
         self.name = ""
         self.age = ""
         self.cpf = ""
@@ -16,6 +32,19 @@ class Employee:
             self, name: str, cpf: str,
             age: int, adress: str, phone: str) -> bool:
 
+        """
+        Adds a new employee to the system.
+
+        Parameters:
+        name (str): The name of the employee
+        cpf (str): The CPF of the employee
+        age (int): The age of the employee
+        adress (str): The address of the employee
+        phone (str): The phone of the employee
+
+        Returns:
+        bool: True if the employee was added successfully, False otherwise
+        """
         if not self._verify_cpf(cpf):
             new_employee = {
                 cpf: [
@@ -38,6 +67,15 @@ class Employee:
             return False
 
     def remove_employee(self, cpf: str) -> bool:
+        """
+        Removes an employee from the system.
+
+        Parameters:
+        cpf (str): The CPF of the employee to be removed
+
+        Returns:
+        bool: True if the employee was removed successfully, False otherwise
+        """
         if self._verify_cpf(cpf):
             for keys in self.load_employee:
                 if cpf == keys:
@@ -48,9 +86,23 @@ class Employee:
         return False
 
     def visualize_employees(self) -> None:
+        """
+        Visualizes all the employees in the system.
+
+        :return: None
+        """
         view_employee(self.load_employee)
 
     def edit_employee(self, cpf: str) -> bool:
+        """
+        Edits an existing employee in the system.
+
+        Parameters:
+        cpf (str): The CPF of the employee to be edited
+
+        Returns:
+        bool: True if the employee was edited successfully, False otherwise
+        """
         if self._verify_cpf(cpf):
             employee_details = self.load_employee[cpf]
 
@@ -81,6 +133,15 @@ class Employee:
         return False
 
     def search_employee(self, cpf: str) -> bool:
+        """
+        Searches for an existing employee in the system.
+
+        Parameters:
+        cpf (str): The CPF of the employee to be searched
+
+        Returns:
+        bool: True if the employee was found, False otherwise
+        """
         if self._verify_cpf(cpf):
             employee = {
                 cpf: self.load_employee[cpf]
@@ -90,6 +151,15 @@ class Employee:
         return False
 
     def _verify_cpf(self, cpf: str) -> bool:
+        """
+        Verifies if a given CPF exists in the system.
+
+        Parameters:
+        cpf (str): The CPF of the employee to be verified
+
+        Returns:
+        bool: True if the CPF exists, False otherwise
+        """
         if cpf in self.load_employee:
             return True
         return False

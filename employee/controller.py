@@ -6,6 +6,16 @@ from view.styles import printS, printW
 
 
 def edit() -> None:
+    """
+    Edits an existing employee.
+
+    Asks the user for the employee's CPF and, if it exists,
+    allows the user to edit their information. If not, prints an
+    error message and goes back to the main menu.
+
+    :return: None
+    """
+
     cpf = input(" | CPF:\t")
 
     employee = Employee()
@@ -21,6 +31,16 @@ def edit() -> None:
 
 
 def search() -> None:
+    """
+    Searches for a previously registered employee.
+
+    Asks the user for the employee's CPF and, if it exists,
+    allows the user to view their information. If not, prints an
+    error message and goes back to the main menu.
+
+    :return: None
+    """
+
     cpf = input(" | CPF:\t")
 
     employee = Employee()
@@ -32,10 +52,16 @@ def search() -> None:
         input()
         return
 
-    printW("> CPF não alcanãdo!")
+    printW("> CPF não alcançado!")
 
 
 def visualize_all_employees() -> None:
+    """
+    Visualize all previously registered employees.
+
+    :return: None
+    """
+
     _basic("Todos os funcionários")
     employee = Employee()
     employee.visualize_employees()
@@ -44,6 +70,16 @@ def visualize_all_employees() -> None:
 
 
 def delete() -> None:
+    """
+    Deletes a previously registered employee.
+
+    Asks the user for the employee's CPF and, if it exists,
+    removes the employee from the system. If not, prints an
+    error message and goes back to the main menu.
+
+    :return: None
+    """
+
     _basic("Deletando funcionário")
 
     cpf = input("CPF:\t")
@@ -59,6 +95,17 @@ def delete() -> None:
 
 
 def new_employee() -> None:
+    """
+    Adds a new employee to the system.
+
+    Asks the user for the employee's name, age, CPF, address and phone.
+    If the CPF is unique, the employee is added to the system.
+    If not, an error message is printed and the user is returned to
+    the main menu.
+
+    :return: None
+    """
+
     _basic("Adicionando novo funcionário")
 
     name = inputStr("Nome:\t")
@@ -84,6 +131,22 @@ def new_employee() -> None:
 
 
 def main_employee() -> None:
+    """
+    Main function of the employee module.
+
+    Runs an infinite loop that calls the employee screen
+    reads the user's option and executes the corresponding action,
+    which can be:
+
+    1. Add a new employee to the system
+    2. View all employees
+    3. Search for an employee
+    4. Remove an employee from the system
+    5. Edit an existing employee
+    0. Go back to the main menu
+
+    :return: None
+    """
     while True:
         clear()
         screen_employee()
