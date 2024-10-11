@@ -1,4 +1,4 @@
-from data.saveJson import SaveDatabase  # type: ignore
+from data.model import SaveDatabase  # type: ignore
 from typing import Dict
 from warehouse.view import infor_warehouse
 

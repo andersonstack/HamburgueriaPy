@@ -1,4 +1,4 @@
-from data.saveJson import SaveDatabase
+from data.model import SaveDatabase
 from employee.view import view_employee
 
 
