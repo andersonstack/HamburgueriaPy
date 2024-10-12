@@ -1,10 +1,11 @@
-from data.model import SaveDatabase  # type: ignore
+from data.saveFiles import SaveData
+from typing import Dict, Optional
 import sqlite3
 
 
-class Employee(SaveDatabase):
+class Employee(SaveData):
     def __init__(self):
-        super().__init__("./data/employee.json")
+        super().__init__("./data/funcionarios.db")
         self.conn = sqlite3.connect(self.db_path)
         self.create_table()
 
@@ -42,7 +43,7 @@ class Employee(SaveDatabase):
         current_status = self._find_cpf(cpf)
 
         if current_status is not None:
-            new_status = not current_status[6]
+            new_status = not current_status[0][6]
 
             if self._find_cpf(cpf):
                 with self.conn:
@@ -61,3 +62,25 @@ class Employee(SaveDatabase):
                 WHERE cpf = ?
             """, [cpf])
             return cursor.fetchall()
+
+    def visualize_employee(self, cpf: str) -> Optional[Dict[str, list]]:
+        cursor = self._find_cpf(cpf)
+
+        if cursor:
+            employee_data = cursor[0]
+
+            employee = {
+                employee_data[1]: [
+                    employee_data[2],
+                    employee_data[3],
+                    employee_data[4],
+                    employee_data[5]]
+            }
+            return employee
+
+        return None
+
+
+if __name__ == '__main__':
+    x = Employee()
+    x.visualize_employee("13321600420")

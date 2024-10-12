@@ -3,6 +3,7 @@ from employee.view import screen_employee
 from controller.inputs import inputInt, inputStr, inputAdrs
 from employee.model import Employee
 from view.styles import printS, printW
+from employee.view import view_employee
 
 
 def edit() -> None:
@@ -44,15 +45,17 @@ def search() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
-    _search = employee.search_employee(cpf)
-    print(_search)
-    if _search:
-        employee.search_employee(cpf)
-        printS("> Enter para continuar")
+    employee_data = employee.visualize_employee(cpf)
+
+    if employee_data is None:
+        printW("> CPF não alcançado! <Enter> para continuar")
         input()
         return
 
-    printW("> CPF não alcançado!")
+    view_employee(employee_data)
+    printS("> Enter para continuar")
+    input()
+    return
 
 
 def visualize_all_employees() -> None:
@@ -125,6 +128,7 @@ def new_employee() -> None:
         printW(f"{cpf} já foi registrado! Deseja ativa-lo ?")
         option = inputStr("Sim/Não:\t").lower()
         if option.startswith("s"):
+            printS(f"{cpf} ativado!")
             contract.update_employee(cpf)
         else:
             printW("Operação cancelada!\n")
@@ -174,4 +178,4 @@ def main_employee() -> None:
 
 
 if __name__ == "__main__":
-    main_employee()
+    search()
