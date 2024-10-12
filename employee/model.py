@@ -52,6 +52,7 @@ class Employee(SaveData):
                         SET active = ?
                         WHERE cpf = ?
                     """, [new_status, cpf])
+                    self.close_connection()
                     return True
         return False
 
@@ -112,3 +113,4 @@ class Employee(SaveData):
 if __name__ == '__main__':
     x = Employee()
     x.visualize_employee("13321600420")
+    x.close_connection()

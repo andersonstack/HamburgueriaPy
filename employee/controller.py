@@ -24,6 +24,7 @@ def edit() -> None:
     if employee_data is None:
         printW("> CPF não alcançado! <Enter> para continuar")
         input()
+        employee.close_connection()
         return
 
     view_employee(employee_data)
@@ -42,7 +43,7 @@ def edit() -> None:
         ]
     }
     employee.edit_employee(employee_edit, cpf)
-
+    employee.close_connection()
     input()
 
 
@@ -63,13 +64,13 @@ def search() -> None:
     employee_data = employee.visualize_employee(cpf)
     if employee_data is None:
         printW("> CPF não alcançado! <Enter> para continuar")
+        employee.close_connection()
         input()
         return
 
     view_employee(employee_data)
     printS("> Enter para continuar")
-    print(employee_data)
-
+    employee.close_connection()
     input()
     return
 
@@ -86,6 +87,7 @@ def visualize_all_employees() -> None:
     employee_data = employee.visualize_all_employee()
     view_employee(employee_data)
     printW("> Enter para continuar")
+    employee.close_connection()
     input()
 
 
@@ -149,10 +151,12 @@ def new_employee() -> None:
             contract.update_employee(cpf)
         else:
             printW("Operação cancelada!\n")
+        contract.close_connection()
         input()
         return
 
     printS(f"{name} foi adicionado ao sistema com sucesso!")
+    contract.close_connection()
     input()
 
 
