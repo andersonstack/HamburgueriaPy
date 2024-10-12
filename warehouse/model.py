@@ -70,6 +70,10 @@ class Warehouse(SaveData):
             for i in buys:
                 buy = {i[0]: [i[1], i[2]]}
                 all_buys.update(buy)
+        if len(all_buys) == 0:
+            print("Nenhum item no almoxarifado")
+            return
+
         infor_warehouse(all_buys, text="Itens no almoxarifado:")
 
     def visualize_buy(self, cod: int) -> Optional[Dict[str, list]] | bool:
@@ -96,6 +100,19 @@ class Warehouse(SaveData):
                 return True
         except sqlite3.OperationalError:
             return False
+
+    def edit_buy(self, cod: int, name: str) -> bool:
+        try:
+            with self.conn:
+                self.conn.execute("""
+                    UPDATE data
+                    SET name = ?
+                    WHERE id = ?
+                """, (name, cod))
+                return True
+        except sqlite3.OperationalError:
+            return False
+
 
 if __name__ == '__main__':
     x = Warehouse()

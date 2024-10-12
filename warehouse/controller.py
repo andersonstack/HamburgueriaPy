@@ -24,10 +24,10 @@ def delete_buy() -> None:
     if buy.visualize_buy(cod):
         confirm = input(f"Deletar {cod}?\n").upper()
         if confirm.startswith('S'):
-                buy.delete_buy(cod)
-                printS("Compra deletada com sucesso. <Enter>")
-        else
-                printW("Ação cancelada. <Enter>")
+            buy.delete_buy(cod)
+            printS("Compra deletada com sucesso. <Enter>")
+        else:
+            printW("Ação cancelada. <Enter>")
     else:
         printE("Código não alcançado! <Enter>")
 
@@ -64,13 +64,15 @@ def edit_buy() -> None:
     cod = inputInt("Digite o ID do produto:\n")
     if not buy.visualize_buy(cod):
         printE("Código não alcançado! <Enter>")
+        buy.close_connection()
         input()
         return
 
-    # name = inputStr("Nome do novo produto:\n")
-    # buy.edit_buy(str(cod), str(name))
+    name = inputStr("Nome do novo produto:\n")
+    buy.edit_buy(cod, name)
 
     printS("Item editado com sucesso. <Enter>")
+    buy.close_connection()
     input("")
 
 
@@ -97,4 +99,4 @@ def main_warehouse() -> None:
 
 
 if __name__ == "__main__":
-    delete_buy()
+    main_warehouse()
