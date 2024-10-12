@@ -11,8 +11,9 @@ def add_buy() -> None:
     quantity = inputInt("Quantidade:\n")
     print("")
     buy = Warehouse()
-    buy.add_buy(name=name, quantity=quantity)
+    buy.insert_data(name=name, quantity=quantity)
     printS("Compra cadastrada com sucesso. <Enter>")
+    buy.close_connection()
     input()
 
 
@@ -20,14 +21,13 @@ def delete_buy() -> None:
     _basic("deletar compra")
     cod = inputInt("Código:\n")
     buy = Warehouse()
-    if buy.view_buy(str(cod)):
+    if buy.visualize_buy(cod):
         confirm = input(f"Deletar {cod}?\n").upper()
-        match confirm:
-            case 'S':
-                buy.delete_buy(str(cod))
-                printS("Compra deletada com sucesso. <Enter>")
-            case _:
-                printW("Ação cancelada. <Enter>")
+        if confirm.startswith('S'):
+            buy.delete_buy(cod)
+            printS("Compra deletada com sucesso. <Enter>")
+        else:
+            printW("Ação cancelada. <Enter>")
     else:
         printE("Código não alcançado! <Enter>")
 
@@ -37,8 +37,9 @@ def delete_buy() -> None:
 def visualise_buys() -> None:
     _basic("Compras em almoxarifado")
     buy = Warehouse()
-    buy.view_warehouse()
+    buy.visualize_buys()
     printW("> Enter para continuar")
+    buy.close_connection()
     input()
 
 
@@ -46,10 +47,14 @@ def search_buy() -> None:
     _basic("Busca de item")
     buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
-    if not buy.view_buy(str(cod)):
+    if not buy.visualize_buy(cod):
         printE("Código não alcançado! <Enter>")
+        buy.close_connection()
+        input()
+        return
 
     printW("> Enter para continuar")
+    buy.close_connection()
     input()
 
 
@@ -57,15 +62,17 @@ def edit_buy() -> None:
     _basic("Edição de item")
     buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
-    if not buy.view_buy(str(cod)):
+    if not buy.visualize_buy(cod):
         printE("Código não alcançado! <Enter>")
+        buy.close_connection()
         input()
         return
 
     name = inputStr("Nome do novo produto:\n")
-    buy.edit_buy(str(cod), str(name))
+    buy.edit_buy(cod, name)
 
     printS("Item editado com sucesso. <Enter>")
+    buy.close_connection()
     input("")
 
 
@@ -89,3 +96,7 @@ def main_warehouse() -> None:
             case '0':
                 clear()
                 return
+
+
+if __name__ == "__main__":
+    main_warehouse()

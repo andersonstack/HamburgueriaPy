@@ -3,6 +3,7 @@ from employee.view import screen_employee
 from controller.inputs import inputInt, inputStr, inputAdrs
 from employee.model import Employee
 from view.styles import printS, printW
+from employee.view import view_employee
 
 
 def edit() -> None:
@@ -19,15 +20,31 @@ def edit() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
-
-    if employee.edit_employee(cpf):
-        printS("Funcionário editado. <Enter>")
+    employee_data = employee.visualize_employee(cpf)
+    if employee_data is None:
+        printW("> CPF não alcançado! <Enter> para continuar")
         input()
+        employee.close_connection()
         return
 
-    printW("CPF não alcançado! <Enter>")
+    view_employee(employee_data)
+
+    name = input(" | Nome:\t")
+    address = input(" | Endereço:\t")
+    age = input(" | Idade:\t")
+    phone = input(" | Telefone:\t")
+
+    employee_edit = {
+        cpf: [
+            name if name != "" else employee_data[cpf][0],
+            address if address != "" else employee_data[cpf][1],
+            age if age != "" else employee_data[cpf][2],
+            phone if phone != "" else employee_data[cpf][3],
+        ]
+    }
+    employee.edit_employee(employee_edit, cpf)
+    employee.close_connection()
     input()
-    return
 
 
 def search() -> None:
@@ -44,15 +61,18 @@ def search() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
-    _search = employee.search_employee(cpf)
-    print(_search)
-    if _search:
-        employee.search_employee(cpf)
-        printS("> Enter para continuar")
+    employee_data = employee.visualize_employee(cpf)
+    if employee_data is None:
+        printW("> CPF não alcançado! <Enter> para continuar")
+        employee.close_connection()
         input()
         return
 
-    printW("> CPF não alcançado!")
+    view_employee(employee_data)
+    printS("> Enter para continuar")
+    employee.close_connection()
+    input()
+    return
 
 
 def visualize_all_employees() -> None:
@@ -64,8 +84,16 @@ def visualize_all_employees() -> None:
 
     _basic("Todos os funcionários")
     employee = Employee()
-    employee.visualize_employees()
+    employee_data = employee.visualize_all_employee()
+    if len(employee_data) == 0:
+        printW("> Nenhum funcionário encontrado! <Enter> para continuar")
+        employee.close_connection()
+        input()
+        return
+
+    view_employee(employee_data)
     printW("> Enter para continuar")
+    employee.close_connection()
     input()
 
 
@@ -85,7 +113,7 @@ def delete() -> None:
     cpf = input("CPF:\t")
 
     contract = Employee()
-    if not contract.remove_employee(cpf):
+    if not contract.update_employee(cpf):
         printW(f"{cpf} não alcançado!")
         input()
         return
@@ -111,22 +139,30 @@ def new_employee() -> None:
     name = inputStr("Nome:\t")
     age = inputInt("Idade:\t")
     cpf = input("CPF:\t")
-    adress = inputAdrs("Endereço:\t")
+    address = inputAdrs("Endereço:\t")
     phone = input("Telefone:\t")
 
     contract = Employee()
-    if not contract.add_employee(
+    if not contract.insert_data(
                             name=name,
                             age=age,
                             cpf=cpf,
-                            adress=adress,
+                            address=address,
                             phone=phone
                     ):
-        printW(f"Não foi possível adicionar {cpf} ao sistema. CPF já existe!")
+        printW(f"{cpf} já foi registrado! Deseja ativa-lo ?")
+        option = inputStr("Sim/Não:\t").lower()
+        if option.startswith("s"):
+            printS(f"{cpf} ativado!")
+            contract.update_employee(cpf)
+        else:
+            printW("Operação cancelada!\n")
+        contract.close_connection()
         input()
         return
 
     printS(f"{name} foi adicionado ao sistema com sucesso!")
+    contract.close_connection()
     input()
 
 

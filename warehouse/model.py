@@ -1,67 +1,120 @@
-from data.saveJson import SaveJson  # type: ignore
-from typing import Dict
+from data.saveFiles import SaveData
+from typing import Dict, Optional
 from warehouse.view import infor_warehouse
+import sqlite3
 
 
-class Warehouse:
-    def __init__(self):
-        self.name = ""
-        self.price = 0.0
-        self.quantity = 0
-        self.warehouse = SaveJson("almoxarifado.json")
-        self.load_warehouse = self.warehouse.load_json()
+class Warehouse(SaveData):
+    def __init__(self) -> None:
+        super().__init__("./data/warehouse.db")
+        self.conn = sqlite3.connect(self.db_path)
+        self.create_table()
 
-    def add_buy(self, name: str, quantity: int) -> int:
-        if self.load_warehouse:
-            last_key = int(list(self.load_warehouse.keys())[-1])
-            id_ = last_key + 1
-        else:
-            id_ = 1
+    def create_table(self) -> None:
+        with self.conn:
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS data(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT,
+                    quantity INTEGER
+                )
+        """)
 
-        add_buy = self._verify_buy(name)
-        if len(add_buy) > 0:
-            for key in add_buy:
-                self._udpate_quantity(key, quantity)
-                return key
-
-        new_item = {id_: [name, quantity]}
-        self.warehouse.modify_json(data=new_item)
-        return id_
-
-    def view_warehouse(self) -> None:
-        infor_warehouse(self.load_warehouse, "Items em almoxarifado:")
-
-    def view_buy(self, ids: str) -> bool:
-        if ids not in self.load_warehouse:
-            return False
-
-        new_dict = {ids: self.load_warehouse[ids]}
-        infor_warehouse(new_dict, "")
+    def insert_data(self, name: str, quantity: int) -> bool:
+        if not self._verify_name(name):
+            try:
+                with self.conn:
+                    self.conn.execute("""
+                        INSERT INTO data(name, quantity)
+                        VALUES(?, ?)
+                    """, (name, quantity))
+                return True
+            except sqlite3.OperationalError:
+                return False
+        self._update_buy(name=name, quantity=quantity)
         return True
 
-    def delete_buy(self, ids: str) -> None:
-        del self.load_warehouse[ids]
-        new_dict = self.load_warehouse
-        self.warehouse.update_json(new_dict)
+    def _update_buy(self, name: str, quantity: int) -> None:
+        """
+        Updates an existing item in the warehouse.
 
-    def edit_buy(self, ids: str, name: str) -> None:
-        for key, value in self.load_warehouse.items():
-            if key == ids:
-                self.load_warehouse[ids] = [name, value[1]]
-                self.warehouse.update_json(self.load_warehouse)
+        Args:
+            name (str): The name of the item.
+            quantity (int): The quantity of the item to be added.
 
-    def _verify_buy(self, name) -> Dict[int, list]:
-        for cod, det in self.load_warehouse.items():
-            if name.upper() == det[0].upper():
-                return {cod: det}
-        return {}
+        Returns:
+            None
+        """
+        with self.conn:
+            self.conn.execute("""
+                        UPDATE data
+                        SET quantity = quantity + ?
+                        WHERE name = ?
+                        """, (quantity, name))
 
-    def _udpate_quantity(self, key, quantity) -> None:
-        if key in self.load_warehouse:
-            self.load_warehouse[key][1] += quantity
-            self.warehouse.modify_json(self.load_warehouse)
+    def _verify_name(self, name: str) -> bool:
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+                WHERE name = ?
+            """, [name])
+            return bool(cursor.fetchall())
+
+    def visualize_buys(self) -> None:
+        all_buys = {}
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+            """)
+            buys = cursor.fetchall()
+            for i in buys:
+                buy = {i[0]: [i[1], i[2]]}
+                all_buys.update(buy)
+        if len(all_buys) == 0:
+            print("Nenhum item no almoxarifado")
+            return
+
+        infor_warehouse(all_buys, text="Itens no almoxarifado:")
+
+    def visualize_buy(self, cod: int) -> Optional[Dict[str, list]] | bool:
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+                WHERE id = ?
+            """, (cod,))
+            data = cursor.fetchone()
+            if data is None:
+                return False
+            else:
+                data_buy = {data[0]: [data[1], data[2]]}
+                infor_warehouse(data_buy)
+                return data_buy
+
+    def delete_buy(self, cod: int) -> bool:
+        try:
+            with self.conn:
+                self.conn.execute("""
+                                DELETE FROM data
+                                WHERE id = ?
+                            """, (cod,))
+                return True
+        except sqlite3.OperationalError:
+            return False
+
+    def edit_buy(self, cod: int, name: str) -> bool:
+        try:
+            with self.conn:
+                self.conn.execute("""
+                    UPDATE data
+                    SET name = ?
+                    WHERE id = ?
+                """, (name, cod))
+                return True
+        except sqlite3.OperationalError:
+            return False
 
 
 if __name__ == '__main__':
-    buy = Warehouse()
-    buy.edit_buy(str(5), "Queijo")
+    x = Warehouse()
+    x.visualize_buy(2)
+    x.close_connection()

@@ -1,165 +1,116 @@
-from data.saveJson import SaveJson
-from employee.view import view_employee
+from data.saveFiles import SaveData
+from typing import Dict, Optional
+import sqlite3
 
 
-class Employee:
-    def __init__(self) -> None:
-        """
-        Constructor method.
+class Employee(SaveData):
+    def __init__(self):
+        super().__init__("./data/funcionarios.db")
+        self.conn = sqlite3.connect(self.db_path)
+        self.create_table()
 
-        Parameters:
-        self (Employee): The instance of the class
+    def create_table(self) -> None:
+        with self.conn:
+            self.conn.execute("""
+                CREATE TABLE IF NOT EXISTS data(
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    cpf TEXT UNIQUE,
+                    name TEXT UNIQUE,
+                    address TEXT,
+                    age INTEGER,
+                    phone TEXT,
+                    active BOOLEAN
+            )
+        """)
 
-        Initialize the Employee class with the following attributes:
-        - name (str): The name of the employee
-        - age (str): The age of the employee
-        - cpf (str): The CPF of the employee
-        - adress (str): The address of the employee
-        - phone (str): The phone of the employee
-        - employee (SaveJson): The SaveJson object to save and load the data
-        - load_employee (Dict[str, Any]): The dictionary with the data of all
-        the employees
-        """
-        self.name = ""
-        self.age = ""
-        self.cpf = ""
-        self.adress = ""
-        self.phone = ""
-        self.employee = SaveJson("funcionarios.json")
-        self.load_employee = self.employee.load_json()
-
-    def add_employee(
-            self, name: str, cpf: str,
-            age: int, adress: str, phone: str) -> bool:
-
-        """
-        Adds a new employee to the system.
-
-        Parameters:
-        name (str): The name of the employee
-        cpf (str): The CPF of the employee
-        age (int): The age of the employee
-        adress (str): The address of the employee
-        phone (str): The phone of the employee
-
-        Returns:
-        bool: True if the employee was added successfully, False otherwise
-        """
-        if not self._verify_cpf(cpf):
-            new_employee = {
-                cpf: [
-                    name,
-                    age,
-                    adress,
-                    phone,
-                    True
-                ]
-            }
-            self.employee.modify_json(data=new_employee)
-            return True
-        else:
-            print("Dados do funcionários pré-existentes")
-            active = input("Pressione <S> para ativar o cadastro\n")
-            if active.upper() in 'S':
-                self.load_employee[cpf][-1] = True
-                self.employee.update_json(self.load_employee)
-                return True
+    def insert_data(
+                    self,
+                    cpf: str,
+                    name: str,
+                    address: str,
+                    age: int,
+                    phone: str) -> bool:
+        if self._find_cpf(cpf):
             return False
+        with self.conn:
+            self.conn.execute("""
+                INSERT INTO data(cpf, name, address, age, phone, active)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, [cpf, name, address, age, phone, True])
+        return True
 
-    def remove_employee(self, cpf: str) -> bool:
-        """
-        Removes an employee from the system.
+    def update_employee(self, cpf: str) -> bool:
+        current_status = self._find_cpf(cpf)
 
-        Parameters:
-        cpf (str): The CPF of the employee to be removed
+        if current_status is not None:
+            new_status = not current_status[0][6]
 
-        Returns:
-        bool: True if the employee was removed successfully, False otherwise
-        """
-        if self._verify_cpf(cpf):
-            for keys in self.load_employee:
-                if cpf == keys:
-                    for details in self.load_employee[keys]:
-                        self.load_employee[cpf][-1] = False
-                        self.employee.update_json(self.load_employee)
-                        return True
+            if self._find_cpf(cpf):
+                with self.conn:
+                    self.conn.execute("""
+                        UPDATE data
+                        SET active = ?
+                        WHERE cpf = ?
+                    """, [new_status, cpf])
+                    self.close_connection()
+                    return True
         return False
 
-    def visualize_employees(self) -> None:
-        """
-        Visualizes all the employees in the system.
+    def _find_cpf(self, cpf: str):
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+                WHERE cpf = ?
+            """, [cpf])
+            return cursor.fetchall()
 
-        :return: None
-        """
-        view_employee(self.load_employee)
+    def visualize_employee(self, cpf: str) -> Optional[Dict[str, list]]:
+        cursor = self._find_cpf(cpf)
 
-    def edit_employee(self, cpf: str) -> bool:
-        """
-        Edits an existing employee in the system.
+        if cursor:
+            employee_data = cursor[0]
 
-        Parameters:
-        cpf (str): The CPF of the employee to be edited
-
-        Returns:
-        bool: True if the employee was edited successfully, False otherwise
-        """
-        if self._verify_cpf(cpf):
-            employee_details = self.load_employee[cpf]
-
-            print(f"Nome atual: {employee_details[0]}")
-            print(f"Idade atual: {employee_details[1]}")
-            print(f"Endereço atual: {employee_details[2]}")
-            print(f"Telefone atual: {employee_details[3]}")
-
-            print("Informações em branco permancem inalteradas\n")
-            name = input("Novo nome:\t")
-            age = input("Nova idade:\t")
-            adress = input("Novo endereço:\t")
-            phone = input("Novo telefone:\t")
-
-            updated_employee = {
-                cpf: [
-                    name if name else employee_details[0],
-                    int(age) if age else employee_details[1],
-                    adress if adress else employee_details[2],
-                    phone if phone else employee_details[3],
-                    True
-                ]
-            }
-
-            self.employee.update_json(data=updated_employee)
-            return True
-
-        return False
-
-    def search_employee(self, cpf: str) -> bool:
-        """
-        Searches for an existing employee in the system.
-
-        Parameters:
-        cpf (str): The CPF of the employee to be searched
-
-        Returns:
-        bool: True if the employee was found, False otherwise
-        """
-        if self._verify_cpf(cpf):
             employee = {
-                cpf: self.load_employee[cpf]
+                employee_data[1]: [
+                    employee_data[2],
+                    employee_data[3],
+                    employee_data[4],
+                    employee_data[5]]
             }
-            view_employee(employee)
-            return True
-        return False
+            return employee
 
-    def _verify_cpf(self, cpf: str) -> bool:
-        """
-        Verifies if a given CPF exists in the system.
+        return None
 
-        Parameters:
-        cpf (str): The CPF of the employee to be verified
+    def visualize_all_employee(self) -> Dict:
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+            """)
 
-        Returns:
-        bool: True if the CPF exists, False otherwise
-        """
-        if cpf in self.load_employee:
-            return True
-        return False
+            employee_data = cursor.fetchall()
+            all_employe = {}
+            for employe in employee_data:
+                employe_ = {
+                    employe[1]: [
+                        employe[2],
+                        employe[3],
+                        employe[4],
+                        employe[5]]
+                }
+                all_employe.update(employe_)
+            return all_employe
+
+    def edit_employee(self, data: Dict[str, list], cpf: str) -> None:
+        name, address, age, phone = data[cpf]
+        with self.conn:
+            self.conn.execute("""
+                UPDATE data
+                SET name = ?, address = ?, age = ?, phone = ?
+                WHERE cpf = ?
+            """, (name, address, age, phone, cpf))
+
+
+if __name__ == '__main__':
+    x = Employee()
+    x.visualize_employee("13321600420")
+    x.close_connection()
