@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 class SaveData(ABC):
     def __init__(self, name_file: str) -> None:
-        self.db_path = f"./data/{name_file}.db"
+        self.db_path = name_file
         self.conn = sqlite3.connect(self.db_path)
         self.create_table()
 
@@ -13,11 +13,10 @@ class SaveData(ABC):
         pass
 
     @abstractmethod
-    def insert_data(
-                    self,
-                    cpf: str,
-                    name: str,
-                    address: str,
-                    age: int,
-                    phone: str) -> None:
+    def insert_data(self, *args) -> bool:
         pass
+
+    def close_connection(self) -> None:
+        """Fecha a conexão com o banco de dados."""
+        if self.conn:
+            self.conn.close()
