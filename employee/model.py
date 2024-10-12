@@ -80,6 +80,34 @@ class Employee(SaveData):
 
         return None
 
+    def visualize_all_employee(self) -> Dict:
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+            """)
+
+            employee_data = cursor.fetchall()
+            all_employe = {}
+            for employe in employee_data:
+                employe_ = {
+                    employe[1]: [
+                        employe[2],
+                        employe[3],
+                        employe[4],
+                        employe[5]]
+                }
+                all_employe.update(employe_)
+            return all_employe
+
+    def edit_employee(self, data: Dict[str, list], cpf: str) -> None:
+        name, address, age, phone = data[cpf]
+        with self.conn:
+            self.conn.execute("""
+                UPDATE data
+                SET name = ?, address = ?, age = ?, phone = ?
+                WHERE cpf = ?
+            """, (name, address, age, phone, cpf))
+
 
 if __name__ == '__main__':
     x = Employee()

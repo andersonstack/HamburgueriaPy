@@ -20,15 +20,30 @@ def edit() -> None:
     cpf = input(" | CPF:\t")
 
     employee = Employee()
-
-    if employee.edit_employee(cpf):
-        printS("Funcionário editado. <Enter>")
+    employee_data = employee.visualize_employee(cpf)
+    if employee_data is None:
+        printW("> CPF não alcançado! <Enter> para continuar")
         input()
         return
 
-    printW("CPF não alcançado! <Enter>")
+    view_employee(employee_data)
+
+    name = input(" | Nome:\t")
+    address = input(" | Endereço:\t")
+    age = input(" | Idade:\t")
+    phone = input(" | Telefone:\t")
+
+    employee_edit = {
+        cpf: [
+            name if name != "" else employee_data[cpf][0],
+            address if address != "" else employee_data[cpf][1],
+            age if age != "" else employee_data[cpf][2],
+            phone if phone != "" else employee_data[cpf][3],
+        ]
+    }
+    employee.edit_employee(employee_edit, cpf)
+
     input()
-    return
 
 
 def search() -> None:
@@ -46,7 +61,6 @@ def search() -> None:
 
     employee = Employee()
     employee_data = employee.visualize_employee(cpf)
-
     if employee_data is None:
         printW("> CPF não alcançado! <Enter> para continuar")
         input()
@@ -54,6 +68,8 @@ def search() -> None:
 
     view_employee(employee_data)
     printS("> Enter para continuar")
+    print(employee_data)
+
     input()
     return
 
@@ -67,7 +83,8 @@ def visualize_all_employees() -> None:
 
     _basic("Todos os funcionários")
     employee = Employee()
-    employee.visualize_employees()
+    employee_data = employee.visualize_all_employee()
+    view_employee(employee_data)
     printW("> Enter para continuar")
     input()
 
@@ -178,4 +195,4 @@ def main_employee() -> None:
 
 
 if __name__ == "__main__":
-    search()
+    edit()
