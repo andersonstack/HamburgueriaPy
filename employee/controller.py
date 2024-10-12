@@ -85,6 +85,12 @@ def visualize_all_employees() -> None:
     _basic("Todos os funcionários")
     employee = Employee()
     employee_data = employee.visualize_all_employee()
+    if len(employee_data) == 0:
+        printW("> Nenhum funcionário encontrado! <Enter> para continuar")
+        employee.close_connection()
+        input()
+        return
+
     view_employee(employee_data)
     printW("> Enter para continuar")
     employee.close_connection()
@@ -199,4 +205,4 @@ def main_employee() -> None:
 
 
 if __name__ == "__main__":
-    edit()
+    main_employee()
