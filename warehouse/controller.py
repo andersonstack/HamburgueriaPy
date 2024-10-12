@@ -11,7 +11,7 @@ def add_buy() -> None:
     quantity = inputInt("Quantidade:\n")
     print("")
     buy = Warehouse()
-    buy.add_buy(name=name, quantity=quantity)
+    buy.insert_data(name=name, quantity=quantity)
     printS("Compra cadastrada com sucesso. <Enter>")
     input()
 
