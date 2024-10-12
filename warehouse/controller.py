@@ -13,6 +13,7 @@ def add_buy() -> None:
     buy = Warehouse()
     buy.insert_data(name=name, quantity=quantity)
     printS("Compra cadastrada com sucesso. <Enter>")
+    buy.close_connection()
     input()
 
 
@@ -37,8 +38,9 @@ def delete_buy() -> None:
 def visualise_buys() -> None:
     _basic("Compras em almoxarifado")
     buy = Warehouse()
-    buy.view_warehouse()
+    buy.visualize_buys()
     printW("> Enter para continuar")
+    buy.close_connection()
     input()
 
 
@@ -46,10 +48,14 @@ def search_buy() -> None:
     _basic("Busca de item")
     buy = Warehouse()
     cod = inputInt("Digite o ID do produto:\n")
-    if not buy.view_buy(str(cod)):
+    if not buy.visualize_buy(cod):
         printE("Código não alcançado! <Enter>")
+        buy.close_connection()
+        input()
+        return
 
     printW("> Enter para continuar")
+    buy.close_connection()
     input()
 
 
@@ -89,3 +95,7 @@ def main_warehouse() -> None:
             case '0':
                 clear()
                 return
+
+
+if __name__ == "__main__":
+    search_buy()

@@ -1,5 +1,5 @@
 from data.saveFiles import SaveData
-from typing import Dict
+from typing import Dict, Optional
 from warehouse.view import infor_warehouse
 import sqlite3
 
@@ -60,8 +60,34 @@ class Warehouse(SaveData):
             """, [name])
             return bool(cursor.fetchall())
 
+    def visualize_buys(self) -> None:
+        all_buys = {}
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+            """)
+            buys = cursor.fetchall()
+            for i in buys:
+                buy = {i[0]: [i[1], i[2]]}
+                all_buys.update(buy)
+        infor_warehouse(all_buys, text="Itens no almoxarifado:")
+
+    def visualize_buy(self, cod: int) -> Optional[Dict[str, list]] | bool:
+        with self.conn:
+            cursor = self.conn.execute("""
+                SELECT * FROM data
+                WHERE id = ?
+            """, (cod,))
+            data = cursor.fetchone()
+            if data is None:
+                return False
+            else:
+                data_buy = {data[0]: [data[1], data[2]]}
+                infor_warehouse(data_buy)
+                return data_buy
+
 
 if __name__ == '__main__':
     x = Warehouse()
-    x.insert_data(name="teste", quantity=10)
+    x.visualize_buy(2)
     x.close_connection()
