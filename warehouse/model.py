@@ -86,6 +86,16 @@ class Warehouse(SaveData):
                 infor_warehouse(data_buy)
                 return data_buy
 
+    def delete_buy(self, cod: int) -> bool:
+        try:
+            with self.conn:
+                self.conn.execute("""
+                                DELETE FROM data
+                                WHERE id = ?
+                            """, (cod,))
+                return True
+        except sqlite3.OperationalError:
+            return False
 
 if __name__ == '__main__':
     x = Warehouse()
