@@ -1,6 +1,7 @@
 from view import screens
 from warehouse.controller import main_warehouse
 from employee.controller import main_employee
+from menu.controller import main_menu
 
 
 get_out = False
@@ -15,7 +16,7 @@ while not get_out:
         case '2':
             main_employee()
         case '3':
-            ...
+            main_menu()
         case '4':
             screens.screen_report()
         case '5':

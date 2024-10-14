@@ -5,7 +5,7 @@ from view.styles import printW, printS
 from controller.inputs import inputStr, inputFloat, inputInt
 
 
-def add_hamburguer():
+def add_burguer():
     _basic("Adicionar Hambúrguer")
     name = inputStr("Hambúrguer: ")
     price = inputFloat("Preço: ")
@@ -67,6 +67,10 @@ def delete_burguer() -> None:
         return
 
 
+def edit_burguer():
+    ...
+
+
 def main_menu() -> None:
     while True:
         clear()
@@ -76,7 +80,7 @@ def main_menu() -> None:
         while True:
             match option:
                 case '1':
-                    add_hamburguer()
+                    add_burguer()
                     ...
                 case '2':
                     view_menu()
@@ -88,7 +92,7 @@ def main_menu() -> None:
                     delete_burguer()
                     ...
                 case '5':
-                    # edit
+                    edit_burguer()
                     ...
                 case '0':
                     clear()
@@ -96,4 +100,4 @@ def main_menu() -> None:
 
 
 if __name__ == "__main__":
-    add_hamburguer()
+    add_burguer()
