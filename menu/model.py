@@ -65,6 +65,36 @@ class Menu(SaveData):
                 print("Não alcançado.")
                 return
 
+    def delete_hamburguer(self, cod: int) -> bool:
+        with self.conn:
+            try:
+                self.conn.execute(
+                    """
+                    DELETE FROM data
+                    WHERE id = ?
+                    """, (cod,)
+                )
+                return True
+            except sqlite3.OperationalError:
+                return False
+
+    def edit_hamburguer(
+            self, cod: int, name: str,
+            ingredients: List[str], price: float) -> bool:
+        with self.conn:
+            try:
+                self.conn.execute(
+                    """
+                    UPDATE data
+                    SET name = ?, ingredients = ?, price = ?
+                    WHERE id = ?
+                    """, (name, dumps(ingredients, ensure_ascii=False),
+                          price, cod)
+                )
+                return True
+            except sqlite3.OperationalError:
+                return False
+
 
 if __name__ == "__main__":
     # name = "X-TUDO"
@@ -73,4 +103,6 @@ if __name__ == "__main__":
     x = Menu()
     # x.insert_data(name=name, ingredients=ingredients, price=price)
     # x.view_menu()
-    x.visualize_hamburguer(2)
+    # x.visualize_hamburguer(2)
+    y = x.edit_hamburguer(2, "PÃO", ['OVO'], 4.99)
+    print(y)

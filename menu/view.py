@@ -1,8 +1,8 @@
-from typing import Any
-from view.screens import _basic
+from typing import List
+from view.screens import _basic, header, options
 
 
-def visualize_menu(menu: list[Any]) -> None:
+def visualize_menu(menu: List[str]) -> None:
     _basic("Menu de Lanches")
     total_length = 114  # Comprimento total da linha
 
@@ -15,7 +15,8 @@ def visualize_menu(menu: list[Any]) -> None:
         # Calcular os espaços para alinhamento
         row_id = total_length - len(f" | CÓD: {item_id} |")
         row_name = total_length - len(f" | Nome: {name} |")
-        row_ingredients = total_length - len(f" | Ingredientes: {', '.join(ingredients)} |")
+        row_ingredients = (total_length -
+                           len(f" | Ingredientes: {', '.join(ingredients)} |"))
         row_price = total_length - len(f" | Preço: R$ {price:.2f} |")
 
         # Exibir os dados formatados
@@ -24,3 +25,15 @@ def visualize_menu(menu: list[Any]) -> None:
         print(f" | Ingredientes: {', '.join(ingredients)}{' ' * row_ingredients}|")
         print(f" | Preço: R$ {price:.2f}{' ' * row_price}|")
         print(f"-|{'-' * 110}|-")
+
+
+def screen_menu() -> None:
+    header("Cardápio")
+    options(
+        "adicionar hambúrguer",
+        "visualizar hambúrguer's",
+        "buscar hambúrguer",
+        "deletar hamburguer",
+        "editar hambúrguer",
+        "menu principal")
+    print(">> Escolha uma opção\n")
