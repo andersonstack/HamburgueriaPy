@@ -1,8 +1,8 @@
-from typing import Tuple, Any
+from typing import Any
 from view.screens import _basic
 
 
-def visualize_menu(menu: Tuple[Any]) -> None:
+def visualize_menu(menu: list[Any]) -> None:
     _basic("Menu de Lanches")
     total_length = 114  # Comprimento total da linha
 
