@@ -35,7 +35,7 @@ def screen_main() -> None:
     options(
         "almoxarifado",
         "funcionarios",
-        "clientes",
+        "cardápio",
         "relatórios",
         "vendas",
         "informações",
