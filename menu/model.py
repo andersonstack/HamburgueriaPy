@@ -1,4 +1,5 @@
 from data.saveFiles import SaveData
+from menu.view import visualize_menu
 from typing import List
 from json import dumps
 import sqlite3
@@ -33,9 +34,21 @@ class Menu(SaveData):
                 """, (name, dumps(ingredients, ensure_ascii=False), price)
             )
 
+    def view_menu(self) -> None:
+        with self.conn:
+            cursor = self.conn.execute(
+                """
+                SELECT * FROM data
+                """
+            )
+            menu = cursor.fetchall()
+            visualize_menu(menu)
+
+
 if __name__ == "__main__":
-    name = "X-TUDO"
-    ingredients = ['Pão', 'Bacon', 'Bacon', 'Salsicha', 'Ovo']
-    price = 10.99
+    # name = "X-TUDO"
+    # ingredients = ['Pão', 'Bacon', 'Bacon', 'Salsicha', 'Ovo']
+    # price = 10.99
     x = Menu()
-    x.insert_data(name=name, ingredients=ingredients, price=price)
+    # x.insert_data(name=name, ingredients=ingredients, price=price)
+    x.view_menu()
