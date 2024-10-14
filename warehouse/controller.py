@@ -1,7 +1,7 @@
 from view.screens import clear, _basic
 from warehouse.model import Warehouse
 from warehouse.view import screen_warehouse
-from controller.inputs import inputStr, inputInt
+from controller.inputs import inputStr, inputInt, inputt
 from view.styles import printS, printW, printE
 
 
@@ -80,7 +80,7 @@ def main_warehouse() -> None:
     while True:
         clear()
         screen_warehouse()
-        option = input("")
+        option = inputt("")
 
         match option:
             case '1':

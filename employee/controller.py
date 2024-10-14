@@ -1,6 +1,6 @@
 from view.screens import clear, _basic
 from employee.view import screen_employee
-from controller.inputs import inputInt, inputStr, inputAdrs
+from controller.inputs import inputInt, inputStr, inputAdrs, inputt
 from employee.model import Employee
 from view.styles import printS, printW
 from employee.view import view_employee
@@ -186,7 +186,7 @@ def main_employee() -> None:
     while True:
         clear()
         screen_employee()
-        option = input("")
+        option = inputt("")
 
         match option:
             case '1':

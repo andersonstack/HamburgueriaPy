@@ -1,4 +1,5 @@
 from view import screens
+from controller.inputs import inputt
 from warehouse.controller import main_warehouse
 from employee.controller import main_employee
 from menu.controller import main_menu
@@ -8,7 +9,7 @@ get_out = False
 
 while not get_out:
     screens.screen_main()
-    option = input("")
+    option = inputt("")
 
     match option:
         case '1':

@@ -2,7 +2,7 @@ from menu.view import screen_menu
 from menu.model import Menu
 from view.screens import clear, _basic
 from view.styles import printW, printS, printE
-from controller.inputs import inputStr, inputFloat, inputInt
+from controller.inputs import inputStr, inputFloat, inputInt, inputt
 
 
 def collect_burguer_data() -> tuple:
@@ -127,7 +127,7 @@ def main_menu() -> None:
     while True:
         clear()
         screen_menu()
-        option = input("")
+        option = inputt("")
 
         match option:
             case '1':
