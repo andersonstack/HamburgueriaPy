@@ -1,13 +1,13 @@
 from menu.view import screen_menu
 from menu.model import Menu
 from view.screens import clear, _basic
-from view.styles import printW, printS
+from view.styles import printW, printS, printE
 from controller.inputs import inputStr, inputFloat, inputInt
 
 
-def add_burguer():
-    _basic("Adicionar Hambúrguer")
-    name = inputStr("Hambúrguer: ")
+def collect_burguer_data() -> tuple:
+    """Coleta os dados do hambúrguer (nome, preço, ingredientes)"""
+    name = inputStr("Nome do Hambúrguer: ")
     price = inputFloat("Preço: ")
 
     ingredients = []
@@ -18,7 +18,7 @@ def add_burguer():
         ingredients.append(ingredient)
 
         if len(ingredient) >= 1:
-            printW("Deseja sair? ")
+            printW("Deseja parar de adicionar ingredientes? ")
             op = input().upper()
 
             if op.startswith("S"):
@@ -26,15 +26,60 @@ def add_burguer():
 
         numbers += 1
 
-    hamburguer = Menu()
-    hamburguer.insert_data(name=name, ingredients=ingredients, price=price)
-    hamburguer.close_connection()
+    return name, ingredients, price
+
+
+def handle_burguer(menu: Menu, cod: int | None = None) -> None:
+    """
+    Lida com a adição ou edição de um hambúrguer.
+    Se `cod` for fornecido, edita; senão, adiciona um novo hambúrguer.
+    """
+    try:
+        if cod:
+            printW(f"Editando hambúrguer de código {cod}...")
+            menu.visualize_hamburguer(cod)
+
+        name, ingredients, price = collect_burguer_data()
+
+        if cod:
+            if menu.edit_hamburguer(cod, name, ingredients, price):
+                printS("Hambúrguer editado com sucesso!")
+            else:
+                printE("Falha ao editar hambúrguer.")
+        else:
+            if menu.insert_data(
+                    name=name, ingredients=ingredients, price=price):
+                printS("Hambúrguer adicionado com sucesso!")
+            else:
+                printE("Falha ao adicionar hambúrguer.")
+    except Exception as e:
+        printE(f"Erro ao processar hambúrguer: {e}")
+    finally:
+        menu.close_connection()
+    input()
+
+
+def add_burguer():
+    _basic("Adicionar Hambúrguer")
+    menu = Menu()
+    handle_burguer(menu)
+
+
+def edit_burguer():
+    _basic("Editar Hambúrguer")
+    cod = inputInt("Código: ")
+    menu = Menu()
+    handle_burguer(menu, cod)
 
 
 def view_menu() -> None:
     menu = Menu()
-    menu.view_menu()
-    menu.close_connection()
+    try:
+        menu.view_menu()
+    except Exception as e:
+        printE(f"Erro ao visualizar o menu: {e}")
+    finally:
+        menu.close_connection()
     printW("> Enter para continuar")
     input()
 
@@ -42,8 +87,12 @@ def view_menu() -> None:
 def search_burguer() -> None:
     cod = inputInt("Código: ")
     menu = Menu()
-    menu.visualize_hamburguer(cod)
-    menu.close_connection()
+    try:
+        menu.visualize_hamburguer(cod)
+    except Exception as e:
+        printE(f"Erro ao buscar hambúrguer: {e}")
+    finally:
+        menu.close_connection()
     printW("> Enter para continuar")
     input()
 
@@ -52,23 +101,22 @@ def delete_burguer() -> None:
     _basic("Deletar Hambúrguer")
     cod = inputInt("Código: ")
     menu = Menu()
-    menu.visualize_hamburguer(1)
-    printW("Deletar Hambúrguer? \n")
-    confirm = input().upper()
-    if confirm.startswith("S"):
-        menu.delete_hamburguer(cod)
+    try:
+        menu.visualize_hamburguer(cod)
+        printW("Deletar Hambúrguer? \n")
+        confirm = input().upper()
+        if confirm.startswith("S"):
+            if menu.delete_hamburguer(cod):
+                printS("Hambúrguer deletado com sucesso!")
+            else:
+                printE("Falha ao deletar hambúrguer.")
+        else:
+            printW("Ação cancelada.")
+    except Exception as e:
+        printE(f"Erro ao deletar hambúrguer: {e}")
+    finally:
         menu.close_connection()
-        printS("Hambúrguer deletado com sucesso. <Enter>")
-        input()
-        return
-    else:
-        printW("Ação cancelada. <Enter>")
-        input()
-        return
-
-
-def edit_burguer():
-    ...
+    input()
 
 
 def main_menu() -> None:
