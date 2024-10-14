@@ -57,6 +57,7 @@ def handle_burguer(menu: Menu, cod: int | None = None) -> None:
     finally:
         menu.close_connection()
     input()
+    return
 
 
 def add_burguer():
@@ -82,6 +83,7 @@ def view_menu() -> None:
         menu.close_connection()
     printW("> Enter para continuar")
     input()
+    return
 
 
 def search_burguer() -> None:
@@ -95,6 +97,7 @@ def search_burguer() -> None:
         menu.close_connection()
     printW("> Enter para continuar")
     input()
+    return
 
 
 def delete_burguer() -> None:
@@ -117,6 +120,7 @@ def delete_burguer() -> None:
     finally:
         menu.close_connection()
     input()
+    return
 
 
 def main_menu() -> None:
@@ -125,27 +129,21 @@ def main_menu() -> None:
         screen_menu()
         option = input("")
 
-        while True:
-            match option:
-                case '1':
-                    add_burguer()
-                    ...
-                case '2':
-                    view_menu()
-                    ...
-                case '3':
-                    search_burguer()
-                    ...
-                case '4':
-                    delete_burguer()
-                    ...
-                case '5':
-                    edit_burguer()
-                    ...
-                case '0':
-                    clear()
-                    return
+        match option:
+            case '1':
+                add_burguer()
+            case '2':
+                view_menu()
+            case '3':
+                search_burguer()
+            case '4':
+                delete_burguer()
+            case '5':
+                edit_burguer()
+            case '0':
+                clear()
+                return
 
 
 if __name__ == "__main__":
-    add_burguer()
+    edit_burguer()
