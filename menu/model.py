@@ -17,7 +17,7 @@ class Menu(SaveData):
                 """
                 CREATE TABLE IF NOT EXISTS data(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    name TEXT UNIQUE,
+                    name TEXT,
                     ingredients LIST,
                     price FLOATING
                 )
