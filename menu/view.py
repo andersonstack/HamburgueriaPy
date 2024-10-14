@@ -15,8 +15,8 @@ def visualize_menu(menu: List[str]) -> None:
         # Calcular os espaços para alinhamento
         row_id = total_length - len(f" | CÓD: {item_id} |")
         row_name = total_length - len(f" | Nome: {name} |")
-        row_ingredients = (total_length -
-                           len(f" | Ingredientes: {', '.join(ingredients)} |"))
+        row_ingredients = (
+            total_length - len(f" | Ingredientes: {', '.join(ingredients)} |"))
         row_price = total_length - len(f" | Preço: R$ {price:.2f} |")
 
         # Exibir os dados formatados

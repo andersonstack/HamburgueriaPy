@@ -1,7 +1,7 @@
 from menu.view import screen_menu
 from menu.model import Menu
 from view.screens import clear, _basic
-from view.styles import printW
+from view.styles import printW, printS
 from controller.inputs import inputStr, inputFloat, inputInt
 
 
@@ -48,6 +48,25 @@ def search_burguer() -> None:
     input()
 
 
+def delete_burguer() -> None:
+    _basic("Deletar Hambúrguer")
+    cod = inputInt("Código: ")
+    menu = Menu()
+    menu.visualize_hamburguer(1)
+    printW("Deletar Hambúrguer? \n")
+    confirm = input().upper()
+    if confirm.startswith("S"):
+        menu.delete_hamburguer(cod)
+        menu.close_connection()
+        printS("Hambúrguer deletado com sucesso. <Enter>")
+        input()
+        return
+    else:
+        printW("Ação cancelada. <Enter>")
+        input()
+        return
+
+
 def main_menu() -> None:
     while True:
         clear()
@@ -66,7 +85,7 @@ def main_menu() -> None:
                     search_burguer()
                     ...
                 case '4':
-                    # delete
+                    delete_burguer()
                     ...
                 case '5':
                     # edit
