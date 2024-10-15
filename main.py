@@ -3,6 +3,7 @@ from controller.inputs import inputt
 from warehouse.controller import main_warehouse
 from employee.controller import main_employee
 from menu.controller import main_menu
+from sales.controller import main_sales
 
 
 get_out = False
@@ -21,7 +22,7 @@ while not get_out:
         case '4':
             screens.screen_report()
         case '5':
-            screens.screen_sales()
+            main_sales()
         case '6':
             screens.screen_infor()
         case '0':
