@@ -8,9 +8,9 @@ class Warehouse(SaveData):
     def __init__(self) -> None:
         super().__init__("./data/warehouse.db")
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
-    def create_table(self) -> None:
+    def _create_table(self) -> None:
         with self.conn:
             self.conn.execute("""
                 CREATE TABLE IF NOT EXISTS data(
@@ -21,20 +21,22 @@ class Warehouse(SaveData):
         """)
 
     def insert_data(self, name: str, quantity: int) -> bool:
-        if not self._verify_name(name):
-            try:
-                with self.conn:
-                    self.conn.execute("""
-                        INSERT INTO data(name, quantity)
-                        VALUES(?, ?)
-                    """, (name, quantity))
-                return True
-            except sqlite3.OperationalError:
-                return False
-        self._update_buy(name=name, quantity=quantity)
-        return True
+        if self._verify_name(name):
+            return self._update_buy(name, quantity)
+        return self._add_new_buy(name, quantity)
 
-    def _update_buy(self, name: str, quantity: int) -> None:
+    def _add_new_buy(self, name: str, quantity: int) -> bool:
+        try:
+            with self.conn:
+                self.conn.execute("""
+                    INSERT INTO data(name, quantity)
+                    VALUES (?, ?)
+                """, (name, quantity))
+                return True
+        except sqlite3.OperationalError:
+            return False
+
+    def _update_buy(self, name: str, quantity: int) -> bool:
         """
         Updates an existing item in the warehouse.
 
@@ -45,71 +47,75 @@ class Warehouse(SaveData):
         Returns:
             None
         """
-        with self.conn:
-            self.conn.execute("""
-                        UPDATE data
-                        SET quantity = quantity + ?
-                        WHERE name = ?
-                        """, (quantity, name))
+        try:
+            with self.conn:
+                self.conn.execute("""
+                    UPDATE data
+                    SET quantity = quantity + ?
+                    WHERE name = ?
+                """, (quantity, name))
+            return True
+        except sqlite3.OperationalError:
+            return False
 
     def _verify_name(self, name: str) -> bool:
         with self.conn:
             cursor = self.conn.execute("""
                 SELECT * FROM data
                 WHERE name = ?
-            """, [name])
+            """, (name,))
             return bool(cursor.fetchall())
 
     def visualize_buys(self) -> None:
+        all_buys = self._fetch_all_buys()
+        if not all_buys:
+            print("Nenhum item no almoxarifado")
+        else:
+            infor_warehouse(all_buys, text="Itens no almoxarifado:")
+
+    def _fetch_all_buys(self) -> Dict[int, list]:
         all_buys = {}
         with self.conn:
             cursor = self.conn.execute("""
                 SELECT * FROM data
             """)
-            buys = cursor.fetchall()
-            for i in buys:
-                buy = {i[0]: [i[1], i[2]]}
-                all_buys.update(buy)
-        if len(all_buys) == 0:
-            print("Nenhum item no almoxarifado")
-            return
+            for row in cursor:
+                all_buys[row[0]] = [row[1], row[2]]
+            return all_buys
 
-        infor_warehouse(all_buys, text="Itens no almoxarifado:")
+    def visualize_buy(self, cod: int) -> Optional[Dict[int, list]] | bool:
+        data_buy = self._fetch_single_buy(cod)
+        if data_buy:
+            infor_warehouse(data_buy)
+            return data_buy
+        return None
 
-    def visualize_buy(self, cod: int) -> Optional[Dict[str, list]] | bool:
+    def _fetch_single_buy(self, cod: int) -> Optional[Dict[int, list]]:
         with self.conn:
             cursor = self.conn.execute("""
                 SELECT * FROM data
                 WHERE id = ?
             """, (cod,))
             data = cursor.fetchone()
-            if data is None:
-                return False
-            else:
-                data_buy = {data[0]: [data[1], data[2]]}
-                infor_warehouse(data_buy)
-                return data_buy
+            if data:
+                return {data[0]: [data[1], data[2]]}
+        return None
 
     def delete_buy(self, cod: int) -> bool:
-        try:
-            with self.conn:
-                self.conn.execute("""
-                                DELETE FROM data
-                                WHERE id = ?
-                            """, (cod,))
-                return True
-        except sqlite3.OperationalError:
-            return False
+        return self._execute_query("""
+            DELETE FROM data WHERE id = ?
+        """, (cod,))
 
     def edit_buy(self, cod: int, name: str) -> bool:
+        return self._execute_query("""
+            UPDATE data SET name = ? WHERE id = ?
+        """, (name, cod))
+
+    def _execute_query(self, query: str, params: tuple) -> bool:
         try:
             with self.conn:
-                self.conn.execute("""
-                    UPDATE data
-                    SET name = ?
-                    WHERE id = ?
-                """, (name, cod))
-                return True
+                self.conn.execute(query, params)
+            return True
         except sqlite3.OperationalError:
             return False
 
