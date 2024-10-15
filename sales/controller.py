@@ -3,6 +3,14 @@ from controller.inputs import inputt
 from view.screens import clear
 
 
+def handle_sell():
+    ...
+
+
+def sell():
+    ...
+
+
 def main_sales():
     while True:
         clear()
@@ -11,8 +19,7 @@ def main_sales():
 
         match option:
             case '1':
-                # add
-                ...
+                sell()
             case '2':
                 # visualize
                 ...

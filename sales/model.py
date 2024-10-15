@@ -8,7 +8,7 @@ class Sales(SaveData):
     def __init__(self):
         super().__init__("./data/sales.db")
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
     def _execute_query(self, query: str, params: tuple = ()) -> bool:
         try:
@@ -18,7 +18,7 @@ class Sales(SaveData):
         except sqlite3.OperationalError:
             return False
 
-    def create_table(self):
+    def _create_table(self):
         query = """
             CREATE TABLE IF NOT EXISTS data(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

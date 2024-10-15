@@ -9,7 +9,7 @@ class Menu(SaveData):
     def __init__(self) -> None:
         super().__init__("./data/cardapio.db")
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
     def _execute_query(self, query: str, params: tuple = ()) -> bool:
         try:
@@ -19,7 +19,7 @@ class Menu(SaveData):
         except sqlite3.OperationalError:
             return False
 
-    def create_table(self) -> None:
+    def _create_table(self) -> None:
         with self.conn:
             self.conn.execute(
                 """

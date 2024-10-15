@@ -6,10 +6,10 @@ class SaveData(ABC):
     def __init__(self, name_file: str) -> None:
         self.db_path = name_file
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
     @abstractmethod
-    def create_table(self) -> None:
+    def _create_table(self) -> None:
         pass
 
     @abstractmethod

@@ -7,9 +7,9 @@ class Employee(SaveData):
     def __init__(self):
         super().__init__("./data/funcionarios.db")
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
-    def create_table(self) -> None:
+    def _create_table(self) -> None:
         with self.conn:
             self.conn.execute("""
                 CREATE TABLE IF NOT EXISTS data(
