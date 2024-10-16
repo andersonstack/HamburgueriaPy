@@ -1,6 +1,4 @@
 from data.saveFiles import SaveData
-from typing import List
-from json import dumps
 import sqlite3
 
 
@@ -23,23 +21,21 @@ class Sales(SaveData):
             CREATE TABLE IF NOT EXISTS data(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name_table TEXT,
-                food_order LIST,
+                food_order INTEGER,
                 price FLOATING
         )"""
         self.conn.execute(query)
 
     def insert_data(
             self, name_table: str,
-            food_order: List[str], price: float) -> bool:
+            food_order: int, price: float) -> bool:
         query = """
         INSERT INTO data(name_table, food_order, price)
         VALUES (?, ?, ?)
         """
-        params = (name_table, dumps(food_order, ensure_ascii=False), price)
+        params = (name_table, food_order, price)
         return self._execute_query(query, params)
 
 
 if __name__ == "__main__":
-    x = Sales()
-    y = x.insert_data(name_table="1", food_order=['X-TUDO', '1'], price=9.99)
-    print(y)
+    ...

@@ -113,8 +113,19 @@ class Menu(SaveData):
         except sqlite3.OperationalError:
             return False
 
+    def fetch_price(self, cod: int) -> float:
+        query = """
+            SELECT price
+            FROM data
+            WHERE id = ?
+        """
+        with self.conn:
+            cursor = self.conn.execute(query, (cod,))
+            result = cursor.fetchone()
+            return result[0]
+
 
 if __name__ == "__main__":
     x = Menu()
-    y = x._check_index(4)
+    y = x.fetch_price(1)
     print(y)

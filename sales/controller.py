@@ -3,36 +3,51 @@ from controller.inputs import inputt, inputInt
 from view.styles import printW, printS
 from view.screens import clear
 from menu.model import Menu
+from sales.model import Sales
 from warehouse.model import Warehouse
 from typing import Dict
 
 
 def extract_ingredients(pedido, quantity) -> Dict[str, int]:
-    menu = Menu()
-    ingredients = menu.handle_hamburguer(pedido)
-    if not ingredients:
-        return {}
+    try:
+        menu = Menu()
+        ingredients = menu.handle_hamburguer(pedido)
+        if not ingredients:
+            return {}
 
-    ingredients_count: Dict[str, int] = {}
+        ingredients_count: Dict[str, int] = {}
 
-    for i in ingredients:
-        ingredient_clean = i.strip('\"')
-        if ingredient_clean in ingredients_count:
-            ingredients_count[ingredient_clean] += 1
-        else:
-            ingredients_count[ingredient_clean] = 1
+        for i in ingredients:
+            ingredient_clean = i.strip('\"')
+            if ingredient_clean in ingredients_count:
+                ingredients_count[ingredient_clean] += 1
+            else:
+                ingredients_count[ingredient_clean] = 1
 
-    for i, j in ingredients_count.items():
-        ingredients_count[i] = j * quantity
-    return ingredients_count
+        for i, j in ingredients_count.items():
+            ingredients_count[i] = j * quantity
+        return ingredients_count
+    finally:
+        menu.close_connection()
 
 
 def verify_ingredients(ingredients: Dict[str, int]) -> bool:
-    warehouse = Warehouse()
-    items = warehouse.verify_ingredients(ingredients)
-    if items:
-        return True
-    return False
+    try:
+        warehouse = Warehouse()
+        items = warehouse.verify_ingredients(ingredients)
+        if items:
+            return True
+        return False
+    finally:
+        warehouse.close_connection()
+
+
+def get_price(cod: int) -> float:
+    try:
+        price = Menu()
+        return price.fetch_price(cod)
+    finally:
+        price.close_connection()
 
 
 def handle_sell(pedido: int, quantity: int) -> bool:
@@ -50,7 +65,9 @@ def sell():
     quantity = inputInt("Quantia:\n")
 
     if handle_sell(pedido, quantity):
-        print("ok")
+        price = get_price(pedido)
+        sales = Sales()
+        sales.insert_data("Anderson", pedido, price)
         return
 
     printW("Erro ao fazer o pedido. <Enter>")
