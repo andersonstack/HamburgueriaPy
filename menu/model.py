@@ -1,7 +1,7 @@
 from data.saveFiles import SaveData
 from menu.view import visualize_menu
 from typing import List
-from json import dumps
+from json import dumps, loads
 import sqlite3
 
 
@@ -84,14 +84,23 @@ class Menu(SaveData):
         params = (name, dumps(ingredients, ensure_ascii=False), price, cod)
         return self._execute_query(query, params)
 
+    def handle_hamburguer(self, cod: int):
+        self.visualize_hamburguer(cod)
+        query = """
+            SELECT ingredients
+            FROM data
+            WHERE id = ?
+        """
+        with self.conn:
+            cursor = self.conn.execute(query, (cod,))
+            result = cursor.fetchone()
+            if result:
+                return loads(result[0])
+            else:
+                return print("nao ")
+
 
 if __name__ == "__main__":
-    # name = "X-TUDO"
-    # ingredients = ['Pão', 'Bacon', 'Bacon', 'Salsicha', 'Ovo']
-    # price = 10.99
     x = Menu()
-    # x.insert_data(name=name, ingredients=ingredients, price=price)
-    # x.view_menu()
-    # x.visualize_hamburguer(2)
-    y = x.edit_hamburguer(2, "PÃO", ['OVO'], 4.99)
+    y = x.handle_hamburguer(3)
     print(y)
