@@ -1,5 +1,5 @@
-from view.styles import printE
 from view.screens import clear
+from view.styles import printE
 import sys
 
 

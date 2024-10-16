@@ -1,7 +1,7 @@
 from data.saveFiles import SaveData
+from json import dumps, loads
 from menu.view import visualize_menu
 from typing import List
-from json import dumps, loads
 import sqlite3
 
 

@@ -1,8 +1,8 @@
-from menu.view import screen_menu
+from controller.inputs import inputStr, inputFloat, inputInt, inputt
 from menu.model import Menu
+from menu.view import screen_menu
 from view.screens import clear, _basic
 from view.styles import printW, printS, printE
-from controller.inputs import inputStr, inputFloat, inputInt, inputt
 
 
 def collect_burguer_data() -> tuple:

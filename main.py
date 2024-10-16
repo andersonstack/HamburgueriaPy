@@ -1,9 +1,9 @@
-from view import screens
 from controller.inputs import inputt
-from warehouse.controller import main_warehouse
 from employee.controller import main_employee
 from menu.controller import main_menu
 from sales.controller import main_sales
+from view import screens
+from warehouse.controller import main_warehouse
 
 
 get_out = False

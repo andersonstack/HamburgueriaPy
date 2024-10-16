@@ -1,9 +1,9 @@
-from view.screens import clear, _basic
-from employee.view import screen_employee
 from controller.inputs import inputInt, inputStr, inputAdrs, inputt
 from employee.model import Employee
-from view.styles import printS, printW
+from employee.view import screen_employee
 from employee.view import view_employee
+from view.screens import clear, _basic
+from view.styles import printS, printW
 
 
 def edit() -> None:

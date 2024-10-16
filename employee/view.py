@@ -1,5 +1,5 @@
-from view.screens import header, options, _basic
 from typing import Dict
+from view.screens import header, options, _basic
 
 
 def view_employee(infor: Dict[str, list]) -> None:

@@ -1,11 +1,11 @@
-from sales.view import screen_sales
 from controller.inputs import inputt, inputInt
-from view.styles import printW, printS
-from view.screens import clear
 from menu.model import Menu
 from sales.model import Sales
-from warehouse.model import Warehouse
+from sales.view import screen_sales
 from typing import Dict
+from view.screens import clear
+from view.styles import printW, printS
+from warehouse.model import Warehouse
 
 
 def extract_ingredients(pedido, quantity) -> Dict[str, int]:
@@ -54,8 +54,6 @@ def handle_sell(pedido: int, quantity: int) -> bool:
     ingredients_count = extract_ingredients(pedido, quantity)
     if len(ingredients_count) > 0:
         if verify_ingredients(ingredients_count):
-            printS("Pedido realizado com sucesso. <Enter>")
-            input()
             return True
     return False
 
@@ -68,6 +66,8 @@ def sell():
         price = get_price(pedido)
         sales = Sales()
         sales.insert_data("Anderson", pedido, price)
+        printS("Pedido realizado com sucesso. <Enter>")
+        input()
         return
 
     printW("Erro ao fazer o pedido. <Enter>")
