@@ -1,17 +1,21 @@
 from sales.view import screen_sales
-from controller.inputs import inputt
+from controller.inputs import inputt, inputInt
+from view.styles import printW, printS
 from view.screens import clear
 from menu.model import Menu
+from warehouse.model import Warehouse
 from typing import Dict
 
 
 def extract_ingredients(pedido, quantity) -> Dict[str, int]:
     menu = Menu()
     ingredients = menu.handle_hamburguer(pedido)
+    if not ingredients:
+        return {}
+
     ingredients_count: Dict[str, int] = {}
 
     for i in ingredients:
-        # Removendo as aspas se ainda existirem
         ingredient_clean = i.strip('\"')
         if ingredient_clean in ingredients_count:
             ingredients_count[ingredient_clean] += 1
@@ -23,17 +27,35 @@ def extract_ingredients(pedido, quantity) -> Dict[str, int]:
     return ingredients_count
 
 
-def handle_sell():
+def verify_ingredients(ingredients: Dict[str, int]) -> bool:
+    warehouse = Warehouse()
+    items = warehouse.verify_ingredients(ingredients)
+    if items:
+        return True
+    return False
 
-    pedido = 3
-    quantity = 5
 
+def handle_sell(pedido: int, quantity: int) -> bool:
     ingredients_count = extract_ingredients(pedido, quantity)
-    print(ingredients_count)
+    if len(ingredients_count) > 0:
+        if verify_ingredients(ingredients_count):
+            printS("Pedido realizado com sucesso. <Enter>")
+            input()
+            return True
+    return False
 
 
 def sell():
-    ...
+    pedido = inputInt("N° Pedido:\n")
+    quantity = inputInt("Quantia:\n")
+
+    if handle_sell(pedido, quantity):
+        print("ok")
+        return
+
+    printW("Erro ao fazer o pedido. <Enter>")
+    input()
+    return
 
 
 def main_sales():
@@ -60,4 +82,4 @@ def main_sales():
 
 
 if __name__ == '__main__':
-    handle_sell()
+    sell()

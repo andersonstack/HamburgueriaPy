@@ -85,22 +85,36 @@ class Menu(SaveData):
         return self._execute_query(query, params)
 
     def handle_hamburguer(self, cod: int):
-        self.visualize_hamburguer(cod)
+        if self._check_index(cod):
+            self.visualize_hamburguer(cod)
+            query = """
+                SELECT ingredients
+                FROM data
+                WHERE id = ?
+            """
+            with self.conn:
+                cursor = self.conn.execute(query, (cod,))
+                result = cursor.fetchone()
+                if result:
+                    return loads(result[0])
+        return False
+
+    def _check_index(self, cod: int) -> bool:
         query = """
-            SELECT ingredients
-            FROM data
+            SELECT COUNT(*) FROM data
             WHERE id = ?
         """
-        with self.conn:
-            cursor = self.conn.execute(query, (cod,))
-            result = cursor.fetchone()
-            if result:
-                return loads(result[0])
-            else:
-                return print("nao ")
+        try:
+            with self.conn:
+                cursor = self.conn.execute(query, (cod,))
+                result = cursor.fetchone()
+                # Se result[0] > 0, significa que o ID existe
+                return result[0] > 0
+        except sqlite3.OperationalError:
+            return False
 
 
 if __name__ == "__main__":
     x = Menu()
-    y = x.handle_hamburguer(3)
+    y = x._check_index(4)
     print(y)

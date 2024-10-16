@@ -119,8 +119,35 @@ class Warehouse(SaveData):
         except sqlite3.OperationalError:
             return False
 
+    def verify_ingredients(self, ingredients: Dict[str, int]) -> bool:
+        query = """
+            SELECT name, quantity
+            FROM data
+        """
+        with self.conn:
+            cursor = self.conn.execute(query).fetchall()
+
+            available_ingredients = {
+                item[0].lower(): item[1] for item in cursor
+            }
+
+        for ingredient, required_quantity in ingredients.items():
+            ingredient_lower = ingredient.lower()
+            if ingredient_lower in available_ingredients:
+                if required_quantity > available_ingredients[ingredient_lower]:
+                    return False
+            else:
+                return False
+
+        return True
+
 
 if __name__ == '__main__':
     x = Warehouse()
-    x.visualize_buy(2)
-    x.close_connection()
+    y = x.verify_ingredients(
+        {
+            "carne": 2,
+            "tomate": 1
+        }
+    )
+    print(y)
