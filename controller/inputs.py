@@ -29,7 +29,7 @@ def inputStr(text: str) -> str:
     while True:
         user_input = inputt(text)
         if user_input.replace(" ", "").isalpha():
-            return user_input.title()
+            return user_input.lower()
         else:
             printE("Digite somente texto e espaços")  # Mensagem de erro
 

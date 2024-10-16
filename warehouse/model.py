@@ -139,7 +139,21 @@ class Warehouse(SaveData):
             else:
                 return False
 
+        self._update_ingredients(ingredients)
+
         return True
+
+    def _update_ingredients(self, ingredients: Dict[str, int]) -> None:
+        for ingredient, quantity in ingredients.items():
+            ingredient_lower = ingredient.lower()
+            with self.conn:
+                self.conn.execute(
+                    """
+                    UPDATE data
+                    SET quantity = quantity - ?
+                    WHERE name = ?
+                    """, (quantity, ingredient_lower)
+                )
 
 
 if __name__ == '__main__':
