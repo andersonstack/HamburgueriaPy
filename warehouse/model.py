@@ -1,6 +1,7 @@
 from services.saveFiles import SaveData
 from typing import Dict, Optional
 from warehouse.view import infor_warehouse
+from services.file_manager import FileManager 
 import sqlite3
 
 
@@ -20,8 +21,13 @@ class Warehouse(SaveData):
                 )
         """)
 
-    def insert_data(self, name: str, quantity: int) -> bool:
+    def insert_data(self, name: str, quantity: int, price: float) -> bool:
+        self._insert_report(name, quantity, price)
         return self._update_or_add_item(name, quantity)
+
+    def _insert_report(self, name: str, quantity: int, price: float) -> None:
+        report = FileManager("warehouse")
+        report.write_file([{name: [quantity, price]}])
 
     def _update_or_add_item(self, name: str, quantity: int) -> bool:
         if self._verify_name(name):

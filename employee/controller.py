@@ -1,4 +1,7 @@
-from controller.inputs import inputInt, inputStr, inputAdrs, inputt
+from controller.inputs import (
+    inputInt,
+    inputStr,
+    inputAdrs, inputt, inputPhone, inputCPF)
 from employee.model import Employee
 from employee.view import screen_employee
 from employee.view import view_employee
@@ -17,7 +20,7 @@ def edit() -> None:
     :return: None
     """
 
-    cpf = input(" | CPF:\t")
+    cpf = inputCPF(" | CPF:\t")
 
     employee = Employee()
     employee_data = employee.visualize_employee(cpf)
@@ -29,10 +32,10 @@ def edit() -> None:
 
     view_employee(employee_data)
 
-    name = input(" | Nome:\t")
-    address = input(" | Endereço:\t")
-    age = input(" | Idade:\t")
-    phone = input(" | Telefone:\t")
+    name = inputStr(" | Nome:\t")
+    address = inputAdrs(" | Endereço:\t")
+    age = inputInt(" | Idade:\t")
+    phone = inputPhone(" | Telefone:\t")
 
     employee_edit = {
         cpf: [
@@ -58,7 +61,7 @@ def search() -> None:
     :return: None
     """
 
-    cpf = input(" | CPF:\t")
+    cpf = inputCPF(" | CPF:\t")
 
     employee = Employee()
     employee_data = employee.visualize_employee(cpf)
@@ -110,7 +113,7 @@ def delete() -> None:
 
     _basic("Deletando funcionário")
 
-    cpf = input("CPF:\t")
+    cpf = inputCPF("CPF:\t")
 
     contract = Employee()
     if not contract.update_employee(cpf):
@@ -138,9 +141,9 @@ def new_employee() -> None:
 
     name = inputStr("Nome:\t")
     age = inputInt("Idade:\t")
-    cpf = input("CPF:\t")
+    cpf = inputCPF("CPF:\t")
     address = inputAdrs("Endereço:\t")
-    phone = input("Telefone:\t")
+    phone = inputPhone("Telefone:\t")
 
     contract = Employee()
     if not contract.insert_data(

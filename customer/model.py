@@ -1,4 +1,4 @@
-from controller.inputs import inputStr, inputInt
+from controller.inputs import inputStr, inputInt, inputIncompleteAds
 from typing import Dict, Union
 
 
@@ -33,7 +33,7 @@ class Client:
         ...
         name = inputStr("Nome: ")
         if adress is not None and table is None:
-            adress = inputStr("Endereço: ")
+            adress = inputIncompleteAds("Endereço: ")
             return {"name": name, "adress": adress}
         else:
             table = inputInt("Mesa: ")

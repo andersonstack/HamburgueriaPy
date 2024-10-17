@@ -43,15 +43,6 @@ def screen_main() -> None:
     print(">> Escolha uma opção\n")
 
 
-def screen_report() -> None:
-    header("relatórios")
-    options(
-        "relatório de compra",
-        "relatorio de vendas",
-    )
-    print(">> Escolha uma opção\n")
-
-
 def screen_infor() -> None:
     header("informações")
     print("""

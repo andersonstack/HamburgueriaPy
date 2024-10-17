@@ -1,7 +1,7 @@
 from view.screens import clear, _basic
 from warehouse.model import Warehouse
 from warehouse.view import screen_warehouse
-from controller.inputs import inputStr, inputInt, inputt
+from controller.inputs import inputStr, inputInt, inputt, inputFloat
 from view.styles import printS, printW, printE
 
 
@@ -9,9 +9,10 @@ def add_buy() -> None:
     _basic("adicionar compra")
     name = inputStr("Item:\n")
     quantity = inputInt("Quantidade:\n")
+    price = inputFloat("Preço: \n")
     print("")
     buy = Warehouse()
-    buy.insert_data(name=name, quantity=quantity)
+    buy.insert_data(name=name, quantity=quantity, price=price)
     printS("Compra cadastrada com sucesso. <Enter>")
     buy.close_connection()
     input()

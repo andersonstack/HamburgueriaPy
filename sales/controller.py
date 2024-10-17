@@ -1,4 +1,4 @@
-from controller.inputs import inputt, inputInt
+from controller.inputs import inputt, inputInt, inputIncompleteAds, inputStr
 from employee.model import Employee
 from menu.model import Menu
 from sales.model import Sales
@@ -75,7 +75,15 @@ def sell():
     if handle_sell(order, quantity):
         price = get_price(order)
         sales = Sales()
-        sales.insert_data("Anderson", order, price)
+        table_name = input("Para mesa?\n").upper()
+        if table_name.startswith("S"):
+            table = inputInt("N° Mesa:\n")
+            sales.insert_data(str(table), order, price)
+        else:
+            name = inputStr("Nome:\n")
+            address = inputIncompleteAds("Endereço:\n")
+            destinatary = name + " " + address
+            sales.insert_data(destinatary, order, price)
         printS("Pedido realizado com sucesso. <Enter>")
     else:
         printW("Erro ao fazer o pedido. <Enter>")
