@@ -38,7 +38,7 @@ def inputDate(text: str) -> str:
         user_input = inputt(text)
 
         if re.match(r"\d{2}/\d{2}/\d{4}", user_input):
-            return user_input
+            return user_input.replace("/", "_")
         else:
             printE("Data inválida")
 

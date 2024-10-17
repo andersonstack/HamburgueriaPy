@@ -6,19 +6,21 @@ from report.model import Reports
 
 
 def view_shopping_report() -> None:
-    data = inputDate("Data: < Vazio: Data atual > ")
+    data = inputDate("Data:")
     clear()
     report = Reports("warehouse", data if data else "")
     report.show_reports()
     printW("> Enter para continuar")
+    inputt("")
 
 
 def view_sales_report() -> None:
-    data = inputDate("Data: < Vazio: Data atual > ")
+    data = inputDate("Data: ")
     clear()
     report = Reports("sales", data if data else "")
     report.show_reports()
     printW("> Enter para continuar")
+    inputt("")
 
 
 def main_report() -> None:
