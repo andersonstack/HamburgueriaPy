@@ -27,7 +27,7 @@ class Menu(SaveData):
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT,
                     ingredients LIST,
-                    price FLOATING
+                    price REAL
                 )
                 """
             )

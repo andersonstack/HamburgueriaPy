@@ -15,7 +15,7 @@ class Employee(SaveData):
                 CREATE TABLE IF NOT EXISTS data(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     cpf TEXT UNIQUE,
-                    name TEXT UNIQUE,
+                    name TEXT,
                     address TEXT,
                     age INTEGER,
                     phone TEXT,
