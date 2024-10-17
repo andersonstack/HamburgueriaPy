@@ -24,16 +24,15 @@ class FileManager:
         except FileNotFoundError:
             return False
 
+    def read_file(self) -> List[Dict[int, List]] | bool:
+        try:
+            with open(self.file, "rb") as arq:
+                x = pickle.load(arq)
+                return x
+        except FileNotFoundError:
+            return False
+
 
 if __name__ == "__main__":
     x = FileManager("sales")
-    x.write_file(
-        [
-            {
-                1: ['X-TUDO', 10.99]
-            },
-            {
-                2: ['X-TUDO', 10.99]
-            }
-        ]
-    )
+    x.read_file()
