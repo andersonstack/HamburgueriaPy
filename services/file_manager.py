@@ -17,7 +17,9 @@ class FileManager:
         if not os.path.exists(self.base_path):
             os.makedirs(self.base_path)
 
-    def write_file(self, report: List[Dict[int, List]]) -> bool:
+    def write_file(
+            self, report: List[Dict[int, List]] |
+            List[Dict[str, List]]) -> bool:
         try:
             with open(self.file, "ab") as arq:
                 pickle.dump(report, arq)
