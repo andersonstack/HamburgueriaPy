@@ -21,50 +21,36 @@ class Warehouse(SaveData):
         """)
 
     def insert_data(self, name: str, quantity: int) -> bool:
+        return self._update_or_add_item(name, quantity)
+
+    def _update_or_add_item(self, name: str, quantity: int) -> bool:
         if self._verify_name(name):
-            return self._update_buy(name, quantity)
-        return self._add_new_buy(name, quantity)
+            return self._update_item(name, quantity)
+        return self._add_item(name, quantity)
 
-    def _add_new_buy(self, name: str, quantity: int) -> bool:
-        try:
-            with self.conn:
-                self.conn.execute("""
-                    INSERT INTO data(name, quantity)
-                    VALUES (?, ?)
-                """, (name, quantity))
-                return True
-        except sqlite3.OperationalError:
-            return False
+    def _add_item(self, name: str, quantity: int) -> bool:
+        return self._execute_query(
+            """
+                INSERT INTO data(name, quantity)
+                VALUES (?, ?)
+            """, (name, quantity)
+        )
 
-    def _update_buy(self, name: str, quantity: int) -> bool:
-        """
-        Updates an existing item in the warehouse.
-
-        Args:
-            name (str): The name of the item.
-            quantity (int): The quantity of the item to be added.
-
-        Returns:
-            None
-        """
-        try:
-            with self.conn:
-                self.conn.execute("""
-                    UPDATE data
-                    SET quantity = quantity + ?
-                    WHERE name = ?
-                """, (quantity, name))
-            return True
-        except sqlite3.OperationalError:
-            return False
+    def _update_item(self, name: str, quantity: int) -> bool:
+        return self._execute_query(
+            """
+                UPDATE data
+                SET quantity = quantity + ?
+                WHERE name = ?
+            """, (quantity, name)
+        )
 
     def _verify_name(self, name: str) -> bool:
         with self.conn:
             cursor = self.conn.execute("""
-                SELECT * FROM data
-                WHERE name = ?
+                SELECT EXISTS(SELECT 1 FROM data WHERE name = ?)
             """, (name,))
-            return bool(cursor.fetchall())
+            return cursor.fetchone()[0] == 1
 
     def visualize_buys(self) -> None:
         all_buys = self._fetch_all_buys()
@@ -93,13 +79,10 @@ class Warehouse(SaveData):
     def _fetch_single_buy(self, cod: int) -> Optional[Dict[int, list]]:
         with self.conn:
             cursor = self.conn.execute("""
-                SELECT * FROM data
-                WHERE id = ?
+                SELECT * FROM data WHERE id = ?
             """, (cod,))
             data = cursor.fetchone()
-            if data:
-                return {data[0]: [data[1], data[2]]}
-        return None
+            return {data[0]: [data[1], data[2]]} if data else None
 
     def delete_buy(self, cod: int) -> bool:
         return self._execute_query("""
