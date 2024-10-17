@@ -87,7 +87,7 @@ def view_all_sales() -> None:
     sales.fetch_all_sales()
     sales.close_connection()
     printW("> Enter para continuar")
-    input
+    input()
     return
 
 
@@ -97,7 +97,7 @@ def search_sales() -> None:
     sales.fetch_one_sales(cod)
     sales.close_connection()
     printW("> Enter para continuar")
-    input
+    input()
     return
 
 
@@ -127,13 +127,10 @@ def main_sales():
                 sell()
             case '2':
                 view_all_sales()
-                ...
             case '3':
                 search_sales()
-                ...
             case '4':
                 close_sales()
-                ...
             case '0':
                 clear()
                 return

@@ -51,6 +51,8 @@ class Sales(SaveData):
                     i[0]: [i[1], i[2], i[3]] for i in result
                 }
                 view_sales(dict_sales)
+            else:
+                print("Sem vendas!")
 
     def fetch_one_sales(self, cod: int) -> None:
         query = """
@@ -61,12 +63,15 @@ class Sales(SaveData):
             try:
                 cursor = self.conn.execute(query, (cod,))
                 sales = cursor.fetchone()
-                dict_pedido = {
-                    sales[0]: [sales[1], sales[2], sales[3]]
-                }
-                view_sales(dict_pedido)
+                if sales:
+                    dict_pedido = {
+                        sales[0]: [sales[1], sales[2], sales[3]]
+                    }
+                    view_sales(dict_pedido)
+                else:
+                    print("Código não alcançado!")
             except sqlite3.OperationalError:
-                print("Código não alcançado!")
+                print("Erro de banco de dados")
 
     def close_sales(self) -> bool:
         query = """
