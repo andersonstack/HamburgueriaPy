@@ -1,12 +1,12 @@
 from report.view import screen_report
 from view.screens import clear
 from view.styles import printW
-from controller.inputs import inputt
+from controller.inputs import inputt, inputDate
 from report.model import Reports
 
 
 def view_shopping_report() -> None:
-    data = input("Data: < Vazio: Data atual > ")
+    data = inputDate("Data: < Vazio: Data atual > ")
     clear()
     report = Reports("warehouse", data if data else "")
     report.show_reports()
@@ -14,7 +14,7 @@ def view_shopping_report() -> None:
 
 
 def view_sales_report() -> None:
-    data = input("Data: < Vazio: Data atual > ")
+    data = inputDate("Data: < Vazio: Data atual > ")
     clear()
     report = Reports("sales", data if data else "")
     report.show_reports()
