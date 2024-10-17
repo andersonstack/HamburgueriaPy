@@ -7,8 +7,9 @@ DATA = datetime.now().strftime("%d_%m_%Y")
 
 
 class FileManager:
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, date: str | None = None) -> None:
         self.base_path = f"data/reports/{path}"
+        self.date = f"data/reports/{path}/{date}.db"
         self.file = os.path.join(self.base_path, f"{DATA}.db")
         self.ensure_directory()
 
@@ -26,7 +27,7 @@ class FileManager:
 
     def read_file(self) -> List[Dict[int, List]] | bool:
         try:
-            with open(self.file, "rb") as arq:
+            with open(self.date, "rb") as arq:
                 x = pickle.load(arq)
                 return x
         except FileNotFoundError:
@@ -34,5 +35,5 @@ class FileManager:
 
 
 if __name__ == "__main__":
-    x = FileManager("sales")
-    x.read_file()
+    x = FileManager("sales", "17_10_2024")
+    print(x.read_file())
