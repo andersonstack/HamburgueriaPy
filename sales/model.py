@@ -1,5 +1,7 @@
-from data.saveFiles import SaveData
+from services.saveFiles import SaveData
 from sales.view import view_sales
+from services.file_manager import FileManager
+from typing import Dict, List
 import sqlite3
 
 
@@ -23,7 +25,7 @@ class Sales(SaveData):
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name_table TEXT,
                 food_order INTEGER,
-                price FLOATING
+                price REAL
         )"""
         self.conn.execute(query)
 
@@ -58,15 +60,44 @@ class Sales(SaveData):
         with self.conn:
             try:
                 cursor = self.conn.execute(query, (cod,))
-                pedido = cursor.fetchone()
+                sales = cursor.fetchone()
                 dict_pedido = {
-                    pedido[0]: [pedido[1], pedido[2], pedido[3]]
+                    sales[0]: [sales[1], sales[2], sales[3]]
                 }
                 view_sales(dict_pedido)
             except sqlite3.OperationalError:
                 print("Código não alcançado!")
 
+    def close_sales(self) -> bool:
+        query = """
+        SELECT * FROM data
+        """
+
+        delete_query = """
+        DROP TABLE IF EXISTS data
+        """
+
+        with self.conn:
+            try:
+                cursor = self.conn.execute(query)
+                sales = cursor.fetchall()
+                dict_sales = [{
+                    i[0]: [i[2], i[3]] for i in sales
+                }]
+
+                self._write_report(dict_sales)
+
+                self.conn.execute(delete_query)
+
+                return True
+            except sqlite3.OperationalError:
+                return False
+
+    def _write_report(self, sales: List[Dict[int, List]]) -> None:
+        report = FileManager("sales")
+        report.write_file(sales)
+
 
 if __name__ == "__main__":
     x = Sales()
-    x.fetch_one_sales(2)
+    y = x.close_sales()
