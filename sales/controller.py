@@ -75,6 +75,25 @@ def sell():
     return
 
 
+def view_all_sales() -> None:
+    sales = Sales()
+    sales.fetch_all_sales()
+    sales.close_connection()
+    printW("> Enter para continuar")
+    input
+    return
+
+
+def search_sales() -> None:
+    cod = inputInt("N° do pedido: ")
+    sales = Sales()
+    sales.fetch_one_sales(cod)
+    sales.close_connection()
+    printW("> Enter para continuar")
+    input
+    return
+
+
 def main_sales():
     while True:
         clear()
@@ -85,10 +104,10 @@ def main_sales():
             case '1':
                 sell()
             case '2':
-                # visualize
+                view_all_sales()
                 ...
             case '3':
-                # search
+                search_sales()
                 ...
             case '4':
                 # close sales
