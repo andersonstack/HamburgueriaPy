@@ -1,8 +1,8 @@
-from menu.view import screen_menu
+from controller.inputs import inputStr, inputFloat, inputInt, inputt
 from menu.model import Menu
+from menu.view import screen_menu
 from view.screens import clear, _basic
 from view.styles import printW, printS, printE
-from controller.inputs import inputStr, inputFloat, inputInt, inputt
 
 
 def collect_burguer_data() -> tuple:
@@ -70,7 +70,11 @@ def edit_burguer():
     _basic("Editar Hambúrguer")
     cod = inputInt("Código: ")
     menu = Menu()
-    handle_burguer(menu, cod)
+    if menu.find_hamburguer(cod):
+        handle_burguer(menu, cod)
+    else:
+        printE("> Hambúrguer não encontrado! <Enter>")
+    input()
 
 
 def view_menu() -> None:
@@ -104,23 +108,24 @@ def delete_burguer() -> None:
     _basic("Deletar Hambúrguer")
     cod = inputInt("Código: ")
     menu = Menu()
-    try:
-        menu.visualize_hamburguer(cod)
-        printW("Deletar Hambúrguer? \n")
-        confirm = input().upper()
-        if confirm.startswith("S"):
-            if menu.delete_hamburguer(cod):
-                printS("Hambúrguer deletado com sucesso!")
+    if menu.find_hamburguer(cod):
+        try:
+            menu.visualize_hamburguer(cod)
+            printW("Deletar Hambúrguer? \n")
+            confirm = input().upper()
+            if confirm.startswith("S"):
+                if menu.delete_hamburguer(cod):
+                    printS("Hambúrguer deletado com sucesso! <Enter>")
+                else:
+                    printE("Falha ao deletar hambúrguer. <Enter>")
             else:
-                printE("Falha ao deletar hambúrguer.")
-        else:
-            printW("Ação cancelada.")
-    except Exception as e:
-        printE(f"Erro ao deletar hambúrguer: {e}")
-    finally:
-        menu.close_connection()
+                printW("Ação cancelada.")
+        except Exception as e:
+            printE(f"Erro ao deletar hambúrguer: {e} <Enter>")
+    else:
+        printW("> Hambúrguer não encontrado! <Enter>")
+    menu.close_connection()
     input()
-    return
 
 
 def main_menu() -> None:

@@ -52,16 +52,6 @@ def screen_report() -> None:
     print(">> Escolha uma opção\n")
 
 
-def screen_sales() -> None:
-    header("vendas")
-    options(
-        "vender",
-        "lista de vendas",
-        "fechar vendas",
-        "menu principal"
-    )
-
-
 def screen_infor() -> None:
     header("informações")
     print("""

@@ -1,4 +1,4 @@
-from data.saveFiles import SaveData
+from services.saveFiles import SaveData
 from typing import Dict, Optional
 import sqlite3
 
@@ -7,15 +7,15 @@ class Employee(SaveData):
     def __init__(self):
         super().__init__("./data/funcionarios.db")
         self.conn = sqlite3.connect(self.db_path)
-        self.create_table()
+        self._create_table()
 
-    def create_table(self) -> None:
+    def _create_table(self) -> None:
         with self.conn:
             self.conn.execute("""
                 CREATE TABLE IF NOT EXISTS data(
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     cpf TEXT UNIQUE,
-                    name TEXT UNIQUE,
+                    name TEXT,
                     address TEXT,
                     age INTEGER,
                     phone TEXT,
@@ -42,7 +42,7 @@ class Employee(SaveData):
     def update_employee(self, cpf: str) -> bool:
         current_status = self._find_cpf(cpf)
 
-        if current_status is not None:
+        if current_status != []:
             new_status = not current_status[0][6]
 
             if self._find_cpf(cpf):
