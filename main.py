@@ -1,6 +1,7 @@
 from controller.inputs import inputt
 from employee.controller import main_employee
 from menu.controller import main_menu
+from report.controller import main_report
 from sales.controller import main_sales
 from view import screens
 from warehouse.controller import main_warehouse
@@ -20,7 +21,7 @@ while not get_out:
         case '3':
             main_menu()
         case '4':
-            screens.screen_report()
+            main_report()
         case '5':
             main_sales()
         case '6':
