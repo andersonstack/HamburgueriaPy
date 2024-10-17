@@ -42,7 +42,7 @@ class Employee(SaveData):
     def update_employee(self, cpf: str) -> bool:
         current_status = self._find_cpf(cpf)
 
-        if current_status is not None:
+        if current_status != []:
             new_status = not current_status[0][6]
 
             if self._find_cpf(cpf):
