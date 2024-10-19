@@ -3,8 +3,6 @@ from view.screens import header, options, _basic
 
 
 def view_employee(infor: Dict[str, list]) -> None:
-    print(infor)
-    input()
     _basic("Funcionário(s)")
     # Comprimento total da linha
     total_length = 114
