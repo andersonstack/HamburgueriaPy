@@ -50,4 +50,4 @@ def screen_infor() -> None:
         Anderson G.Pereira Cruz
         github: andersoncruz-13
     """)
-    print(">> Escolha uma opção\n")
+    input(">> Enter para continuar\n")
